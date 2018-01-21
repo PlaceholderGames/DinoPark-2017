@@ -138,7 +138,7 @@ half4 frag( v2f i ) : COLOR
 	#ifdef HAS_REFLECTION
 	bump.xy *= i.viewDirZ.w;
 	float3 uv1 = i.ref; uv1.xy += bump * _ReflDistort;
-	half4 refl = tex2Dproj( _ReflectionTex, uv1 );
+	half4 refl = tex2Dproj( _ReflectionTex, UNITY_PROJ_COORD(uv1) );
 	half fresnel = tex2D( _Fresnel, float2(fresnelFac,fresnelFac) ).a;
 	// Cg 1.5 has a bug when compiling for ps_2_0 where it does not respect
 	// destination masks properly. So final color ends up being just fresnel,

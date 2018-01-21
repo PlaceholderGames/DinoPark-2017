@@ -3,5 +3,5 @@ var speed = 0.5;
 
 function Start () 
 {
-	animation[statename].speed = speed;
+	GetComponent.<Animation>()[statename].speed = speed;
 }

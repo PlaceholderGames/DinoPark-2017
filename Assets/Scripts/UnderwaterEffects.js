@@ -43,10 +43,15 @@ function Awake() {
 
 function Update ()
 {
+	var myAudio : AudioSource;
+	// *** fix
+	myAudio = GetComponent.<AudioSource>();
+
 	if (waterLevel < transform.position.y && below)
 	{
-		audio.clip = aAudio;
-		audio.Play();
+
+		myAudio.clip = aAudio;
+		myAudio.Play();
 		RenderSettings.fogDensity = aDensity;
 		RenderSettings.fogColor = aColor;
 		
@@ -60,8 +65,8 @@ function Update ()
 	
 	if (waterLevel > transform.position.y && !below)
 	{
-		audio.clip = uAudio;
-		audio.Play();
+		myAudio.clip = uAudio;
+		myAudio.Play();
 		RenderSettings.fogDensity = uDensity;
 		RenderSettings.fogColor = uColor;
 		

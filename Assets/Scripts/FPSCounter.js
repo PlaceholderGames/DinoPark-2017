@@ -35,6 +35,8 @@ function Update()
 
     timeleft -= deltaTime;
     accum += 1.0 / deltaTime;
+    var guiText = UI.Text;
+    // *** fix
     
     // Interval ended - update GUI text and start new interval
     if( timeleft <= 0.0 )

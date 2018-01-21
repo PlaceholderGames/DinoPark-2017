@@ -139,7 +139,8 @@ half4 frag( v2f i ) : COLOR
 	
 	#ifdef HAS_REFLECTION
 	float3 uv1 = i.ref; uv1.xy += bump * _ReflDistort;
-	half4 refl = tex2Dproj( _ReflectionTex, uv1 );
+	half4 refl = tex2Dproj( _ReflectionTex, UNITY_PROJ_COORD(uv1) );
+	// *** fix from uv1
 	#endif
 	#ifdef HAS_REFRACTION
 	float3 uv2 = i.ref; uv2.xy -= bump * _RefrDistort;
