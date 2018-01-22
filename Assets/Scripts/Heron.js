@@ -67,12 +67,12 @@ function Start()
 	anim["Run"].speed = runSpeed;
 	anim["FishingWalk"].speed = fishWalkSpeed;
 	
-	leftKnee = myT.FindChild("HeronAnimated/MasterMover/RootDummy/Root/Lhip/knee2");
-	leftAnkle = leftKnee.FindChild("ankle2");
-	leftFoot = leftAnkle.FindChild("foot2");
-	rightKnee = myT.FindChild("HeronAnimated/MasterMover/RootDummy/Root/Rhip/knee3");
-	rightAnkle = rightKnee.FindChild("ankle3");
-	rightFoot = rightAnkle.FindChild("foot3");
+	leftKnee = myT.Find("HeronAnimated/MasterMover/RootDummy/Root/Lhip/knee2");
+	leftAnkle = leftKnee.Find("ankle2");
+	leftFoot = leftAnkle.Find("foot2");
+	rightKnee = myT.Find("HeronAnimated/MasterMover/RootDummy/Root/Rhip/knee3");
+	rightAnkle = rightKnee.Find("ankle3");
+	rightFoot = rightAnkle.Find("foot3");
 	
 	colliders =  FindObjectsOfType(HeronCollider);
 	

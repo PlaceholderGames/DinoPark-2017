@@ -43,7 +43,7 @@ function Update()
     {
         // display two fractional digits (f2 format)
         fps = accum/frames;
-        guiText.text = fps.ToString("f2");
+        GetComponent(GUIText).text = fps.ToString("f2");
         timeleft = updateInterval;
         accum = 0.0;
         frames = 0;
