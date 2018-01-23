@@ -159,12 +159,12 @@ public class MeshCombineUtility {
 		Mesh mesh = new Mesh();
 		mesh.name = "Combined Mesh";
 		mesh.vertices = vertices;
-		mesh.normals = normals;
+        mesh.normals = normals;
 		mesh.tangents = tangents;
 		mesh.uv = uv;
 		mesh.uv2 = uv1;
 		if (generateStrips)
-			mesh.SetTriangles(strip, 0);
+            mesh.SetTriangles(strip, 0);
 		else
 			mesh.triangles = triangles;
 		
