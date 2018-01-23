@@ -12,26 +12,28 @@ var waterSurface : Renderer;
 var underwaterSurface : Renderer;
 
 private var below = false;
-private var glow : GlowEffect;
-private var blur : BlurEffect;
+//private var glow : GlowEffect;
+//private var blur : BlurEffect;
 
 
 function Awake() {
 	if(!waterLevel)
 	{
-		water = FindObjectOfType(Water);
+		water = UnityStandardAssets.Water.Water;
 		if(water) waterLevel = water.gameObject.position.y;
 	}
 	aColor = RenderSettings.fogColor;
 	aDensity = RenderSettings.fogDensity;
 	
-	glow = GetComponent(GlowEffect);
-	blur = GetComponent(BlurEffect);
+	//glow = GetComponent(GlowEffect);
+	//blur = GetComponent(BlurEffect);
+    /*
 	if( !glow || !blur )
 	{
 		Debug.LogError("no right Glow/Blur assigned to camera!");
 		enabled = false;
 	}
+    */
 	if( !waterSurface || !underwaterSurface )
 	{
 		Debug.LogError("assign water & underwater surfaces");
@@ -57,8 +59,8 @@ function Update ()
 		
 		below = false;
 		
-		glow.enabled = !below; 
-		blur.enabled = below; 
+		//glow.enabled = !below; 
+		//blur.enabled = below; 
 		waterSurface.enabled = true;
 		underwaterSurface.enabled = false;
 	}
@@ -72,9 +74,9 @@ function Update ()
 		
 		below = true;
 		
-		glow.enabled = !below; 
-		blur.enabled = below;
+		//glow.enabled = !below; 
+		//blur.enabled = below;
 		waterSurface.enabled = false;
-		underwaterSurface.enabled = false;
+		underwaterSurface.enabled = true;
 	}
 }
