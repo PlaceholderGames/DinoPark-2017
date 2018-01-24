@@ -9,7 +9,7 @@ var aColor = Color(1,1,1,1);
 var aDensity = .008;
 
 var waterSurface : Renderer;
-var underwaterSurface : Renderer;
+//var underwaterSurface : Renderer;
 
 private var below = false;
 //private var glow : GlowEffect;
@@ -33,7 +33,7 @@ function Awake() {
 		Debug.LogError("no right Glow/Blur assigned to camera!");
 		enabled = false;
 	}
-    */
+    
 	if( !waterSurface || !underwaterSurface )
 	{
 		Debug.LogError("assign water & underwater surfaces");
@@ -41,6 +41,7 @@ function Awake() {
 	}
 	if( underwaterSurface != null )
 		underwaterSurface.enabled = false; // initially underwater is disabled
+    */
 }
 
 function Update ()
@@ -62,7 +63,7 @@ function Update ()
 		//glow.enabled = !below; 
 		//blur.enabled = below; 
 		waterSurface.enabled = true;
-		underwaterSurface.enabled = false;
+		//underwaterSurface.enabled = false;
 	}
 	
 	if (waterLevel > transform.position.y && !below)
@@ -77,6 +78,6 @@ function Update ()
 		//glow.enabled = !below; 
 		//blur.enabled = below;
 		waterSurface.enabled = false;
-		underwaterSurface.enabled = true;
+		//underwaterSurface.enabled = true;
 	}
 }
