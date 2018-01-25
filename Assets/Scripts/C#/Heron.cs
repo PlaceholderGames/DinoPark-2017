@@ -29,47 +29,51 @@ public class Heron : MonoBehaviour {
 
 	private float minHeight = 34.1f;
 	private float maxHeight = 42.00f;
-	private HeronCollider colliders[];
+	private HeronCollider[] colliders; //needs array size, how big?
 
-	private float hitTestDistanceIncrement = 1.00;
-	private float hitTestDistanceMax = 50.00;
-	private float hitTestTimeIncrement = 0.2;
+	private float hitTestDistanceIncrement = 1.00f;
+	private float hitTestDistanceMax = 50.00f;
+	private float hitTestTimeIncrement = 0.2f;
 
-	private var myT : Transform;
-	private var anim : Animation;
-	private var leftKnee : Transform;
-	private var leftAnkle : Transform;
-	private var leftFoot : Transform;
-	private var rightKnee : Transform;
-	private var rightAnkle : Transform;
-	private var rightFoot : Transform;
+	private Transform myT;
+	private Animation anim;
+	private Transform leftKnee;
+	private Transform leftAnkle;
+	private Transform leftFoot;
+	private Transform rightKnee;
+	private Transform rightAnkle;
+	private Transform rightFoot;
 
-	private var player : Transform;
-	private var terrain : TerrainData;
+	private Transform player;
+	private TerrainData terrain;
 
-	private var offsetMoveDirection : Vector3;
-	private var usedMoveDirection : Vector3;
-	private 
-	private var velocity : Vector3;
-	private 
+	private Vector3 offsetMoveDirection;
+	private Vector3 usedMoveDirection;
+	private Vector3 velocity;
+	private Vector3 forward;
 	private bool strechNeck = false;
 	private bool fishing = false;
-	private float lastSpeed = 0.00;
+	private float lastSpeed = 0.00f;
 
 	enum HeronStatus {Idle = 0, Walking = 1, Running = 2}
 
-	function Start()
+    IEnumerator wait(float time)
+    {
+        yield return new WaitForSeconds(time);
+    }
+
+	void Start()
 	{
 		forward = transform.forward;
 
-		obj = GameObject.FindWithTag("Player");
+		GameObject obj = GameObject.FindWithTag("Player");
 		player = obj.transform;
 		myT = transform;
-		terr = Terrain.activeTerrain;
+		Terrain terr = Terrain.activeTerrain;
 		if(terr)
 			terrain = terr.terrainData;
 
-		anim = GetComponentInChildren(Animation);
+		anim = GetComponentInChildren<Animation>();
 		anim["Walk"].speed = walkSpeed;
 		anim["Run"].speed = runSpeed;
 		anim["FishingWalk"].speed = fishWalkSpeed;
@@ -81,25 +85,25 @@ public class Heron : MonoBehaviour {
 		rightAnkle = rightKnee.Find("ankle3");
 		rightFoot = rightAnkle.Find("foot3");
 
-		colliders =  FindObjectsOfType(HeronCollider);
+		colliders =  FindObjectsOfType(typeof(HeronCollider)) as HeronCollider[];
 
 		MainLoop();
 		MoveLoop();
 		AwareLoop();
 	}
 
-	function MainLoop()
+	void MainLoop()
 	{
 		while(true)
 		{
-
-			yield SeekPlayer();
-			yield Idle();
-			yield Fish();	
+            //did have yield
+			SeekPlayer();
+			Idle();
+			Fish();	
 		}
 	}
 
-	function SeekPlayer()
+	void SeekPlayer()
 	{
 		var time = 0.00;
 		while(time < seekPlayerTime)
@@ -108,23 +112,22 @@ public class Heron : MonoBehaviour {
 
 			if(moveDirection.magnitude < shyDistance)
 			{
-				yield;
-				return;
+                yield;
 			}
 
 			moveDirection.y = 0;
-			moveDirection = (moveDirection.normalized + (myT.forward * 0.5)).normalized;
+			moveDirection = (moveDirection.normalized + (myT.forward * 0.5f)).normalized;
 			offsetMoveDirection = GetPathDirection(myT.position, moveDirection);
 
 			if(offsetMoveDirection != Vector3.zero) status = HeronStatus.Walking;
 			else status = HeronStatus.Idle;
 
-			yield WaitForSeconds(hitTestTimeIncrement);
+			wait(hitTestTimeIncrement);
 			time +=	hitTestTimeIncrement;
 		}
 	}
 
-	function Idle ()
+	void Idle ()
 	{
 		strechNeck = false;
 		var time = 0.00;
@@ -135,12 +138,12 @@ public class Heron : MonoBehaviour {
 			status = HeronStatus.Idle;
 			offsetMoveDirection = Vector3.zero;
 
-			yield WaitForSeconds(hitTestTimeIncrement);
+            wait(hitTestTimeIncrement);
 			time +=	hitTestTimeIncrement;
 		}
 	}
 
-	function Scared ()
+	void Scared ()
 	{
 		var dist = (player.position - myT.position).magnitude;
 		if(dist > scaredDistance) return;
@@ -158,49 +161,49 @@ public class Heron : MonoBehaviour {
 			}
 
 			moveDirection.y = 0;
-			moveDirection = (moveDirection.normalized + (myT.forward * 0.5)).normalized;
+			moveDirection = (moveDirection.normalized + (myT.forward * 0.5f)).normalized;
 			offsetMoveDirection = GetPathDirection(myT.position, moveDirection);
 
 			if(offsetMoveDirection != Vector3.zero) status = HeronStatus.Running;
 			else status = HeronStatus.Idle;
 
-			yield WaitForSeconds(hitTestTimeIncrement);
+			wait(hitTestTimeIncrement);
 			time +=	hitTestTimeIncrement;
 		}
 	}
 
-	function Fish()
+	void Fish()
 	{
-		var height : float = terrain.GetInterpolatedHeight(myT.position.x / terrain.size.x, myT.position.z / terrain.size.z);
+		float height = terrain.GetInterpolatedHeight(myT.position.x / terrain.size.x, myT.position.z / terrain.size.z);
 		status = HeronStatus.Walking;
-		var direction : Vector3;
-		var randomDir : Vector3 = Random.onUnitSphere;
+		Vector3 direction;
+		Vector3 randomDir = Random.onUnitSphere;
 
 		if(height > 40)
 		{
 			maxHeight = 40;
 			offsetMoveDirection = GetPathDirection(myT.position, randomDir);
-			yield WaitForSeconds(0.5);
+			wait(0.5f);
 			if(velocity.magnitude > 0.01) direction = myT.right * (Random.value > 0.5 ? -1 : 1);
 		}
 		if(height > 38)
 		{
 			maxHeight = 38;
 			offsetMoveDirection = GetPathDirection(myT.position, randomDir);
-			yield WaitForSeconds(1);
+			wait(1f);
 			if(velocity.magnitude > 0.01) direction = myT.right * (Random.value > 0.5 ? -1 : 1);
 		}
 		if(height > 36.5)
 		{
-			maxHeight = 36.5;
+			maxHeight = 36.5f;
 			offsetMoveDirection = GetPathDirection(myT.position, randomDir);
-			yield WaitForSeconds(1.5);
+			wait(1.5f);
 			if(velocity.magnitude > 0.01) direction = myT.right * (Random.value > 0.5 ? -1 : 1);
 		}
 		while(height > 35)
 		{
 			maxHeight = 35;
-			yield WaitForSeconds(0.5);
+			wait(0.5f);
 			if(velocity.magnitude > 0.01) direction = myT.right * (Random.value > 0.5 ? -1 : 1);
 			offsetMoveDirection = GetPathDirection(myT.position, randomDir);
 			height = terrain.GetInterpolatedHeight(myT.position.x / terrain.size.x, myT.position.z / terrain.size.z);
@@ -208,23 +211,23 @@ public class Heron : MonoBehaviour {
 
 		fishing = true;
 		status = HeronStatus.Walking;
-		yield WaitForSeconds(fishingTime / 3);
+		wait(fishingTime / 3);
 		status = HeronStatus.Idle;
-		yield WaitForSeconds(fishingTime / 6);
+        wait(fishingTime / 6);
 		status = HeronStatus.Walking;
-		yield WaitForSeconds(fishingTime / 3);
+        wait(fishingTime / 3);
 		status = HeronStatus.Idle;
-		yield WaitForSeconds(fishingTime / 6);
+        wait(fishingTime / 6);
 		fishing = false;
 
 		maxHeight = 42;
 	}
 
-	function AwareLoop ()
+	void AwareLoop ()
 	{
 		while(true)
 		{
-			dist = (player.position - myT.position).magnitude;
+			float dist = (player.position - myT.position).magnitude;
 
 			if(dist < scaredDistance && status != HeronStatus.Running)
 			{
@@ -239,46 +242,46 @@ public class Heron : MonoBehaviour {
 		}	
 	}
 
-	function MoveLoop ()
+	void MoveLoop ()
 	{
 		while(true)
 		{
 			var deltaTime = Time.deltaTime;
-			var targetSpeed = 0.00;
+			var targetSpeed = 0.00f;
 			if(status == HeronStatus.Walking && offsetMoveDirection.magnitude > 0.01)
 			{
 				if(!fishing)
 				{
 					targetSpeed = walkAnimSpeed * walkSpeed;
-					anim.CrossFade("Walk", 0.4);
+					anim.CrossFade("Walk", 0.4f);
 				}
 				else
 				{
 					targetSpeed = fishWalkAnimSpeed * fishWalkSpeed;
-					anim.CrossFade("FishingWalk", 0.4);
+					anim.CrossFade("FishingWalk", 0.4f);
 				}
 			}
 			else if(status == HeronStatus.Running)
 			{
 				targetSpeed = runAnimSpeed * runSpeed;
-				anim.CrossFade("Run", 0.4);
+				anim.CrossFade("Run", 0.4f);
 			}
 			else
 			{
 				if(!fishing)
 				{
 					targetSpeed = 0;
-					if(!strechNeck) anim.CrossFade("IdleHold", 0.4);
-					else anim.CrossFade("IdleStrechNeck", 0.4);
+					if(!strechNeck) anim.CrossFade("IdleHold", 0.4f);
+					else anim.CrossFade("IdleStrechNeck", 0.4f);
 				}
 				else
 				{
 					targetSpeed = 0;
-					anim.CrossFade("IdleFishing", 0.4);
+					anim.CrossFade("IdleFishing", 0.4f);
 				}
 			}
 
-			usedMoveDirection = Vector3.Lerp(usedMoveDirection, offsetMoveDirection, deltaTime * 0.7);
+			usedMoveDirection = Vector3.Lerp(usedMoveDirection, offsetMoveDirection, deltaTime * 0.7f);
 			velocity = Vector3.RotateTowards(velocity, offsetMoveDirection * targetSpeed, turning * deltaTime, acceleration * deltaTime);
 			velocity.y = 0;
 
@@ -286,7 +289,7 @@ public class Heron : MonoBehaviour {
 			{
 				if(lastSpeed < 0.01)
 				{
-					velocity = forward * 0.1;
+					velocity = forward * 0.1f;
 				}
 				else
 				{
@@ -300,9 +303,9 @@ public class Heron : MonoBehaviour {
 		}	
 	}
 
-	function GetPathDirection (curPos : Vector3, wantedDirection : Vector3) : Vector3
+	Vector3 GetPathDirection (Vector3 curPos, Vector3 wantedDirection)
 	{
-		var awayFromCollision : Vector3 = TestPosition(curPos);
+		Vector3 awayFromCollision = TestPosition(curPos);
 		if(awayFromCollision != Vector3.zero)
 		{
 			//Debug.DrawRay(myT.position, awayFromCollision.normalized * 20, Color.yellow);
@@ -313,19 +316,19 @@ public class Heron : MonoBehaviour {
 			///Debug.DrawRay(myT.position, Vector3.up * 5, Color.yellow);
 		}
 
-		var right = Vector3.Cross(wantedDirection, Vector3.up);
-		var currentLength : float = TestDirection(myT.position, wantedDirection);
+		Vector3 right = Vector3.Cross(wantedDirection, Vector3.up);
+		float currentLength = TestDirection(myT.position, wantedDirection);
 		if(currentLength > hitTestDistanceMax)
 		{
 			return wantedDirection;
 		}
 		else
 		{
-			var sideAmount = 1 - Mathf.Clamp01(currentLength / 50);
-			var rightDirection = Vector3.Lerp(wantedDirection, right, sideAmount * sideAmount);
-			var rightLength : float = TestDirection(myT.position, rightDirection);
-			var leftDirection = Vector3.Lerp(wantedDirection, -right, sideAmount * sideAmount);
-			var leftLength : float = TestDirection(myT.position, leftDirection);
+			float sideAmount = 1 - Mathf.Clamp01(currentLength / 50);
+            Vector3 rightDirection = Vector3.Lerp(wantedDirection, right, sideAmount * sideAmount);
+			float rightLength = TestDirection(myT.position, rightDirection);
+            Vector3 leftDirection = Vector3.Lerp(wantedDirection, -right, sideAmount * sideAmount);
+            float leftLength = TestDirection(myT.position, leftDirection);
 
 			if(rightLength > leftLength && rightLength > currentLength && rightLength > hitTestDistanceIncrement)
 			{
@@ -346,15 +349,15 @@ public class Heron : MonoBehaviour {
 		return Vector3.zero;
 	}
 
-	function TestDirection (position : Vector3, direction : Vector3) : float
+	float TestDirection (Vector3 position, Vector3 direction)
 	{
-		var length = 0.00;
+		float length = 0.00f;
 		while(true)
 		{
 			length += hitTestDistanceIncrement;
 			if(length > hitTestDistanceMax) return length;
-			var testPos : Vector3 = position + (direction * length);
-			var height : float = terrain.GetInterpolatedHeight(testPos.x / terrain.size.x, testPos.z / terrain.size.z);
+            Vector3 testPos = position + (direction * length);
+            float height = terrain.GetInterpolatedHeight(testPos.x / terrain.size.x, testPos.z / terrain.size.z);
 			if(height > maxHeight || height < minHeight)
 			{
 				break;
@@ -365,9 +368,9 @@ public class Heron : MonoBehaviour {
 				var i = 0;
 				while(i < colliders.length)
 				{
-					var collider : HeronCollider = colliders[i];
-					x = collider.position.x - testPos.x;
-					z = collider.position.z - testPos.z;
+                    HeronCollider collider = colliders[i];
+					float x = collider.position.x - testPos.x;
+					float z = collider.position.z - testPos.z;
 					if(x < 0) x = -x;
 					if(z < 0) z = -z;
 					if(z + x < collider.radius)
@@ -384,21 +387,26 @@ public class Heron : MonoBehaviour {
 		return length;
 	}
 
-	function TestPosition (testPos : Vector3) : Vector3
+	Vector3 TestPosition (Vector3 testPos) //: Vector3
 	{
-		var moveDir : Vector3;
-		var hieghtPos : Vector3 = testPos;
-		var height : float = terrain.GetInterpolatedHeight(testPos.x / terrain.size.x, testPos.z / terrain.size.z);
+        Vector3 moveDir;
+        Vector3 forwardDir;
+        Vector3 forwardPos;
+        Vector3 move;
+        float forwardHeight;
+        float diff;
+        Vector3 heightPos = testPos;
+        float height = terrain.GetInterpolatedHeight(testPos.x / terrain.size.x, testPos.z / terrain.size.z);
 		if(height > maxHeight || height < minHeight)
 		{
-			var heightDiff = 100.00;
-			var optimalHeight = (maxHeight * 0.5) + (minHeight * 0.5);
+			var heightDiff = 100.00f;
+			var optimalHeight = (maxHeight * 0.5f) + (minHeight * 0.5f);
 
 			var found = false;
-			var mult = 1.00;
+			var mult = 1.00f;
 			while(!found && mult < 5)
 			{
-				var rotation = 0.00;
+				float rotation = 0.00f;
 				while(rotation < 360)
 				{
 					forwardDir = Quaternion.Euler(0, rotation, 0) * Vector3.forward;
@@ -413,15 +421,15 @@ public class Heron : MonoBehaviour {
 						//Debug.DrawRay(forwardPos, Vector3.up, Color.green);
 						found = true;
 						heightDiff = diff;
-						hieghtPos = forwardPos;
+                        heightPos = forwardPos;
 					}
 					rotation += 45;
 				}
-				mult += 0.5;
+				mult += 0.5f;
 			}
 		}
 
-		move = hieghtPos - testPos;
+		move = heightPos - testPos;
 		if(move.magnitude > 0.01)
 		{
 			//print("height");
@@ -436,9 +444,9 @@ public class Heron : MonoBehaviour {
 		var i = 0;
 		while(i < colliders.length)
 		{
-			var collider : HeronCollider = colliders[i];
-			x = collider.position.x - testPos.x;
-			z = collider.position.z - testPos.z;
+			HeronCollider collider = colliders[i];
+			float x = collider.position.x - testPos.x;
+			float z = collider.position.z - testPos.z;
 			if(x < 0) x = -x;
 			if(z < 0) z = -z;
 			if(z + x < collider.radius)
@@ -452,40 +460,40 @@ public class Heron : MonoBehaviour {
 		return moveDir;
 	}
 
-	function LateUpdate () // leg IK
+	void LateUpdate () // leg IK
 	{
-		rightHeight = terrain.GetInterpolatedHeight(rightFoot.position.x / terrain.size.x, rightFoot.position.z / terrain.size.z);
-		rightNormal = terrain.GetInterpolatedNormal(rightFoot.position.x / terrain.size.x, rightFoot.position.z / terrain.size.z);
-		leftHeight = terrain.GetInterpolatedHeight(leftFoot.position.x / terrain.size.x, leftFoot.position.z / terrain.size.z);
-		leftNormal = terrain.GetInterpolatedNormal(leftFoot.position.x / terrain.size.x, leftFoot.position.z / terrain.size.z);
+		float rightHeight = terrain.GetInterpolatedHeight(rightFoot.position.x / terrain.size.x, rightFoot.position.z / terrain.size.z);
+        Vector3 rightNormal = terrain.GetInterpolatedNormal(rightFoot.position.x / terrain.size.x, rightFoot.position.z / terrain.size.z);
+        float leftHeight = terrain.GetInterpolatedHeight(leftFoot.position.x / terrain.size.x, leftFoot.position.z / terrain.size.z);
+        Vector3 leftNormal = terrain.GetInterpolatedNormal(leftFoot.position.x / terrain.size.x, leftFoot.position.z / terrain.size.z);
 
 		if(leftHeight < rightHeight)
 		{
-			transform.position.y = leftHeight;
+			transform.position = new Vector3(transform.position.x, leftHeight, transform.position.z);
 			leftFoot.rotation = Quaternion.LookRotation(leftFoot.forward, leftNormal);
 			leftFoot.Rotate(Vector3.right * 15);
 
-			raise = (rightHeight - leftHeight) * 0.5;
+			float raise = (rightHeight - leftHeight) * 0.5f;
 
-			rightKnee.position.y += raise;
-			rightAnkle.position.y += raise;
+			rightKnee.position = rightKnee.position + new Vector3(0.0f, raise, 0.0f);
+			rightAnkle.position = rightAnkle.position + new Vector3(0.0f, raise, 0.0f);
 			rightFoot.rotation = Quaternion.LookRotation(rightNormal, rightFoot.up);
 			rightFoot.Rotate(-Vector3.right * 15);
 		}
 		else
 		{
-			transform.position.y = rightHeight;
+			transform.position = new Vector3(rightKnee.position.x, rightHeight, rightKnee.position.z);
 			rightFoot.rotation = Quaternion.LookRotation(rightNormal, rightFoot.up);
 			rightFoot.Rotate(-Vector3.right * 15);
 
-			raise = (leftHeight - rightHeight) * 0.5;
+            float raise = (leftHeight - rightHeight) * 0.5f;
 
-			leftKnee.position.y += raise;
-			leftAnkle.position.y += raise;
-			leftFoot.rotation = Quaternion.LookRotation(leftFoot.forward, leftNormal);
+            leftKnee.position = leftKnee.position + new Vector3(0.0f, raise, 0.0f);
+            leftAnkle.position = leftAnkle.position + new Vector3(0.0f, raise, 0.0f);
+            leftFoot.rotation = Quaternion.LookRotation(leftFoot.forward, leftNormal);
 			leftFoot.Rotate(Vector3.right * 15);
 		}
 
-		transform.position.y += 0.1;
+        transform.position = transform.position + new Vector3(0.0f, 0.1f, 0.0f);
 	}
 }
