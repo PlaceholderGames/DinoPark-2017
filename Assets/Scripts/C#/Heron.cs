@@ -88,8 +88,8 @@ public class Heron : MonoBehaviour {
 		colliders =  FindObjectsOfType(typeof(HeronCollider)) as HeronCollider[];
 
 		MainLoop();
-		MoveLoop();
-		AwareLoop();
+        StartCoroutine(MoveLoop());
+        StartCoroutine(AwareLoop());
 	}
 
 	void MainLoop()
@@ -97,22 +97,22 @@ public class Heron : MonoBehaviour {
 		while(true)
 		{
             //did have yield
-			SeekPlayer();
+			StartCoroutine(SeekPlayer());
 			Idle();
 			Fish();	
 		}
 	}
 
-	void SeekPlayer()
+    IEnumerator SeekPlayer()
 	{
-		var time = 0.00;
+		float time = 0.00f;
 		while(time < seekPlayerTime)
 		{
-			var moveDirection = player.position - myT.position;
+            Vector3 moveDirection = player.position - myT.position;
 
 			if(moveDirection.magnitude < shyDistance)
 			{
-                yield;
+                yield break;
 			}
 
 			moveDirection.y = 0;
@@ -130,7 +130,7 @@ public class Heron : MonoBehaviour {
 	void Idle ()
 	{
 		strechNeck = false;
-		var time = 0.00;
+        float time = 0.00f;
 		while(time < seekPlayerTime)
 		{	
 			if(time > 0.6) strechNeck = true;
@@ -143,22 +143,23 @@ public class Heron : MonoBehaviour {
 		}
 	}
 
-	void Scared ()
+    IEnumerator Scared ()
 	{
-		var dist = (player.position - myT.position).magnitude;
-		if(dist > scaredDistance) return;
-
-		var time = 0.00;
+		float dist = (player.position - myT.position).magnitude;
+        if (dist > scaredDistance)
+        {
+            yield break; //was return
+        }
+        float time = 0.00f;
 
 		while(time < scaredTime)
 		{
-			var moveDirection = myT.position - player.position;
+			Vector3 moveDirection = myT.position - player.position;
 
 			if(moveDirection.magnitude > shyDistance * 1.5)
 			{
-				yield;
-				return;
-			}
+                yield break;
+            }
 
 			moveDirection.y = 0;
 			moveDirection = (moveDirection.normalized + (myT.forward * 0.5f)).normalized;
@@ -223,7 +224,7 @@ public class Heron : MonoBehaviour {
 		maxHeight = 42;
 	}
 
-	void AwareLoop ()
+    IEnumerator AwareLoop ()
 	{
 		while(true)
 		{
@@ -236,18 +237,18 @@ public class Heron : MonoBehaviour {
 				StopCoroutine("Idle");
 				strechNeck = false;
 				StopCoroutine("SeekPlayer");
-				Scared();
+                StartCoroutine(Scared());
 			}
-			yield;	
+            yield return null;
 		}	
 	}
 
-	void MoveLoop ()
+    IEnumerator MoveLoop ()
 	{
 		while(true)
 		{
-			var deltaTime = Time.deltaTime;
-			var targetSpeed = 0.00f;
+            float deltaTime = Time.deltaTime;
+            float targetSpeed = 0.00f;
 			if(status == HeronStatus.Walking && offsetMoveDirection.magnitude > 0.01)
 			{
 				if(!fishing)
@@ -299,7 +300,7 @@ public class Heron : MonoBehaviour {
 			transform.position += velocity * deltaTime;
 			transform.rotation = Quaternion.LookRotation(forward);
 			lastSpeed = velocity.magnitude;
-			yield;	
+			yield return null;	
 		}	
 	}
 
@@ -364,9 +365,9 @@ public class Heron : MonoBehaviour {
 			}
 			else
 			{
-				var hit = false;
-				var i = 0;
-				while(i < colliders.length)
+				bool hit = false;
+				int i = 0;
+				while(i < colliders.Length)
 				{
                     HeronCollider collider = colliders[i];
 					float x = collider.position.x - testPos.x;
@@ -399,11 +400,11 @@ public class Heron : MonoBehaviour {
         float height = terrain.GetInterpolatedHeight(testPos.x / terrain.size.x, testPos.z / terrain.size.z);
 		if(height > maxHeight || height < minHeight)
 		{
-			var heightDiff = 100.00f;
-			var optimalHeight = (maxHeight * 0.5f) + (minHeight * 0.5f);
+            float heightDiff = 100.00f;
+            float optimalHeight = (maxHeight * 0.5f) + (minHeight * 0.5f);
 
-			var found = false;
-			var mult = 1.00f;
+			bool found = false;
+            float mult = 1.00f;
 			while(!found && mult < 5)
 			{
 				float rotation = 0.00f;
@@ -441,8 +442,8 @@ public class Heron : MonoBehaviour {
 			moveDir = Vector3.zero;
 		}
 
-		var i = 0;
-		while(i < colliders.length)
+		int i = 0;
+		while(i < colliders.Length)
 		{
 			HeronCollider collider = colliders[i];
 			float x = collider.position.x - testPos.x;
