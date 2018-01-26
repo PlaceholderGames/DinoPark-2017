@@ -27,8 +27,7 @@ function Awake() {
 	
 	//glow = GetComponent(GlowEffect);
 	//blur = GetComponent(BlurEffect);
-	/*
-
+    /*
 	if( !glow || !blur )
 	{
 		Debug.LogError("no right Glow/Blur assigned to camera!");
