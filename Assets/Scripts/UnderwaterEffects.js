@@ -27,21 +27,14 @@ function Awake() {
 	
 	//glow = GetComponent(GlowEffect);
 	//blur = GetComponent(BlurEffect);
-<<<<<<< HEAD
 	/*
-=======
-    /*
->>>>>>> watereffects
+
 	if( !glow || !blur )
 	{
 		Debug.LogError("no right Glow/Blur assigned to camera!");
 		enabled = false;
 	}
-<<<<<<< HEAD
-	*/
-=======
     
->>>>>>> watereffects
 	if( !waterSurface || !underwaterSurface )
 	{
 		Debug.LogError("assign water & underwater surfaces");
