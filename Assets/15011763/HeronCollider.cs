@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class HeronCollider : MonoBehaviour {
 
-    float radius = 0.00f;
-    Vector3 position;
+    public float radius = 0.00f;
+    public Vector3 position;
 
-    void Awake()
+    private void Awake()
     {
         position = transform.position;
     }
 
-    void onDrawGizmoSelected()
+    private void onDrawGizmoSelected()
     {
         Gizmos.color = new Color(0.32f, 0.55f, 0.76f, 0.7f);
         Gizmos.DrawWireSphere(transform.position, radius);

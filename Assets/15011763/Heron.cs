@@ -32,8 +32,7 @@ public class Heron : MonoBehaviour {
     private float minHeight = 34.1f;
     private float maxHeight = 42.00f;
 
-    // THIS IS BROKE, not sure what to do with this
-    private var colliders : HeronCollider[];
+    private HeronCollider[] colliders;
 
     private float hitTestDistanceIncrement = 1.00f;
     private float hitTestDistanceMax = 50.00f;
@@ -89,7 +88,7 @@ public class Heron : MonoBehaviour {
         rightAnkle = rightKnee.Find("ankle3");
         rightFoot = rightAnkle.Find("foot3");
 
-        colliders = FindObjectsOfType(HeronCollider); // BROKE
+        colliders = FindObjectsOfType<HeronCollider>();
 
         Update();
         MoveLoop();
@@ -97,17 +96,17 @@ public class Heron : MonoBehaviour {
     }
 
     // Update is called once per frame
-    IEnumerable Update() {
+    void Update() {
         while (true)
         {
 
-            yield return SeekPlayer();
-            yield return Idle();
-            yield return Fish();
+            SeekPlayer();
+            Idle();
+            Fish();
         }
     }
 
-    IEnumerable SeekPlayer()
+    void SeekPlayer()
     {
         var time = 0.00;
         while (time < seekPlayerTime)
@@ -116,7 +115,7 @@ public class Heron : MonoBehaviour {
 
             if (moveDirection.magnitude < shyDistance)
             {
-                yield break;
+                return;
             }
 
             moveDirection.y = 0;
@@ -127,13 +126,13 @@ public class Heron : MonoBehaviour {
             else status = HeronStatus.Idle;
 
             
-            yield return new WaitForSeconds(hitTestTimeIncrement);
+            new WaitForSeconds(hitTestTimeIncrement);
             time += hitTestTimeIncrement;
 
         }
     }
 
-    IEnumerable Idle()
+    void Idle()
     {
         strechNeck = false;
         var time = 0.00;
@@ -144,16 +143,16 @@ public class Heron : MonoBehaviour {
             status = HeronStatus.Idle;
             offsetMoveDirection = Vector3.zero;
 
-            yield return new WaitForSeconds(hitTestTimeIncrement);
+            new WaitForSeconds(hitTestTimeIncrement);
             time += hitTestTimeIncrement;
 
         }
     }
 
-    IEnumerable Scared()
+    void Scared()
     {
         var dist = (player.position - myT.position).magnitude;
-        if (dist > scaredDistance) yield break;
+        if (dist > scaredDistance) return;
 
         var time = 0.00;
 
@@ -163,7 +162,7 @@ public class Heron : MonoBehaviour {
 
             if (moveDirection.magnitude > shyDistance * 1.5)
             {
-                yield break;
+                return;
             }
 
             moveDirection.y = 0;
@@ -173,13 +172,13 @@ public class Heron : MonoBehaviour {
             if (offsetMoveDirection != Vector3.zero) status = HeronStatus.Running;
             else status = HeronStatus.Idle;
 
-            yield return new WaitForSeconds(hitTestTimeIncrement);
+            new WaitForSeconds(hitTestTimeIncrement);
             time += hitTestTimeIncrement;
 
         }
     }
 
-    IEnumerable Fish()
+    void Fish()
     {
         float height = terrain.GetInterpolatedHeight(myT.position.x / terrain.size.x, myT.position.z / terrain.size.z);
         status = HeronStatus.Walking;
@@ -190,27 +189,27 @@ public class Heron : MonoBehaviour {
         {
             maxHeight = 40;
             offsetMoveDirection = GetPathDirection(myT.position, randomDir);
-            yield return new  WaitForSeconds(0.5f);
+            new  WaitForSeconds(0.5f);
             if (velocity.magnitude > 0.01) direction = myT.right * (Random.value > 0.5 ? -1 : 1);
         }
         if (height > 38)
         {
             maxHeight = 38;
             offsetMoveDirection = GetPathDirection(myT.position, randomDir);
-            yield return new WaitForSeconds(1.0f);
+            new WaitForSeconds(1.0f);
             if (velocity.magnitude > 0.01) direction = myT.right * (Random.value > 0.5 ? -1 : 1);
         }
         if (height > 36.5)
         {
             maxHeight = 36.5f;
             offsetMoveDirection = GetPathDirection(myT.position, randomDir);
-            yield return new WaitForSeconds(1.5f);
+            new WaitForSeconds(1.5f);
             if (velocity.magnitude > 0.01) direction = myT.right * (Random.value > 0.5 ? -1 : 1);
         }
         while (height > 35)
         {
             maxHeight = 35;
-            yield return new WaitForSeconds(0.5f);
+            new WaitForSeconds(0.5f);
             if (velocity.magnitude > 0.01) direction = myT.right * (Random.value > 0.5 ? -1 : 1);
             offsetMoveDirection = GetPathDirection(myT.position, randomDir);
             height = terrain.GetInterpolatedHeight(myT.position.x / terrain.size.x, myT.position.z / terrain.size.z);
@@ -218,13 +217,13 @@ public class Heron : MonoBehaviour {
 
         fishing = true;
         status = HeronStatus.Walking;
-        yield return new WaitForSeconds(fishingTime / 3f);
+        new WaitForSeconds(fishingTime / 3f);
         status = HeronStatus.Idle;
-        yield return new WaitForSeconds(fishingTime / 6f);
+        new WaitForSeconds(fishingTime / 6f);
         status = HeronStatus.Walking;
-        yield return new WaitForSeconds(fishingTime / 3f);
+        new WaitForSeconds(fishingTime / 3f);
         status = HeronStatus.Idle;
-        yield return new WaitForSeconds(fishingTime / 6f);
+        new WaitForSeconds(fishingTime / 6f);
         fishing = false;
 
         maxHeight = 42;
@@ -249,7 +248,7 @@ public class Heron : MonoBehaviour {
         }
     }
 
-    IEnumerable MoveLoop()
+    void MoveLoop()
     {
         while (true)
         {
@@ -306,7 +305,7 @@ public class Heron : MonoBehaviour {
             transform.position += velocity * deltaTime;
             transform.rotation = Quaternion.LookRotation(forward);
             lastSpeed = velocity.magnitude;
-            yield break;
+            return;
         }
     }
 
@@ -373,11 +372,11 @@ public class Heron : MonoBehaviour {
             {
                 var hit = false;
                 var i = 0;
-                while (i < colliders.length)
+                while (i < colliders.GetLength(0))
                 {
-                    var collider : HeronCollider = colliders[i];
-                    var x = collider.position.x - testPos.x; // BROKE
-                    var z = collider.position.z - testPos.z;
+                    HeronCollider collider = colliders[i];
+                    float x = collider.position.x - testPos.x;
+                    float z = collider.position.z - testPos.z;
                     if (x < 0) x = -x;
                     if (z < 0) z = -z;
                     if (z + x < collider.radius)
@@ -444,9 +443,9 @@ public class Heron : MonoBehaviour {
         }
 
         var i = 0;
-        while (i < colliders.length)
+        while (i < colliders.GetLength(0))
         {
-            var collider = colliders[i];
+            HeronCollider collider = colliders[i];
             var x = collider.position.x - testPos.x;
             var z = collider.position.z - testPos.z;
             if (x < 0) x = -x; // BROKE
@@ -463,41 +462,77 @@ public class Heron : MonoBehaviour {
 
     }
 
+    // Changes made here are based on 14734231
     void LateUpdate() // leg IK
     {
-        var rightHeight = terrain.GetInterpolatedHeight(rightFoot.position.x / terrain.size.x, rightFoot.position.z / terrain.size.z);
-        var rightNormal = terrain.GetInterpolatedNormal(rightFoot.position.x / terrain.size.x, rightFoot.position.z / terrain.size.z);
-        var leftHeight = terrain.GetInterpolatedHeight(leftFoot.position.x / terrain.size.x, leftFoot.position.z / terrain.size.z);
-        var leftNormal = terrain.GetInterpolatedNormal(leftFoot.position.x / terrain.size.x, leftFoot.position.z / terrain.size.z);
+        float rightHeight = terrain.GetInterpolatedHeight(rightFoot.position.x / terrain.size.x, rightFoot.position.z / terrain.size.z);
+        Vector3 rightNormal = terrain.GetInterpolatedNormal(rightFoot.position.x / terrain.size.x, rightFoot.position.z / terrain.size.z);
+        float leftHeight = terrain.GetInterpolatedHeight(leftFoot.position.x / terrain.size.x, leftFoot.position.z / terrain.size.z);
+        Vector3 leftNormal = terrain.GetInterpolatedNormal(leftFoot.position.x / terrain.size.x, leftFoot.position.z / terrain.size.z);
+
 
         if (leftHeight < rightHeight)
         {
-            transform.position.y = leftHeight;
+            Vector3 move = new Vector3(transform.position.x, 0.0f, transform.position.z);
+            move.y = leftHeight;
+            transform.position = move;
+
+            //transform.position.y = leftHeight;
+
             leftFoot.rotation = Quaternion.LookRotation(leftFoot.forward, leftNormal);
             leftFoot.Rotate(Vector3.right * 15);
 
-            raise = (rightHeight - leftHeight) * 0.5;
+            float raise = (rightHeight - leftHeight) * 0.5f;
 
-            rightKnee.position.y += raise;
-            rightAnkle.position.y += raise;
+            Vector3 rightKneeMove = rightKnee.position;
+            rightKneeMove.y += raise;
+            rightKnee.position = rightKneeMove;
+
+            //rightKnee.position.y += raise;
+
+            Vector3 rightAnkleMove = rightAnkle.position;
+            rightAnkleMove.y += raise;
+            rightAnkle.position = rightAnkleMove;
+
+            //rightAnkle.position.y += raise;
+
             rightFoot.rotation = Quaternion.LookRotation(rightNormal, rightFoot.up);
             rightFoot.Rotate(-Vector3.right * 15);
         }
         else
         {
-            transform.position.y = rightHeight;
+            Vector3 move = new Vector3(transform.position.x, 0.0f, transform.position.z);
+            move.y = rightHeight;
+            transform.position = move;
+
+            //transform.position.y = rightHeight;
+
             rightFoot.rotation = Quaternion.LookRotation(rightNormal, rightFoot.up);
             rightFoot.Rotate(-Vector3.right * 15);
 
-            var raise = (leftHeight - rightHeight) * 0.5;
+            float raise = (leftHeight - rightHeight) * 0.5f;
 
-            leftKnee.position.y += raise;
-            leftAnkle.position.y += raise;
+            Vector3 leftKneeMove = leftKnee.position;
+            leftKneeMove.y += raise;
+            leftKnee.position = leftKneeMove;
+
+            //leftKnee.position.y += raise;
+
+            Vector3 leftAnkleMove = leftAnkle.position;
+            leftAnkleMove.y += raise;
+            leftAnkle.position = leftAnkleMove;
+
+            //leftAnkle.position.y += raise;
+
             leftFoot.rotation = Quaternion.LookRotation(leftFoot.forward, leftNormal);
             leftFoot.Rotate(Vector3.right * 15);
         }
 
-        transform.position.y += 0.1;
+        Vector3 move2 = transform.position;
+        move2.y += 0.1f;
+        transform.position = move2;
+
+        //transform.position.y += 0.1;
     }
 }
 
