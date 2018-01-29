@@ -268,8 +268,8 @@ public class Heron : MonoBehaviour {
 		velocity = Vector3.RotateTowards (velocity, offsetMoveDirection * targetSpeed, turning * deltaTime, acceleration * deltaTime);
 		velocity.y = 0;
 
-		if (velocity.magnitude > 0.01) {
-			if (lastSpeed < 0.01) {
+		if (velocity.magnitude > 0.01f) {
+			if (lastSpeed < 0.01f) {
 				velocity = forward * 0.1f;
 			} else {
 				forward = velocity.normalized;
