@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class HeronCollider : MonoBehaviour {
 
-	private double radius = 0.00f;
-	private Vector3 position;
+	public float radius = 0.00f;
+	public Vector3 position;
 
 	// Use this for initialization
 	void Start () {
@@ -14,7 +14,7 @@ public class HeronCollider : MonoBehaviour {
 
 	void OnDrawGizmoSelected()
 	{
-		Gizmos.color = new Color (0.32, 0.55, 0.76, 0.7);
-		Gizmos.DrawWireSphere (transform.position, radius);
+		Gizmos.color = new Color (0.32f, 0.55f, 0.76f, 0.7f);
+		Gizmos.DrawSphere (transform.position, radius);
 	}
 }
