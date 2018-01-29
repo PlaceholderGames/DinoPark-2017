@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Heron : MonoBehaviour {
 
-	enum HeronStatus {Idle = 0, Walking = 1, Running = 2};
-
 	public float acceleration = 5.0f;
 	public float turning = 3.0f;
 
@@ -46,7 +44,7 @@ public class Heron : MonoBehaviour {
 	private Transform rightAnkle;
 	private Transform rightFoot;
 
-	private Transform player;
+	private Transform player = null;
 	private TerrainData terrain;
 
 	private Vector3 offsetMoveDirection;
@@ -55,19 +53,18 @@ public class Heron : MonoBehaviour {
 	private Vector3 forward;
 	private bool strechNeck = false;
 	private bool fishing = false;
-	private double lastSpeed = 0.00;
+	private float lastSpeed = 0.00f;
 
-	private GameObject obj;
-	private Terrain terr;
-
-	private bool stretchNeck;
+	enum HeronStatus {Idle = 0, Walking = 1, Running = 2};
 
 	// Use this for initialization
 	void Start () {
-		obj = GameObject.FindGameObjectWithTag ("Player");
+		forward = transform.forward;
+
+		GameObject obj = GameObject.FindWithTag ("Player");
 		player = obj.transform;
 		myT = transform;
-		terr = Terrain.activeTerrain;
+		Terrain terr = Terrain.activeTerrain;
 		if(terr)
 			terrain = terr.terrainData;
 		anim = GetComponentInChildren<Animation>();
@@ -82,28 +79,28 @@ public class Heron : MonoBehaviour {
 		rightAnkle = rightKnee.Find("ankle3");
 		rightFoot = rightAnkle.Find("foot3");
 
-		//might not work
-		//colliders = GameObject.FindGameObjectsWithTag ("HeronColliders");
+		colliders = FindObjectsOfType<HeronCollider>();
 
-		MainLoop ();
+		StartCoroutine(MainLoop ());
+		StartCoroutine(MoveLoop ());
+		StartCoroutine(AwareLoop());
 	}
 
-	private IEnumerable MainLoop()
+	private IEnumerator MainLoop()
 	{
 		while (true) {
-			yield return SeekPlayer();
-			yield return Idle();
-			yield return Fish();
+			yield return StartCoroutine(SeekPlayer());
+			yield return StartCoroutine(Idle());
+			yield return StartCoroutine(Fish());
 		}
 	}
 
-	private IEnumerable SeekPlayer()
+	private IEnumerator SeekPlayer()
 	{
-		double time = 0.0f;
-		Vector3 moveDir;
+		float time = 0.0f;
 
 		while (time < seekPlayerTime) {
-			moveDir = player.position = myT.position;
+			Vector3 moveDir = player.position - myT.position;
 
 			if (moveDir.magnitude < shyDistance) {
 				yield return null; 
@@ -124,7 +121,7 @@ public class Heron : MonoBehaviour {
 		}
 	}
 
-	private IEnumerable Idle ()
+	private IEnumerator Idle ()
 	{
 		strechNeck = false;
 		float time = 0.00f;
@@ -139,7 +136,7 @@ public class Heron : MonoBehaviour {
 		}
 	}
 
-	private IEnumerable Scared()
+	private IEnumerator Scared()
 	{
 		float dist = (player.position - myT.position).magnitude;
 		if (dist > scaredDistance)
@@ -168,7 +165,7 @@ public class Heron : MonoBehaviour {
 		}
 	}
 
-	private IEnumerable Fish()
+	private IEnumerator Fish()
 	{
 		float height = terrain.GetInterpolatedHeight (myT.position.x / terrain.size.x, myT.position.z / terrain.size.z);
 		status = HeronStatus.Walking;
@@ -212,7 +209,7 @@ public class Heron : MonoBehaviour {
 		status = HeronStatus.Idle;
 		yield return new WaitForSeconds (fishingTime / 6);
 		status = HeronStatus.Walking;
-		yield return new WaitForSeconds(fishingTime/3);
+		yield return new WaitForSeconds (fishingTime / 3);
 		status = HeronStatus.Idle;
 		yield return new WaitForSeconds (fishingTime / 6);
 		fishing = false;
@@ -221,24 +218,24 @@ public class Heron : MonoBehaviour {
 
 	}
 
-	private IEnumerable AwareLoop()
+	private IEnumerator AwareLoop()
 	{
 		while (true) {
 			float dist = (player.position - myT.position).magnitude;
 
 			if (dist < scaredDistance && status != HeronStatus.Running) {
-				StopCoroutine ("Fish");
+				StopCoroutine (Fish());
 				maxHeight = 42;
-				StopCoroutine ("Idle");
+				StopCoroutine (Idle());
 				strechNeck = false;
-				StopCoroutine ("SeekPlayer");
+				StopCoroutine (SeekPlayer());
 				Scared ();
 			}
 			yield return null;
 		}
 	}
 
-	private IEnumerable MoveLoop()
+	private IEnumerator MoveLoop()
 	{
 		float deltaTime = Time.deltaTime;
 		float targetSpeed = 0.00f;
@@ -429,7 +426,7 @@ public class Heron : MonoBehaviour {
 
 		if(leftHeight < rightHeight)
 		{
-			transform.position = new Vector3 (transform.position.x, transform.position.y + leftHeight, transform.position.z);
+			transform.position = new Vector3 (transform.position.x, leftHeight, transform.position.z);
 			leftFoot.rotation = Quaternion.LookRotation(leftFoot.forward, leftNormal);
 			leftFoot.Rotate(Vector3.right * 15);
 
@@ -442,7 +439,7 @@ public class Heron : MonoBehaviour {
 		}
 		else
 		{
-			transform.position = new Vector3 (transform.position.x, transform.position.y + rightHeight, transform.position.z);
+			transform.position = new Vector3 (transform.position.x, rightHeight, transform.position.z);
 			rightFoot.rotation = Quaternion.LookRotation(rightNormal, rightFoot.up);
 			rightFoot.Rotate(-Vector3.right * 15);
 
@@ -456,4 +453,5 @@ public class Heron : MonoBehaviour {
 
 		transform.position = new Vector3 (transform.position.x, transform.position.y + 0.1f, transform.position.z);
 	}
-}		
+}
+		
