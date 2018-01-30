@@ -15,7 +15,7 @@ public class FPSFreeCam : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 	}
     // Update is called once per frame
-    void LateUpdate()
+    void FixedUpdate()
     {
         Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("UpDown"), Input.GetAxis("Vertical"));
         targetVelocity = transform.TransformDirection(targetVelocity);
