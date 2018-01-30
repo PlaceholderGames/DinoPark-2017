@@ -15,7 +15,7 @@ public class FPSFreeCam : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 	}
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("UpDown"), Input.GetAxis("Vertical"));
         targetVelocity = transform.TransformDirection(targetVelocity);
@@ -26,7 +26,7 @@ public class FPSFreeCam : MonoBehaviour {
         Vector3 velocityChange = (targetVelocity - velocity);
         velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
         velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-        velocityChange.y = Mathf.Clamp(velocityChange.y, - maxVelocityChange, maxVelocityChange);
+        velocityChange.y = Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);
         rb.AddForce(velocityChange, ForceMode.VelocityChange);
         //if (Input.GetButton("w"))
         //{
@@ -64,42 +64,5 @@ public class FPSFreeCam : MonoBehaviour {
         //    //transform.Translate(Vector3.up * speed / 100);
         //    rb.MovePosition(rb.position + up * Time.deltaTime);
         //}
-    }
-        
-	
-    void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "terrain")
-        {
-            Debug.Log("colliding with terrain");
-        }
-        if (other.tag != "terrain")
-        {
-        //rb.AddForce(3 * Physics.gravity);
-        //if (Input.GetButton("w"))
-        //{
-        //    //transform.Translate(Vector3.forward * speed / 6);
-        //    rb.MovePosition(rb.position + cameraTransform.transform.forward);
-        //}
-        //if (Input.GetButton("s"))
-        //{
-        //    transform.Translate(Vector3.back * speed / 6);
-        //}
-        //if (Input.GetButton("a"))
-        //{
-        //    transform.Translate(Vector3.left * speed / 6);
-        //}
-        //if (Input.GetButton("d"))
-        //{
-        //    transform.Translate(Vector3.right * speed / 6);
-        //}
-        //if (Input.GetButton("q"))
-        //{
-        //    transform.Translate(Vector3.down * speed / 6);
-        //}
-        //if (Input.GetButton("e"))
-        //{
-        //    transform.Translate(Vector3.up * speed / 6);
-        }
     }
 }
