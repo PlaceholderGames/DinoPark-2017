@@ -1,0 +1,166 @@
+fileFormatVersion: 2
+guid: 1016d6406d5217f4d879613f2ddd5e67
+timeCreated: 1517217460
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Back
+    100004: Chest
+    100006: Cube
+    100008: Cube_001
+    100010: Cube_002
+    100012: Cube_003
+    100014: DownMouth
+    100016: DownMouth Rig
+    100018: Estomach
+    100020: Head
+    100022: LeftArmy
+    100024: LeftArmyStart
+    100026: LeftHand
+    100028: LeftHandStart
+    100030: LeftHip
+    100032: LeftKnee
+    100034: LeftKneeRig
+    100036: LeftKneeStart
+    100038: LeftShoulder
+    100040: Neck
+    100042: //RootNode
+    100044: RightArmy
+    100046: RightArmyStart
+    100048: RightHand
+    100050: RightHandStart
+    100052: RightHip
+    100054: RightKnee
+    100056: RightKneeRig
+    100058: RightKneeStart
+    100060: RightShoulder
+    100062: Tail1
+    100064: Tail2
+    100066: Tail3
+    100068: Tail4
+    100070: Tail5
+    100072: TailRig
+    100074: TailStart
+    100076: UpMouth
+    100078: UpMouthRig
+    400000: Armature
+    400002: Back
+    400004: Chest
+    400006: Cube
+    400008: Cube_001
+    400010: Cube_002
+    400012: Cube_003
+    400014: DownMouth
+    400016: DownMouth Rig
+    400018: Estomach
+    400020: Head
+    400022: LeftArmy
+    400024: LeftArmyStart
+    400026: LeftHand
+    400028: LeftHandStart
+    400030: LeftHip
+    400032: LeftKnee
+    400034: LeftKneeRig
+    400036: LeftKneeStart
+    400038: LeftShoulder
+    400040: Neck
+    400042: //RootNode
+    400044: RightArmy
+    400046: RightArmyStart
+    400048: RightHand
+    400050: RightHandStart
+    400052: RightHip
+    400054: RightKnee
+    400056: RightKneeRig
+    400058: RightKneeStart
+    400060: RightShoulder
+    400062: Tail1
+    400064: Tail2
+    400066: Tail3
+    400068: Tail4
+    400070: Tail5
+    400072: TailRig
+    400074: TailStart
+    400076: UpMouth
+    400078: UpMouthRig
+    4300000: Cube
+    4300002: Cube_001
+    4300004: Cube_002
+    4300006: Cube_003
+    9500000: //RootNode
+    13700000: Cube
+    13700002: Cube_001
+    13700004: Cube_002
+    13700006: Cube_003
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
