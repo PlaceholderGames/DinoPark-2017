@@ -85,7 +85,7 @@ public class Heron : MonoBehaviour {
 
         colliders = FindObjectsOfType<HeronCollider>();
 
-        MainLoop();
+        Update();
         MoveLoop();
         AwareLoop();
     }
