@@ -12,8 +12,8 @@ var scaredDistance = 5.00;
 var strechNeckProbability = 10.00;
 
 var fishWalkSpeed = 1.00;
-var walkSpeed = 1.00;
-var runSpeed = 1.00;
+var walkSpeed = 0.75;
+var runSpeed = 2.00;
 
 private var status = HeronStatus.Idle;
 
@@ -21,8 +21,8 @@ private var fishWalkAnimSpeed = 0.50;
 private var walkAnimSpeed = 2.00;
 private var runAnimSpeed = 9.00;
 
-private var minHeight = 34.1;
-private var maxHeight = 42.00;
+private var minHeight = 64.1;
+private var maxHeight = 82.00;
 private var colliders : HeronCollider[];
 
 private var hitTestDistanceIncrement = 1.00;
