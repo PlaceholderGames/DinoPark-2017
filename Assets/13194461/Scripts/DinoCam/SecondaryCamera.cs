@@ -6,13 +6,19 @@ public class SecondaryCamera : MonoBehaviour {
 
     Vector3 myPos;
     Vector3 offset;
+    Vector3 centreScreen;
     public Transform objPosition;
     public Camera dinoCam;
+    float x;
+    float y;
 
 	// Use this for initialization
 	void Start () {
         dinoCam.enabled = false;
         offset = new Vector3(0.0f, 5.0f, -5.0f);
+        x = Screen.width / 2;
+        y = Screen.height / 2;
+        centreScreen = new Vector3(x, y);
 	}
 	
 	// Update is called once per frame
@@ -20,7 +26,7 @@ public class SecondaryCamera : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit objHit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(centreScreen);
 
             if (Physics.Raycast(ray, out objHit))
             {
