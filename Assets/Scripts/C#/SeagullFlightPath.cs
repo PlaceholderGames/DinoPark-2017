@@ -14,7 +14,7 @@ public class SeagullFlightPath : MonoBehaviour
     float circleTime = 15.00f;
     float awayTime = 20.00f;
 
-    Vector3 offset;
+    public Vector3 offset;
 
     private Transform myT;
     private Transform player;
@@ -127,7 +127,7 @@ public class SeagullFlightPath : MonoBehaviour
         delta.y = 0;
         delta = delta.normalized * flySpeed * dTime;
         Vector3 newPos = new Vector3(myT.position.x + delta.x, 1000, myT.position.z + delta.z);
-        if (col.Raycast(Ray(newPos, -Vector3.up), hit, 2000))
+        if (col.Raycast(new Ray(newPos, -Vector3.up), out hit, 2000))
         {
             newHeight = hit.point.y;
         }

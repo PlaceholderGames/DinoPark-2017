@@ -10,8 +10,7 @@ public class Seagull : MonoBehaviour
 
     float minSpeed = 0.00f;
     float turnSpeed = 0.00f;
-    float randomFreq = 0.00f;
-    randomFreq = 1.0f / randomFreq;
+    float randomFreq = 1.0f / 0.0f;
 
     float randomForce = 0.00f;
     float toOriginForce = 0.00f;
@@ -85,6 +84,10 @@ public class Seagull : MonoBehaviour
         float speed = velocity.magnitude;
         Vector3 avoidPush = Vector3.zero;
         Vector3 avgPoint = Vector3.zero;
+        Vector3 forceV;
+        Vector3 toAvg;
+        Vector3 diff;
+        float d;
         int count = 0;
         float f = 0.0f;
         Vector3 myPosition = transformComponent.position;
@@ -98,8 +101,8 @@ public class Seagull : MonoBehaviour
                 avgPoint += otherPosition;
                 count++;
 
-                Vector3 forceV = myPosition - otherPosition;
-                float d = forceV.magnitude;
+                forceV = myPosition - otherPosition;
+                d = forceV.magnitude;
                 if (d < followRadius)
                 {
                     if (d < avoidanceRadius)
@@ -118,15 +121,15 @@ public class Seagull : MonoBehaviour
         if (count > 0)
         {
             avoidPush /= count;
-            Vector3 toAvg = (avgPoint / count) - myPosition;
+            toAvg = (avgPoint / count) - myPosition;
         }
         else
         {
-            Vector3 toAvg = Vector3.zero;
+            toAvg = Vector3.zero;
         }
 
-        Vector3 forceV = origin.position + target.offset - myPosition;
-        float d = forceV.magnitude;
+        forceV = origin.position + target.offset - myPosition;
+        d = forceV.magnitude;
         f = d / toOriginRange;
         if (d > 0) originPush = (forceV / d) * f * toOriginForce;
 
@@ -152,7 +155,7 @@ public class Seagull : MonoBehaviour
 
         // Raycast
         float distance = speed * Time.deltaTime;
-        if (raycast > 0.00f && distance > 0.00f && Physics.Raycast(myPosition, velocity, hit, (int)distance))
+        if (raycast && distance > 0.00f && Physics.Raycast(myPosition, velocity, 0.0f, (int)distance)) // fix
         {
             velocity = Vector3.Reflect(velocity, hit.normal) * bounce;
         }

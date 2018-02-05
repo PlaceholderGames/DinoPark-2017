@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class Heron : MonoBehaviour {
 
-	float acceleration = 5.00f;
-	float turning = 3.00f;
+	public float acceleration = 5.00f;
+    public float turning = 3.00f;
 
-	float maxIdleTime = 4.00f;
-	float seekPlayerTime = 6.00f;
-	float scaredTime = 4.00f;
-	float fishingTime = 30.00f;
+    public float maxIdleTime = 4.00f;
+    public float seekPlayerTime = 6.00f;
+    public float scaredTime = 4.00f;
+    public float fishingTime = 30.00f;
 
-	float shyDistance = 10.00f;
-	float scaredDistance = 5.00f;
+    public float shyDistance = 10.00f;
+    public float scaredDistance = 5.00f;
 
-	float strechNeckProbability = 10.00f;
+    public float strechNeckProbability = 10.00f;
 
-	float fishWalkSpeed = 1.00f;
-	float walkSpeed = 1.00f;
-	float runSpeed = 1.00f;
+    public float fishWalkSpeed = 1.00f;
+    public float walkSpeed = 1.00f;
+    public float runSpeed = 1.00f;
 
 	private HeronStatus status = HeronStatus.Idle;
 
