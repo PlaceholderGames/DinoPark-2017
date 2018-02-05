@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: c3eb9f84c3edb174483b1f7dd7acfe46
 timeCreated: 1517314479
 licenseType: Free
+=======
+guid: 6464c2641054a5f43a8d28b475a0fdf2
+timeCreated: 1517219493
+licenseType: Pro
+>>>>>>> master
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
@@ -114,7 +120,11 @@ ModelImporter:
     13700006: Cube.003
   materials:
     importMaterials: 1
+<<<<<<< HEAD
     materialName: 0
+=======
+    materialName: 1
+>>>>>>> master
     materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
