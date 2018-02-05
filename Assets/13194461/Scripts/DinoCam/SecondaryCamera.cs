@@ -15,7 +15,7 @@ public class SecondaryCamera : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         dinoCam.enabled = false;
-        offset = new Vector3(0.0f, 5.0f, -5.0f);
+        offset = new Vector3(0.0f, 5.0f, 0.0f);
         x = Screen.width / 2;
         y = Screen.height / 2;
         centreScreen = new Vector3(x, y);
@@ -38,9 +38,7 @@ public class SecondaryCamera : MonoBehaviour {
                 else
                 {
                     dinoCam.enabled = false;
-                }
-                  
-                  
+                }  
             }
             else
             {
@@ -49,5 +47,5 @@ public class SecondaryCamera : MonoBehaviour {
         }
 
         transform.position = objPosition.position + myPos + offset;
-	}
+    }
 }
