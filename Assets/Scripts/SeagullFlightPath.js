@@ -3,9 +3,9 @@
 #pragma downcast
 
 var flySpeed = 15.00;
-var highFlyHeight = 80.00;
-var normalFlyHeight = 40.00;
-var lowFlyHeight = 20.00;
+var highFlyHeight = 60.00;
+var normalFlyHeight = 30.00;
+var lowFlyHeight = 15.00;
 var flyDownSpeed = 0.10;
 var circleRadius = 60.00;
 var circleSpeed = 0.20;
