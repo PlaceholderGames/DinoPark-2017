@@ -1,13 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
 guid: f128c52d4d875334d922cbb3b0cb0177
-timeCreated: 1517314479
-licenseType: Free
-=======
-guid: 7a485ad6ff1eed741bcf7b163bb66af3
-timeCreated: 1517217463
-licenseType: Pro
->>>>>>> master
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
@@ -101,11 +93,7 @@ ModelImporter:
   materials:
     importMaterials: 1
     materialName: 0
-<<<<<<< HEAD
     materialSearch: 1
-=======
-    materialSearch: 0
->>>>>>> master
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -128,7 +116,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
