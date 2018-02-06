@@ -67,6 +67,7 @@ public class Heron : MonoBehaviour {
 		Terrain terr = Terrain.activeTerrain;
 		if(terr)
 			terrain = terr.terrainData;
+		
 		anim = GetComponentInChildren<Animation>();
 		anim ["Walk"].speed = walkSpeed;
 		anim ["Run"].speed = runSpeed;
@@ -81,15 +82,15 @@ public class Heron : MonoBehaviour {
 
 		colliders = FindObjectsOfType<HeronCollider>();
 
-		StartCoroutine(MainLoop ());
-		StartCoroutine(MoveLoop ());
+		StartCoroutine(MainLoop());
+		StartCoroutine(MoveLoop());
 		StartCoroutine(AwareLoop());
 	}
 
 	private IEnumerator MainLoop()
 	{
 		while (true) {
-			yield return StartCoroutine(SeekPlayer());
+			yield return StartCoroutine (SeekPlayer());
 			yield return StartCoroutine(Idle());
 			yield return StartCoroutine(Fish());
 		}
@@ -98,23 +99,21 @@ public class Heron : MonoBehaviour {
 	private IEnumerator SeekPlayer()
 	{
 		float time = 0.0f;
-
+		Debug.Log ("Seek Player");
 		while (time < seekPlayerTime) {
 			Vector3 moveDir = player.position - myT.position;
 
 			if (moveDir.magnitude < shyDistance) {
 				yield return null; 
-				//return;
+				yield break;
 			}
 
 			moveDir.y = 0;
 			moveDir = (moveDir.normalized + (myT.forward * 0.5f)).normalized;
 			offsetMoveDirection = GetPathDirection (myT.position, moveDir);
 
-			if (offsetMoveDirection != Vector3.zero)
-				status = HeronStatus.Walking;
-			else
-				status = HeronStatus.Idle;
+			if (offsetMoveDirection != Vector3.zero) status = HeronStatus.Walking;
+			else status = HeronStatus.Idle;
 
 			yield return new WaitForSeconds(hitTestTimeIncrement);
 			time += hitTestTimeIncrement;
@@ -123,11 +122,13 @@ public class Heron : MonoBehaviour {
 
 	private IEnumerator Idle ()
 	{
+		Debug.Log ("Idle");
 		strechNeck = false;
 		float time = 0.00f;
-		while (time < seekPlayerTime) {
-			if (time > 0.6)
-				strechNeck = true;
+		while (time < seekPlayerTime)
+		{
+			if (time > 0.6) strechNeck = true;
+
 			status = HeronStatus.Idle;
 			offsetMoveDirection = Vector3.zero;
 
@@ -138,27 +139,27 @@ public class Heron : MonoBehaviour {
 
 	private IEnumerator Scared()
 	{
+		Debug.Log ("Scared");
 		float dist = (player.position - myT.position).magnitude;
-		if (dist > scaredDistance)
-			yield return null;
+		if (dist > scaredDistance) yield break;
+
 		float time = 0.00f;
 
-		while (time < scaredTime) {
+		while (time < scaredTime) 
+		{
 			Vector3 moveDirection = myT.position - player.position;
 
 			if (moveDirection.magnitude > shyDistance * 1.5) {
-				yield return null; 
-
+				yield return null;
+				yield break;
 			}
 
 			moveDirection.y = 0;
 			moveDirection = (moveDirection.normalized + (myT.forward * 0.5f)).normalized;
 			offsetMoveDirection = GetPathDirection (myT.position, moveDirection);
 
-			if (offsetMoveDirection != Vector3.zero)
-				status = HeronStatus.Running;
-			else
-				status = HeronStatus.Idle;
+			if (offsetMoveDirection != Vector3.zero) status = HeronStatus.Running;
+			else status = HeronStatus.Idle;
 
 			yield return new WaitForSeconds (hitTestTimeIncrement);
 			time += hitTestTimeIncrement;
@@ -220,7 +221,8 @@ public class Heron : MonoBehaviour {
 
 	private IEnumerator AwareLoop()
 	{
-		while (true) {
+		while (true) 
+		{
 			float dist = (player.position - myT.position).magnitude;
 
 			if (dist < scaredDistance && status != HeronStatus.Running) {
@@ -229,57 +231,62 @@ public class Heron : MonoBehaviour {
 				StopCoroutine (Idle());
 				strechNeck = false;
 				StopCoroutine (SeekPlayer());
-				Scared ();
+				StartCoroutine(Scared ());
 			}
 			yield return null;
 		}
 	}
 
-	private IEnumerator MoveLoop()
+	private IEnumerator MoveLoop ()
 	{
-		float deltaTime = Time.deltaTime;
-		float targetSpeed = 0.00f;
+		while (true) {
+			Debug.Log ("Move");
+			float deltaTime = Time.deltaTime;
+			float targetSpeed = 0.00f;
 
-		if (status == HeronStatus.Walking && offsetMoveDirection.magnitude > 0.01) {
-			if (!fishing) {
-				targetSpeed = walkAnimSpeed * walkSpeed;
-				anim.CrossFade ("Walk", 0.4f);
+			if (status == HeronStatus.Walking && offsetMoveDirection.magnitude > 0.01f) {
+				if (!fishing) {
+					targetSpeed = walkAnimSpeed * walkSpeed;
+					anim.CrossFade ("Walk", 0.4f);
+				} else {
+					targetSpeed = fishWalkAnimSpeed * fishWalkSpeed;
+					anim.CrossFade ("FishingWalk", 0.4f);
+				}
+			} else if (status == HeronStatus.Running) {
+				targetSpeed = runAnimSpeed * runSpeed;
+				anim.CrossFade ("Run", 0.4f);
 			} else {
-				targetSpeed = fishWalkAnimSpeed * fishWalkSpeed;
-				anim.CrossFade ("FishingWalk", 0.4f);
+				if (!fishing) {
+					targetSpeed = 0;
+					if (!strechNeck)
+						anim.CrossFade ("IdleHold", 0.4f);
+					else
+						anim.CrossFade ("IdleStrechNeck", 0.4f);
+				} else {
+					targetSpeed = 0;
+					anim.CrossFade ("IdleFishing", 0.4f);
+				}
 			}
-		} else if (status == HeronStatus.Running) {
-			targetSpeed = runAnimSpeed * runSpeed;
-			anim.CrossFade ("Run", 0.4f);
-		} else {
-			if (!fishing) {
-				targetSpeed = 0;
-				if (!strechNeck)
-					anim.CrossFade ("IdleHold", 0.4f);
-				else
-					anim.CrossFade ("IdleStrechNeck", 0.4f);
-			} else {
-				targetSpeed = 0;
-				anim.CrossFade ("IdleFishing", 0.4f);
+
+			usedMoveDirection = Vector3.Lerp (usedMoveDirection, offsetMoveDirection, deltaTime * 0.7f);
+			velocity = Vector3.RotateTowards (velocity, offsetMoveDirection * targetSpeed, turning * deltaTime, acceleration * deltaTime);
+			velocity.y = 0;
+
+			if (velocity.magnitude > 0.01f) {
+				if (lastSpeed < 0.01f) {
+					velocity = forward * 0.1f;
+				} else {
+					forward = velocity.normalized;
+				}
 			}
+			transform.position += velocity * deltaTime;
+			transform.rotation = Quaternion.LookRotation (forward);
+			lastSpeed = velocity.magnitude;
+			yield return null;
 		}
-
-		usedMoveDirection = Vector3.Lerp (usedMoveDirection, offsetMoveDirection, deltaTime * 0.7f);
-		velocity = Vector3.RotateTowards (velocity, offsetMoveDirection * targetSpeed, turning * deltaTime, acceleration * deltaTime);
-		velocity.y = 0;
-
-		if (velocity.magnitude > 0.01f) {
-			if (lastSpeed < 0.01f) {
-				velocity = forward * 0.1f;
-			} else {
-				forward = velocity.normalized;
-			}
-		}
-		transform.position += velocity * deltaTime;
-		transform.rotation = Quaternion.LookRotation (forward);
-		lastSpeed = velocity.magnitude;
-		yield return null;
 	}
+
+	
 
 	Vector3 GetPathDirection(Vector3 curPos, Vector3 wantedDirection)
 	{
@@ -317,11 +324,10 @@ public class Heron : MonoBehaviour {
 		return Vector3.zero;
 	}
 
+
 	float TestDirection ( Vector3 position, Vector3 direction)
 	{
-		float length = 0.0f;
-		float x = 0;
-		float z = 0;
+		float length = 0.00f;
 
 		while (true) {
 			length += hitTestDistanceIncrement;
@@ -337,8 +343,9 @@ public class Heron : MonoBehaviour {
 
 				while (i < colliders.Length) {
 					HeronCollider collider = colliders [i];
-					x = collider.position.x - testPos.x;
-					z = collider.position.z - testPos.z;
+				
+					float x = collider.position.x - testPos.x;
+					float z = collider.position.z - testPos.z;
 
 					if (x < 0)
 						x = -x;
@@ -452,6 +459,7 @@ public class Heron : MonoBehaviour {
 		}
 
 		transform.position = new Vector3 (transform.position.x, transform.position.y + 0.1f, transform.position.z);
+		//Debug.Log ("Player Position = " + player.transform.position);
 	}
 }
 		

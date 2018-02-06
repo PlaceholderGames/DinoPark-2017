@@ -1,13 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
 guid: 31bf8136b6bde7f4f9406eda2f8110d7
-timeCreated: 1517256682
-licenseType: Free
-=======
-guid: 6464c2641054a5f43a8d28b475a0fdf2
-timeCreated: 1517219493
-licenseType: Pro
->>>>>>> master
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
@@ -120,11 +112,7 @@ ModelImporter:
     13700006: Cube.003
   materials:
     importMaterials: 1
-<<<<<<< HEAD
     materialName: 0
-=======
-    materialName: 1
->>>>>>> master
     materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
@@ -148,7 +136,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1

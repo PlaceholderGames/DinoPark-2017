@@ -85,7 +85,6 @@ function MainLoop()
 {
 	while(true)
 	{
-		
 		yield SeekPlayer();
 		yield Idle();
 		yield Fish();	
