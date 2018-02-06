@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 85a58683a078a8c4dbff538deca798f8
 timeCreated: 1517256683
 licenseType: Free
+=======
+guid: eb1f2c2318a826a40b318f2447724695
+timeCreated: 1517217463
+licenseType: Pro
+>>>>>>> master
 NativeFormatImporter:
   mainObjectFileID: 2100000
   userData: 
