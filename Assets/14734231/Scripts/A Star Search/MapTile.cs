@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapTile : MonoBehaviour{
+public class MapTile {
 
     public Vector3 position;
     public bool walkable;

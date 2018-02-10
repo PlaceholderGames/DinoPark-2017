@@ -36,24 +36,6 @@ public class MapGrid : MonoBehaviour {
         oldHeightThreshold = heightThreshold;
         oldSeaLevel = seaLevel;
     }
-	
-
-
-	// Update is called once per frame
-	void Update () {
-
-        // Only check which tiles are walkable if a variable has changed
-        if (oldTileSize != tileSize)
-            oldTileSize = tileSize;
-        else if (oldHeightThreshold != heightThreshold)
-            oldHeightThreshold = heightThreshold;
-        else if (oldSeaLevel != seaLevel)
-            oldSeaLevel = seaLevel;
-        else
-            return; 
-
-        checkWalkable();
-	}
 
     private void initialiseTiles()
     {
@@ -72,13 +54,30 @@ public class MapGrid : MonoBehaviour {
                 Vector3 tileLocation = mapBottomLeft + Vector3.right * (x * tileSize + (tileSize / 2)) + Vector3.forward * (y * tileSize + (tileSize / 2));
 
                 tileLocation.y = terrain.SampleHeight(tileLocation);
-                
+
                 // Create new tile at tileLocation 
                 tiles[x, y] = new MapTile(tileLocation);
 
             }
         }
     }
+
+    // Update is called once per frame
+    void Update () {
+
+        // Only check which tiles are walkable if a variable has changed
+        if (oldTileSize != tileSize)
+            oldTileSize = tileSize;
+        else if (oldHeightThreshold != heightThreshold)
+            oldHeightThreshold = heightThreshold;
+        else if (oldSeaLevel != seaLevel)
+            oldSeaLevel = seaLevel;
+        else
+            return; 
+
+        checkWalkable();
+	}
+
 
     public void checkWalkable()
     {
@@ -119,5 +118,39 @@ public class MapGrid : MonoBehaviour {
             }
         }
     }
-    
+
+    /// <summary>
+    /// Returns the corresponding mapTile from a position
+    /// </summary>
+    /// <param name="position">A vector3 world position</param>
+    /// <returns>The corresponding mapTile at position</returns>
+    public MapTile getTileFromPosition(Vector3 position)
+    {
+        Vector2 coord = getCoordFromPosition(position);
+
+        // Return tile from array
+        return tiles[(int)coord.x, (int)coord.y];
+    }
+
+    /// <summary>
+    /// Converts a vector 3 world position into a vector2 grid coordinate
+    /// </summary>
+    /// <param name="position">Vector 3 world position</param>
+    /// <returns>Vector 2 grid coordinate</returns>
+    public Vector2 getCoordFromPosition(Vector3 position)
+    {
+        position -= transform.position;
+        Vector2 mapPercentage; // Convert the position to a percentage across the available map (clamped between 0% and 100%).
+        mapPercentage.x = Mathf.Clamp01((position.x + gridWorldSize.x / 2) / gridWorldSize.x);
+        mapPercentage.y = Mathf.Clamp01((position.z + gridWorldSize.y / 2) / gridWorldSize.y);
+
+        // Advance across tiles array for percentage, then round to closest tile
+        int xTile = Mathf.RoundToInt((tiles.GetLength(0) - 1) * mapPercentage.x);
+        int yTile = Mathf.RoundToInt((tiles.GetLength(1) - 1) * mapPercentage.y);
+
+        //        0%=================100%
+        // Array [0] [1] [2] [3] [4] [5]
+
+        return new Vector2(xTile, yTile);
+    }
 }
