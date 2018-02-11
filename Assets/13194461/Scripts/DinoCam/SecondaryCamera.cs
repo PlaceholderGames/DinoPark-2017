@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SecondaryCamera : MonoBehaviour {
 
@@ -11,14 +12,20 @@ public class SecondaryCamera : MonoBehaviour {
     public Camera dinoCam;
     float x;
     float y;
+    float speed;
+    GameObject canvas;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         dinoCam.enabled = false;
         offset = new Vector3(0.0f, 5.0f, 0.0f);
         x = Screen.width / 2;
         y = Screen.height / 2;
         centreScreen = new Vector3(x, y);
+        speed = 3.0f;
+
+        canvas = GameObject.Find("Canvas");
+        canvas.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -46,6 +53,16 @@ public class SecondaryCamera : MonoBehaviour {
             }
         }
 
-        transform.position = objPosition.position + myPos + offset;
+        transform.position = objPosition.position - (objPosition.forward * 5) + offset;
+        transform.rotation = Quaternion.Lerp(transform.rotation, objPosition.transform.rotation, Time.deltaTime * speed);
+
+        if (dinoCam.enabled)
+        {
+            canvas.SetActive(true);
+        }
+        else
+        {
+            canvas.SetActive(false);
+        }
     }
 }
