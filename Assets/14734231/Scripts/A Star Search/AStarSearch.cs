@@ -8,7 +8,7 @@ using UnityEngine;
 public class AStarSearch : MonoBehaviour
 {
     public MapGrid mapGrid; // The MapGrid object applied over the map
-    public Agent target; // The agent to search for
+    public GameObject target; // The agent to search for
 
     private Vector3 targetPos; // Position of the target to be updated each frame
 
