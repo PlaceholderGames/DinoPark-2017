@@ -9,23 +9,23 @@ public class SecondaryCamera : MonoBehaviour {
     Vector3 offset;
     Vector3 centreScreen;
     public Transform objPosition;
+    public Transform playerPosition;
     public Camera dinoCam;
     float x;
     float y;
     float speed;
-    GameObject canvas;
+    public Image dinoMenu;
 
     // Use this for initialization
     void Start () {
+        dinoMenu.enabled = false;
         dinoCam.enabled = false;
         offset = new Vector3(0.0f, 5.0f, 0.0f);
         x = Screen.width / 2;
         y = Screen.height / 2;
         centreScreen = new Vector3(x, y);
         speed = 3.0f;
-
-        canvas = GameObject.Find("Canvas");
-        canvas.SetActive(false);
+        dinoMenu.rectTransform.sizeDelta = new Vector2(Screen.width * 0.22f, Screen.height * 0.5f);       
 	}
 	
 	// Update is called once per frame
@@ -49,20 +49,16 @@ public class SecondaryCamera : MonoBehaviour {
             }
             else
             {
+                
                 dinoCam.enabled = false;
             }
         }
 
         transform.position = objPosition.position - (objPosition.forward * 5) + offset;
         transform.rotation = Quaternion.Lerp(transform.rotation, objPosition.transform.rotation, Time.deltaTime * speed);
-
-        if (dinoCam.enabled)
-        {
-            canvas.SetActive(true);
-        }
+        if (dinoCam.enabled == true)
+            dinoMenu.enabled = true;
         else
-        {
-            canvas.SetActive(false);
-        }
+            dinoMenu.enabled = false;
     }
 }
