@@ -1,11 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
 guid: a3b960fd95c663341af47ac4b4f021c4
-=======
-guid: 1ffd3e77dbe70414898ec09a9cbfe617
-timeCreated: 1517314744
-licenseType: Free
->>>>>>> origin/AStar
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
