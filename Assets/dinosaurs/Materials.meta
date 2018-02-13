@@ -1,5 +1,6 @@
 fileFormatVersion: 2
 <<<<<<< HEAD
+<<<<<<< HEAD
 guid: 1901fa69aabf8c64eb67bd7307b2b2ef
 folderAsset: yes
 timeCreated: 1517314477
@@ -10,6 +11,12 @@ folderAsset: yes
 timeCreated: 1517217459
 licenseType: Pro
 >>>>>>> master
+=======
+guid: 7cdb552e2864e644d8077db854c3a914
+folderAsset: yes
+timeCreated: 1517314743
+licenseType: Free
+>>>>>>> origin/AStar
 DefaultImporter:
   userData: 
   assetBundleName: 

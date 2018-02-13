@@ -1,5 +1,6 @@
 fileFormatVersion: 2
 <<<<<<< HEAD
+<<<<<<< HEAD
 guid: 2d658cc936bee68418dcc27c69734bd2
 timeCreated: 1517314477
 licenseType: Free
@@ -8,6 +9,11 @@ guid: ee1587086ad89ce4294762564fc1c656
 timeCreated: 1517217459
 licenseType: Pro
 >>>>>>> master
+=======
+guid: c8f53dda4a32d364ebd363e1fbe030e7
+timeCreated: 1517314743
+licenseType: Free
+>>>>>>> origin/AStar
 NativeFormatImporter:
   mainObjectFileID: 2100000
   userData: 
