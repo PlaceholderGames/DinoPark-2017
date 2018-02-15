@@ -11,8 +11,9 @@ public class FPSFreeCam : MonoBehaviour {
     public GameObject freeCam;
     public GameObject firstPersonCamera;
     public Transform freecam;
-    public Transform mainCamera;
-    public MoveFPS movefps;
+    public MoveFPS movefpsScript;
+    public GameObject fpsCam;
+    public GameObject FreeCamera;
 
     Rigidbody rb;
 
@@ -24,21 +25,21 @@ public class FPSFreeCam : MonoBehaviour {
 
     void Update()
     {
-        if (freeCam.activeSelf == true)
+        if (FreeCamera.activeInHierarchy == true)
         {
             if (Input.GetButton("f"))
             {
-                mainCamera.parent = firstPersonCamera.transform;
-                movefps.movePosition();
-                freeCam.SetActive(false);
-                firstPersonCamera.SetActive(true);
+                movefpsScript.movePosition();
+                
             }
         }
     }
     public void movePosition()
     {
-        mainCamera.transform.position = firstPersonCamera.transform.position;
+        
         freecam.transform.position = firstPersonCamera.transform.position;
+        FreeCamera.SetActive(true);
+        fpsCam.SetActive(false);
     }
     // Update is called once per frame
     void FixedUpdate()

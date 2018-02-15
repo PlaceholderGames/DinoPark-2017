@@ -7,9 +7,9 @@ public class MoveFPS : MonoBehaviour {
     public GameObject fpsCamera;
     public GameObject freeCam;
     public Transform moveFPS;
-    Camera fpsCam;
-    public FPSFreeCam fpsFreeCam;
-    public Transform mainCamera;
+    public GameObject fpsCam;
+    public GameObject freecam;
+    public FPSFreeCam fpsFreeCamScript;
 
 
     void Start()
@@ -18,21 +18,20 @@ public class MoveFPS : MonoBehaviour {
     }
     void Update()
     {
-        if (fpsCamera.activeSelf == true)
+        if (fpsCam.activeInHierarchy == true)
         {
             if (Input.GetButton("r"))
             {
-                freeCam.SetActive(true);
-                mainCamera.parent = freeCam.transform;
-                fpsFreeCam.movePosition();
-                fpsCamera.SetActive(false);
+                fpsFreeCamScript.movePosition();
             }
         }
     }
     // Use this for initialization
     public void movePosition()
     {
-        mainCamera.transform.position = freeCam.transform.position;
+        
         moveFPS.transform.position = freeCam.transform.position;
+        freecam.SetActive(false);
+        fpsCam.SetActive(true);
     }
 }
