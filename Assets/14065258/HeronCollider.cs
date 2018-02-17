@@ -16,7 +16,7 @@ public class HeronCollider : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.color =  new Color(0.32f, 0.55f, 0.76f, 0.7f);
-        Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.color = new Color(0.32f, 0.55f, 0.76f, 0.7f);
+        Gizmos.DrawSphere(transform.position, radius);
     }
 }
