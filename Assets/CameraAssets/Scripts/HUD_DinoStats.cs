@@ -18,9 +18,17 @@ public class HUD_DinoStats : MonoBehaviour {
 		dinoList = GameObject.FindGameObjectsWithTag (dinoTypeTag);
 		//get all gameobjects with the tag dinostats
 
-		HUDStatPanels = GameObject.FindGameObjectsWithTag("DinoStats");
+		//HUDStatPanels = GameObject.FindGameObjectsWithTag("DinoStats");
 	
-		//HUDStatPanels = GameObject.Find("/DinoStats");
+		HUDStatPanels = GameObject.FindGameObjectsWithTag ("DinoStats");
+
+		//Only populate panels if dinos exist
+		for (int i = 0; i < dinoList.Length; i++) {
+			HUDStatPanels [i].GetComponent<DinoStats> ().setPosText (dinoList [i].transform.position);
+			HUDStatPanels [i].GetComponent<DinoStats> ().setDinoIDText (dinoList [i].name);
+			//HUDStatPanels [i].GetComponent<DinoStats> ().setHealthText (dinoList [i].getHealth());
+			//HUDStatPanels [i].GetComponent<DinoStats> ().setHungerText (dinoList [i].getHunger());
+		}
 
 
 	}
