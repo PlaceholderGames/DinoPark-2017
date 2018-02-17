@@ -7,7 +7,7 @@ public class HUD_DinoStats : MonoBehaviour {
 
 	public string dinoTypeTag;
 	//GUI Stat Panels
-	public  GameObject[] HUDStatPanels;
+	public  List<GameObject> HUDStatPanels;
 
 	//List of dinos in the world
 	GameObject[] dinoList;
@@ -16,11 +16,13 @@ public class HUD_DinoStats : MonoBehaviour {
 	void Start () {
 		//get all dinos with specified tag
 		dinoList = GameObject.FindGameObjectsWithTag (dinoTypeTag);
-		//get all gameobjects with the tag dinostats
 
-		//HUDStatPanels = GameObject.FindGameObjectsWithTag("DinoStats");
-	
-		HUDStatPanels = GameObject.FindGameObjectsWithTag ("DinoStats");
+		//Go throught child objects and find the tags
+		foreach (Transform child in transform) {
+			if(child.CompareTag("DinoStats")){
+				HUDStatPanels.Add (child.gameObject);
+			}
+		}
 
 		//Only populate panels if dinos exist
 		for (int i = 0; i < dinoList.Length; i++) {
