@@ -59,23 +59,21 @@ public class Heron : MonoBehaviour
 
 
     private double time = 0.00;
-   
+
 
     // Use this for initialization
     void Start()
     {
         forward = transform.forward;
 
-        forward = transform.forward;
-
-        var obj = GameObject.FindWithTag("Player");
+        GameObject obj = GameObject.FindWithTag("Player");
         player = obj.transform;
         myT = transform;
-        var terr = Terrain.activeTerrain;
+        Terrain terr = Terrain.activeTerrain;
         if (terr)
             terrain = terr.terrainData;
 
-        anim = GetComponentInChildren(Animation);
+        anim = GetComponentInChildren<Animation>();
         anim["Walk"].speed = walkSpeed;
         anim["Run"].speed = runSpeed;
         anim["FishingWalk"].speed = fishWalkSpeed;
@@ -83,7 +81,6 @@ public class Heron : MonoBehaviour
         leftKnee = myT.Find("HeronAnimated/MasterMover/RootDummy/Root/Lhip/knee2");
         leftAnkle = leftKnee.Find("ankle2");
         leftFoot = leftAnkle.Find("foot2");
-
         rightKnee = myT.Find("HeronAnimated/MasterMover/RootDummy/Root/Rhip/knee3");
         rightAnkle = rightKnee.Find("ankle3");
         rightFoot = rightAnkle.Find("foot3");
@@ -93,10 +90,7 @@ public class Heron : MonoBehaviour
         MainLoop();
         MoveLoop();
         AwareLoop();
-
-
     }
-
     void SeekPlayer()
     {
         float time = 0.0f;
@@ -117,6 +111,41 @@ public class Heron : MonoBehaviour
 
             new WaitForSeconds(hitTestTimeIncrement);
             time += hitTestTimeIncrement;
+        }
+    }
+
+
+    void Idle()
+    {
+        strechNeck = false;
+        float time = 0.0f;
+        while (time < seekPlayerTime)
+        {
+            if (time > 0.6) strechNeck = true;
+
+            status = HeronStatus.Idle;
+            offsetMoveDirection = Vector3.zero;
+
+            new WaitForSeconds(hitTestTimeIncrement);
+            time += hitTestTimeIncrement;
+        }
+    }
+
+    void Scared()
+    {
+        var dist = (player.position - myT.position).magnitude;
+        if (dist > scaredDistance) return;
+
+        var time = 0.00;
+
+        while (time < scaredTime)
+        {
+            var moveDirection = myT.position - player.position;
+
+            if (moveDirection.magnitude > shyDistance * 1.5)
+            {
+                return;
+            }
         }
     }
 // Update is called once per frame
