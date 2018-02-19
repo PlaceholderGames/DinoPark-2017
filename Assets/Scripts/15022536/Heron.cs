@@ -31,7 +31,7 @@ public class Heron : MonoBehaviour
 
     private float minHeight = 64.1f;
     private float maxHeight = 82.00f;
-    private HeronCollider colliders = new HeronCollider[];
+    private HeronCollider[] colliders;
 
     private float hitTestDistanceIncrement = 1.00f;
     private float hitTestDistanceMax = 50.00f;
@@ -83,11 +83,12 @@ public class Heron : MonoBehaviour
         leftKnee = myT.Find("HeronAnimated/MasterMover/RootDummy/Root/Lhip/knee2");
         leftAnkle = leftKnee.Find("ankle2");
         leftFoot = leftAnkle.Find("foot2");
+
         rightKnee = myT.Find("HeronAnimated/MasterMover/RootDummy/Root/Rhip/knee3");
         rightAnkle = rightKnee.Find("ankle3");
         rightFoot = rightAnkle.Find("foot3");
 
-        colliders = FindObjectsOfType(HeronCollider);
+        colliders = FindObjectsOfType<HeronCollider>();
 
         MainLoop();
         MoveLoop();
@@ -98,16 +99,24 @@ public class Heron : MonoBehaviour
 
     void SeekPlayer()
     {
+        float time = 0.0f;
         while (time < seekPlayerTime)
         {
-            double moveDirection = player.position - myT.position;
+            Vector3 moveDirection = player.position - myT.position;
 
             if(moveDirection.magnitude < shyDistance)
             {
-                yield;
                 return;
             }
             moveDirection.y = 0;
+            moveDirection = (moveDirection.normalized + (myT.forward * 0.5f)).normalized;
+            offsetMoveDirection = GetPathDirection(myT.position, moveDirection);
+
+            if (offsetMoveDirection != Vector3.zero) status = HeronStatus.Walking;
+            else status = HeronStatus.Idle;
+
+            new WaitForSeconds(hitTestTimeIncrement);
+            time += hitTestTimeIncrement;
         }
     }
 // Update is called once per frame
@@ -116,16 +125,16 @@ private void Update()
 
     }
 
-    void MainLoop()
+void MainLoop()
+{
+    while (true)
     {
-        while (true)
-        {
-            yield SeekPlayer();
-            yield Idle();
-            yield Fish();
 
-        }
+        SeekPlayer();
+        Idle();
+        Fish();
     }
+}
 }
 
 
