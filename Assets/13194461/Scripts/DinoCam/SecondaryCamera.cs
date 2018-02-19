@@ -21,10 +21,12 @@ public class SecondaryCamera : MonoBehaviour {
     float minimapXPos;
     float minimapYPos;
     float minimapZPos;
+    bool followPlayer;
 
     // Use this for initialization
     void Start() {
         UseMinimap = true;
+        followPlayer = true;
         playerPosition = objPosition;
         dinoMenu.enabled = false;
         dinoCam.enabled = true;
@@ -107,6 +109,21 @@ public class SecondaryCamera : MonoBehaviour {
             minimapXPos += 0.1f;
             transform.position = new Vector3(minimapXPos, minimapYPos, minimapZPos);
         }
+
+        if (Input.GetKey("[5]"))
+        {
+            followPlayer = !followPlayer;
+            if (!followPlayer)
+            {
+                minimapXPos = playerPosition.position.x;
+                minimapYPos = playerPosition.position.y + minimapOffset.y;
+                minimapZPos = playerPosition.position.z;
+            }
+        }
+
+        if (followPlayer)
+            transform.position = playerPosition.position + minimapOffset;
+
 
     }
 
