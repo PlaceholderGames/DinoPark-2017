@@ -8,7 +8,7 @@ public class Graze : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
 	}
 	
 	// Update is called once per frame
@@ -18,10 +18,11 @@ public class Graze : MonoBehaviour {
 
         if (Physics.Raycast(transform.position, Vector3.down, out hit, distance))
         {
-            Renderer rend = hit.transform.GetComponent<Renderer>();
-            Texture2D tex = rend.material.mainTexture as Texture2D;
-
+            float[] tex = TerrainSurface.GetTextureMix(hit.collider.transform.position);
+            Debug.Log("(" + tex[1] + ", " + tex[2] + ", " + tex[3] + ")");
             // if tex == grass then eat
+
+            //(0, 0.7411765, 0.2588235)
         }
     }
 }
