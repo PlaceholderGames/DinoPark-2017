@@ -5,12 +5,32 @@ using UnityEngine;
 public class Graze : MonoBehaviour {
 
     public Hunger hungerSO;
+    TerrainData mTerrainData;
+    float[,,] mSplatmapData;
+    int mNumTextures;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
+        mTerrainData = Terrain.activeTerrain.terrainData;
+        int alphamapWidth = mTerrainData.alphamapWidth;
+        int alphamapHeight = mTerrainData.alphamapHeight;
 
+        mSplatmapData = mTerrainData.GetAlphamaps(0, 0, alphamapWidth, alphamapHeight);
+        mNumTextures = mSplatmapData.Length / (alphamapWidth * alphamapHeight);
 	}
 	
+    private Vector3 ConvertToSplatMapCoord(Vector3 dinoPos)
+    {
+        Vector3 vecRet = new Vector3();
+        Terrain ter = Terrain.activeTerrain;
+        Vector3 terPos = ter.transform.position;
+
+        vecRet.x = ((dinoPos.x - terPos.x) / ter.terrainData.size.x) * ter.terrainData.alphamapWidth;
+        vecRet.z = ((dinoPos.z - terPos.z) / ter.terrainData.size.z) * ter.terrainData.alphamapHeight;
+
+        return vecRet;
+    }
+
 	// Update is called once per frame
 	void Update () {
         RaycastHit hit;
@@ -18,11 +38,24 @@ public class Graze : MonoBehaviour {
 
         if (Physics.Raycast(transform.position, Vector3.down, out hit, distance))
         {
-            float[] tex = TerrainSurface.GetTextureMix(hit.collider.transform.position);
-            Debug.Log("(" + tex[1] + ", " + tex[2] + ", " + tex[3] + ")");
-            // if tex == grass then eat
-
-            //(0, 0.7411765, 0.2588235)
+            int tex = GetActiveTerrainTextureIdx(hit);
+            Debug.Log(tex);
         }
+    }
+
+    int GetActiveTerrainTextureIdx(RaycastHit hit)
+    {
+        Vector3 dinoPos = hit.collider.transform.position;
+        Vector3 terrainCoord = ConvertToSplatMapCoord(dinoPos);
+        int ret = 0;
+        float comp = 0f;
+
+        for (int i = 0; i < mNumTextures; i++)
+        {
+            if (comp < mSplatmapData[(int)terrainCoord.z, (int)terrainCoord.x, i])
+                ret = i;
+        }
+
+        return ret;
     }
 }
