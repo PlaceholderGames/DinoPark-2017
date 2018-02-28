@@ -2,60 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Graze : MonoBehaviour {
+public class Graze : MonoBehaviour
+{
 
     public Hunger hungerSO;
-    TerrainData mTerrainData;
-    float[,,] mSplatmapData;
-    int mNumTextures;
+    TerrainData terrainData;
+    Transform terrainPos;
+    float [,,] splatmapData;
 
     // Use this for initialization
-    void Start () {
-        mTerrainData = Terrain.activeTerrain.terrainData;
-        int alphamapWidth = mTerrainData.alphamapWidth;
-        int alphamapHeight = mTerrainData.alphamapHeight;
-
-        mSplatmapData = mTerrainData.GetAlphamaps(0, 0, alphamapWidth, alphamapHeight);
-        mNumTextures = mSplatmapData.Length / (alphamapWidth * alphamapHeight);
-	}
-	
-    private Vector3 ConvertToSplatMapCoord(Vector3 dinoPos)
+    void Start()
     {
-        Vector3 vecRet = new Vector3();
-        Terrain ter = Terrain.activeTerrain;
-        Vector3 terPos = ter.transform.position;
-
-        vecRet.x = ((dinoPos.x - terPos.x) / ter.terrainData.size.x) * ter.terrainData.alphamapWidth;
-        vecRet.z = ((dinoPos.z - terPos.z) / ter.terrainData.size.z) * ter.terrainData.alphamapHeight;
-
-        return vecRet;
+        terrainData = Terrain.activeTerrain.terrainData;
+        terrainPos = Terrain.activeTerrain.transform;
     }
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update()
+    {
         RaycastHit hit;
         float distance = 100f;
 
         if (Physics.Raycast(transform.position, Vector3.down, out hit, distance))
         {
-            int tex = GetActiveTerrainTextureIdx(hit);
-            Debug.Log(tex);
+            Transform dinoTransform = hit.collider.transform;
+            Vector3 dinoPos = new Vector3(dinoTransform.position.x, dinoTransform.position.y, dinoTransform.position.z);
+
+            float terX = ((dinoPos.x - terrainPos.position.x) / terrainData.size.x) * terrainData.alphamapWidth;
+            float terZ = ((dinoPos.z - terrainPos.position.z) / terrainData.size.z) * terrainData.alphamapHeight;
+
+            splatmapData = terrainData.GetAlphamaps((int)dinoPos.x, (int)dinoPos.y, 1, 1);
+
+            float texture1Level = splatmapData[0, 0, 1];
+            float texture2Level = splatmapData[0, 0, 2];
+            float texture3Level = splatmapData[0, 0, 3];
+            float texture4Level = splatmapData[0, 0, 4];
+
+            Debug.Log("T1L" + texture1Level);
+            Debug.Log("T2L" + texture2Level);
+            Debug.Log("T3L" + texture3Level);
+            Debug.Log("T4L" + texture4Level);
         }
     }
 
-    int GetActiveTerrainTextureIdx(RaycastHit hit)
-    {
-        Vector3 dinoPos = hit.collider.transform.position;
-        Vector3 terrainCoord = ConvertToSplatMapCoord(dinoPos);
-        int ret = 0;
-        float comp = 0f;
-
-        for (int i = 0; i < mNumTextures; i++)
-        {
-            if (comp < mSplatmapData[(int)terrainCoord.z, (int)terrainCoord.x, i])
-                ret = i;
-        }
-
-        return ret;
-    }
 }
