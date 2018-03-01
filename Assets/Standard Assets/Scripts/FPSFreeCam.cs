@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FPSFreeCam : MonoBehaviour {
-
     // Use this for initialization
     public float speed = 20.0f;
     public float maxVelocityChange = 10.0f;
@@ -12,31 +11,35 @@ public class FPSFreeCam : MonoBehaviour {
     public GameObject freeCam;
     public GameObject firstPersonCamera;
     public Transform freecam;
-    public Transform mainCamera;
-    MoveFPS movefps;
-    
+    public MoveFPS movefpsScript;
+    public GameObject fpsCam;
+    public GameObject FreeCamera;
+
     Rigidbody rb;
 
-    void Start () {
+    void Start()
+    {
         rb = GetComponent<Rigidbody>();
-        
-	}
+
+    }
 
     void Update()
     {
-        if (freeCam.activeSelf == true)
+        if (FreeCamera.activeInHierarchy == true)
         {
             if (Input.GetButton("f"))
             {
-                firstPersonCamera.SetActive(true);
-                mainCamera.parent = transform;
+                movefpsScript.movePosition();
+                
             }
         }
     }
-    public void movePosition(float x, float y, float z)
+    public void movePosition()
     {
-
+        
         freecam.transform.position = firstPersonCamera.transform.position;
+        FreeCamera.SetActive(true);
+        fpsCam.SetActive(false);
     }
     // Update is called once per frame
     void FixedUpdate()
