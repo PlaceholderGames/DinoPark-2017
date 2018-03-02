@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MoveFPS : MonoBehaviour {
 
-    public GameObject fpsCamera;
-    public GameObject freeCam;
+    //public GameObject fpsCamera;
+    public GameObject freeCamPosition;
     public Transform moveFPS;
     public GameObject fpsCam;
     public GameObject freecam;
@@ -30,7 +30,7 @@ public class MoveFPS : MonoBehaviour {
     public void movePosition()
     {
         
-        moveFPS.transform.position = freeCam.transform.position;
+        moveFPS.transform.position = freeCamPosition.transform.position;
         freecam.SetActive(false);
         fpsCam.SetActive(true);
     }
