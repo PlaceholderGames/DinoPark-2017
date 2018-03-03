@@ -170,36 +170,36 @@ public class Heron : MonoBehaviour {
 	{
 		float height = terrain.GetInterpolatedHeight (myT.position.x / terrain.size.x, myT.position.z / terrain.size.z);
 		status = HeronStatus.Walking;
-		Vector3 direction;
+		//Vector3 direction;
 		Vector3 randomDir = Random.onUnitSphere;
 
 		if (height > 40) {
 			maxHeight = 40;
 			offsetMoveDirection = GetPathDirection (myT.position, randomDir);
 			yield return new WaitForSeconds(0.5f);
-			if (velocity.magnitude > 0.01)
-				direction = myT.right * (Random.value > 0.5 ? -1 : 1);
+			//if (velocity.magnitude > 0.01)
+				//direction = myT.right * (Random.value > 0.5 ? -1 : 1);
 			}
 
 		if (height > 38) {
 			maxHeight = 38;
 			offsetMoveDirection = GetPathDirection (myT.position, randomDir);
 			yield return new WaitForSeconds(1f);
-			if (velocity.magnitude > 0.01)
-				direction = myT.right * (Random.value > 0.5 ? -1 : 1);
+			//if (velocity.magnitude > 0.01)
+				//direction = myT.right * (Random.value > 0.5 ? -1 : 1);
 		}
 
 		if (height > 36.5) {
 			maxHeight = 36.5f;
 			offsetMoveDirection = GetPathDirection (myT.position, randomDir);
 			yield return new WaitForSeconds (1.5f);
-			if (velocity.magnitude > 0.01)
-				direction = myT.right * (Random.value > 0.5 ? -1 : 1);
+			//if (velocity.magnitude > 0.01)
+				//direction = myT.right * (Random.value > 0.5 ? -1 : 1);
 		}
 		while (height > 35) {
 			maxHeight = 35;
 			yield return new WaitForSeconds (0.5f);
-			if(velocity.magnitude > 0.01) direction = myT.right * (Random.value > 0.5 ? -1 : 1);
+			//if(velocity.magnitude > 0.01) direction = myT.right * (Random.value > 0.5 ? -1 : 1);
 			offsetMoveDirection = GetPathDirection (myT.position, randomDir);
 			height = terrain.GetInterpolatedHeight (myT.position.x / terrain.size.x, myT.position.z / terrain.size.z);
 		}
