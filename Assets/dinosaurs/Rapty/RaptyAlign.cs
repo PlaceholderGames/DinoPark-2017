@@ -8,9 +8,9 @@ public class RaptyAlign : RaptyBehaviour
     public float slowRadius;
     public float timeToTarget = 0.1f;
 
-    public override Steering GetSteering()
+    public override RaptySteering GetRaptySteering()
     {
-        Steering steering = new Steering();
+        RaptySteering steering = new RaptySteering();
         float targetOrientation = target.GetComponent<RaptyAgent>().orientation;
         float rotation = targetOrientation - agent.orientation;
         rotation = MapToRange(rotation);

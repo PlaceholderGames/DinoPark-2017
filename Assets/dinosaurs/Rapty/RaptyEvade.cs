@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RaptyEvade : Flee
+public class RaptyEvade : RaptyFlee
 {
     public float maxPrediction;
     private GameObject targetAux;
@@ -15,7 +15,7 @@ public class RaptyEvade : Flee
         target = new GameObject();
     }
 
-    public override Steering GetSteering()
+    public override RaptySteering GetRaptySteering()
     {
         Vector3 direction = targetAux.transform.position - transform.position;
         float distance = direction.magnitude;
@@ -27,7 +27,7 @@ public class RaptyEvade : Flee
             prediction = distance / speed;
         target.transform.position = targetAux.transform.position;
         target.transform.position += targetAgent.velocity * prediction;
-        return base.GetSteering();
+        return base.GetRaptySteering();
     }
 
     void OnDestroy ()

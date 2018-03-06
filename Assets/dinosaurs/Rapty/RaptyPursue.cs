@@ -15,7 +15,7 @@ public class RaptyPursue : RaptySeek
         target = new GameObject();
     }
 
-    public override RaptySteering GetSteering()
+    public override RaptySteering GetRaptySteering()
     {
         Vector3 direction = targetAux.transform.position - transform.position;
         float distance = direction.magnitude;
@@ -27,7 +27,7 @@ public class RaptyPursue : RaptySeek
             prediction = distance / speed;
         target.transform.position = targetAux.transform.position;
         target.transform.position += targetAgent.velocity * prediction;
-        return base.GetSteering();
+        return base.GetRaptySteering();
     }
 
     void OnDestroy ()

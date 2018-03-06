@@ -13,7 +13,7 @@ public class RaptyFace : RaptyAlign {
         target.AddComponent<RaptyAgent>();
     }
 
-    public override Steering GetSteering()
+    public override RaptySteering GetRaptySteering()
     {
         Vector3 direction = targetAux.transform.position - transform.position;
         if (direction.magnitude > 0.0f)
@@ -22,7 +22,7 @@ public class RaptyFace : RaptyAlign {
             targetOrientation *= Mathf.Rad2Deg;
             target.GetComponent<RaptyAgent>().orientation = targetOrientation;
         }
-        return base.GetSteering();
+        return base.GetRaptySteering();
     }
 
     void OnDestroy ()

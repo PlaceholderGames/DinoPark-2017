@@ -1,8 +1,8 @@
 ﻿public class RaptySeek : RaptyBehaviour
 {
-    public override Steering GetSteering()
+    public override RaptySteering GetRaptySteering()
     {
-        Steering steering = new Steering();
+        RaptySteering steering = new RaptySteering();
         steering.linear = target.transform.position - transform.position;
         steering.linear.Normalize();
         steering.linear = steering.linear * agent.maxAccel;

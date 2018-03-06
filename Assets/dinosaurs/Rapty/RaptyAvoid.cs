@@ -12,9 +12,9 @@ public class RaptyAvoid : RaptyBehaviour
         targets = GameObject.FindGameObjectsWithTag("Rapty");
     }
 
-    public override Steering GetSteering()
+    public override RaptySteering GetRaptySteering()
     {
-        Steering steering = new Steering();
+        RaptySteering steering = new RaptySteering();
         float shortestTime = Mathf.Infinity;
         GameObject firstTarget = null;
         float firstMinSeparation = 0.0f;

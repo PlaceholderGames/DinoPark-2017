@@ -7,9 +7,9 @@ public class RaptyArrive : RaptyBehaviour
     public float slowRadius;
     public float timeToTarget = 0.1f;
  
-    public override Steering GetSteering()
+    public override RaptySteering GetRaptySteering()
     {
-        Steering steering = new Steering();
+        RaptySteering steering = new RaptySteering();
         Vector3 direction = target.transform.position - transform.position;
         float distance = direction.magnitude;
         float targetSpeed;

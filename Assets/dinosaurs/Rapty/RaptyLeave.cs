@@ -7,9 +7,9 @@ public class RaptyLeave : RaptyBehaviour
     public float dangerRadius;
     public float timeToTarget = 0.1f;
 
-    public override Steering GetSteering()
+    public override RaptySteering GetRaptySteering()
     {
-        Steering steering = new Steering();
+        RaptySteering steering = new RaptySteering();
         Vector3 direction = transform.position - target.transform.position;
         float distance = direction.magnitude;
         if (distance > dangerRadius)

@@ -27,7 +27,7 @@ public class AnkyEvade : AnkyFlee
             prediction = distance / speed;
         target.transform.position = targetAux.transform.position;
         target.transform.position += targetAgent.velocity * prediction;
-        return base.GetSteering();
+        return base.GetAnkySteering();
     }
 
     void OnDestroy ()

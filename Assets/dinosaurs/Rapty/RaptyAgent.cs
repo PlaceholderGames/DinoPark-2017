@@ -14,13 +14,13 @@ public class RaptyAgent : MonoBehaviour
     public float orientation;
     public float rotation;
     public Vector3 velocity;
-    protected Steering steering;
-    private Dictionary<int, List<Steering>> groups;
+    protected RaptySteering steering;
+    private Dictionary<int, List<RaptySteering>> groups;
     void Start()
     {
         velocity = Vector3.zero;
-        steering = new Steering();
-        groups = new Dictionary<int, List<Steering>>();
+        steering = new RaptySteering();
+        groups = new Dictionary<int, List<RaptySteering>>();
     }
     public virtual void Update()
     {
@@ -38,7 +38,7 @@ public class RaptyAgent : MonoBehaviour
     {
         if (blendPriority)
         {
-            steering = GetPrioritySteering();
+            steering = GetPriorityRaptySteering();
             groups.Clear();
         }
         velocity += steering.linear * Time.deltaTime;
@@ -60,27 +60,27 @@ public class RaptyAgent : MonoBehaviour
         {
             velocity = Vector3.zero;
         }
-        steering = new Steering();
+        steering = new RaptySteering();
     }
-    public void SetSteering(Steering steering)
+    public void SetSteering(RaptySteering steering)
     {
         this.steering = steering;
     }
 
-    public void SetSteering(Steering steering, float weight)
+    public void SetRaptySteering(RaptySteering steering, float weight)
     {
         this.steering.linear += (weight * steering.linear);
         this.steering.angular += (weight * steering.angular);
     }
-    public void SetSteering(Steering steering, int priority)
+    public void SetRaptySteering(RaptySteering steering, int priority)
     {
         if (!groups.ContainsKey(priority))
         {
-            groups.Add(priority, new List<Steering>());
+            groups.Add(priority, new List<RaptySteering>());
         }
         groups[priority].Add(steering);
     }
-    public void SetSteering(Steering steering, bool pipeline)
+    public void SetRaptySteering(RaptySteering steering, bool pipeline)
     {
         if (!pipeline)
         {
@@ -88,16 +88,16 @@ public class RaptyAgent : MonoBehaviour
             return;
         }
     }
-    private Steering GetPrioritySteering()
+    private RaptySteering GetPriorityRaptySteering()
     {
-        Steering steering = new Steering();
+        RaptySteering steering = new RaptySteering();
         float sqrThreshold = priorityThreshold * priorityThreshold;
         List<int> gIdList = new List<int>(groups.Keys);
         gIdList.Sort();
         foreach (int gid in gIdList)
         {
-            steering = new Steering();
-            foreach (Steering singleSteering in groups[gid])
+            steering = new RaptySteering();
+            foreach (RaptySteering singleSteering in groups[gid])
             {
                 steering.linear += singleSteering.linear;
                 steering.angular += singleSteering.angular;

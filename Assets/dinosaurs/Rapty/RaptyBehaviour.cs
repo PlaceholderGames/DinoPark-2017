@@ -14,17 +14,17 @@ public class RaptyBehaviour : MonoBehaviour
     public virtual void Update()
     {
         if (agent.blendWeight)
-            agent.SetSteering(GetSteering(), weight);
+            agent.SetRaptySteering(GetRaptySteering(), weight);
         else if (agent.blendPriority)
-            agent.SetSteering(GetSteering(), priority);
+            agent.SetRaptySteering(GetRaptySteering(), priority);
         else if (agent.blendPipeline)
-            agent.SetSteering(GetSteering(), true);
+            agent.SetRaptySteering(GetRaptySteering(), true);
         else
-            agent.SetSteering(GetSteering());
+            agent.SetSteering(GetRaptySteering());
     }
-    public virtual Steering GetSteering()
+    public virtual RaptySteering GetRaptySteering()
     {
-        return new Steering();
+        return new RaptySteering();
     }
     public float MapToRange(float rotation)
     {

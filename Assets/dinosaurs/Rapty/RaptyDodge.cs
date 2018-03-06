@@ -12,9 +12,9 @@ public class RaptyDodge : RaptySeek
         target = new GameObject();
     }
 
-    public override Steering GetSteering()
+    public override RaptySteering GetRaptySteering()
     {
-        Steering steering = new Steering();
+        RaptySteering steering = new RaptySteering();
         Vector3 position = transform.position;
         Vector3 rayVector = agent.velocity.normalized * lookAhead;
         rayVector += position;;
@@ -24,7 +24,7 @@ public class RaptyDodge : RaptySeek
         {
             position = hit.point + hit.normal * avoidDistance;
             target.transform.position = position;
-            steering = base.GetSteering();
+            steering = base.GetRaptySteering();
         }
         return steering;
     }
