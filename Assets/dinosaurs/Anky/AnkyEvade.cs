@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AnkyEvade : Flee
+public class AnkyEvade : AnkyFlee
 {
     public float maxPrediction;
     private GameObject targetAux;
@@ -15,7 +15,7 @@ public class AnkyEvade : Flee
         target = new GameObject();
     }
 
-    public override Steering GetSteering()
+    public override AnkySteering GetAnkySteering()
     {
         Vector3 direction = targetAux.transform.position - transform.position;
         float distance = direction.magnitude;

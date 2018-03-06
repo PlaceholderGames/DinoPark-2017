@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-public class AnkySteering
+public class RaptySteering
 {
     public float angular;
     public Vector3 linear;
-    public AnkySteering()
+    public RaptySteering()
     {
         angular = 0.0f;
         linear = new Vector3();

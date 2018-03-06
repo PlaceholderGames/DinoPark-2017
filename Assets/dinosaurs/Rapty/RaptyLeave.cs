@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AnkyLeave : AnkyBehaviour
+public class RaptyLeave : RaptyBehaviour
 {
     public float escapeRadius;
     public float dangerRadius;
     public float timeToTarget = 0.1f;
 
-    public override AnkySteering GetAnkySteering()
+    public override Steering GetSteering()
     {
-        AnkySteering steering = new AnkySteering();
+        Steering steering = new Steering();
         Vector3 direction = transform.position - target.transform.position;
         float distance = direction.magnitude;
         if (distance > dangerRadius)

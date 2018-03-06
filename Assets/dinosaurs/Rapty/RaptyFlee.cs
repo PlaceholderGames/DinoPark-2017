@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-public class AnkyFlee : AnkyBehaviour {
-    public override AnkySteering GetAnkySteering()
+public class RaptyFlee : RaptyBehaviour {
+    public override Steering GetSteering()
     {
-        AnkySteering steering = new AnkySteering();
+        Steering steering = new Steering();
         steering.linear = transform.position - target.transform.position;
         steering.linear.Normalize();
         steering.linear = steering.linear * agent.maxAccel;

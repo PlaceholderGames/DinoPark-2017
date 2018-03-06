@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Arrive : AnkyBehaviour
+public class AnkyArrive : AnkyBehaviour
 {
     public float targetRadius;
     public float slowRadius;
     public float timeToTarget = 0.1f;
  
-    public override Steering GetSteering()
+    public override AnkySteering GetAnkySteering()
     {
-        Steering steering = new Steering();
+        AnkySteering steering = new AnkySteering();
         Vector3 direction = target.transform.position - transform.position;
         float distance = direction.magnitude;
         float targetSpeed;

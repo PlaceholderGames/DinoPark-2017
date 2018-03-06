@@ -1,21 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AnkyPursue : AnkySeek
+public class RaptyEvade : Flee
 {
     public float maxPrediction;
     private GameObject targetAux;
-    private AnkyAgent targetAgent;
+    private RaptyAgent targetAgent;
 
     public override void Awake()
     {
         base.Awake();
-        targetAgent = target.GetComponent<AnkyAgent>();
+        targetAgent = target.GetComponent<RaptyAgent>();
         targetAux = target;
         target = new GameObject();
     }
 
-    public override AnkySteering GetAnkySteering()
+    public override Steering GetSteering()
     {
         Vector3 direction = targetAux.transform.position - transform.position;
         float distance = direction.magnitude;
@@ -27,7 +27,7 @@ public class AnkyPursue : AnkySeek
             prediction = distance / speed;
         target.transform.position = targetAux.transform.position;
         target.transform.position += targetAgent.velocity * prediction;
-        return base.GetAnkySteering();
+        return base.GetSteering();
     }
 
     void OnDestroy ()

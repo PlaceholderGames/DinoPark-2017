@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AnkyAlign : AnkyBehaviour
+public class RaptyAlign : RaptyBehaviour
 {
 
     public float targetRadius;
     public float slowRadius;
     public float timeToTarget = 0.1f;
 
-    public override AnkySteering GetAnkySteering()
+    public override Steering GetSteering()
     {
-        AnkySteering steering = new AnkySteering();
-        float targetOrientation = target.GetComponent<AnkyAgent>().orientation;
+        Steering steering = new Steering();
+        float targetOrientation = target.GetComponent<RaptyAgent>().orientation;
         float rotation = targetOrientation - agent.orientation;
         rotation = MapToRange(rotation);
         float rotationSize = Mathf.Abs(rotation);

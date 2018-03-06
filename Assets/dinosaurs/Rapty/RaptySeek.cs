@@ -1,8 +1,8 @@
-﻿public class AnkySeek : AnkyBehaviour
+﻿public class RaptySeek : RaptyBehaviour
 {
-    public override AnkySteering GetAnkySteering()
+    public override Steering GetSteering()
     {
-        AnkySteering steering = new AnkySteering();
+        Steering steering = new Steering();
         steering.linear = target.transform.position - transform.position;
         steering.linear.Normalize();
         steering.linear = steering.linear * agent.maxAccel;

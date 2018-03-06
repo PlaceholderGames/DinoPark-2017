@@ -2,19 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AnkyAvoid : AnkyBehaviour
+public class RaptyAvoid : RaptyBehaviour
 {
     public float collisionRadius = 0.4f;
     GameObject[] targets;
 
     void Start ()
     {
-        targets = GameObject.FindGameObjectsWithTag("Anky");
+        targets = GameObject.FindGameObjectsWithTag("Rapty");
     }
 
-    public override AnkySteering GetAnkySteering()
+    public override Steering GetSteering()
     {
-        AnkySteering steering = new AnkySteering();
+        Steering steering = new Steering();
         float shortestTime = Mathf.Infinity;
         GameObject firstTarget = null;
         float firstMinSeparation = 0.0f;
@@ -24,7 +24,7 @@ public class AnkyAvoid : AnkyBehaviour
         foreach (GameObject t in targets)
         {
             Vector3 relativePos;
-            AnkyAgent targetAgent = t.GetComponent<AnkyAgent>();
+            RaptyAgent targetAgent = t.GetComponent<RaptyAgent>();
             relativePos = t.transform.position - transform.position;
             Vector3 relativeVel = targetAgent.velocity - agent.velocity;
             float relativeSpeed = relativeVel.magnitude;

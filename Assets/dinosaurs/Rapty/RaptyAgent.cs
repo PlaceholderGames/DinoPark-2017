@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-public class AnkyAgent : MonoBehaviour
+public class RaptyAgent : MonoBehaviour
 {
     public bool blendWeight = false;
     public bool blendPriority = false;
@@ -14,13 +14,13 @@ public class AnkyAgent : MonoBehaviour
     public float orientation;
     public float rotation;
     public Vector3 velocity;
-    protected AnkySteering steering;
-    private Dictionary<int, List<AnkySteering>> groups;
+    protected Steering steering;
+    private Dictionary<int, List<Steering>> groups;
     void Start()
     {
         velocity = Vector3.zero;
-        steering = new AnkySteering();
-        groups = new Dictionary<int, List<AnkySteering>>();
+        steering = new Steering();
+        groups = new Dictionary<int, List<Steering>>();
     }
     public virtual void Update()
     {
@@ -38,7 +38,7 @@ public class AnkyAgent : MonoBehaviour
     {
         if (blendPriority)
         {
-            steering = GetPriorityAnkySteering();
+            steering = GetPrioritySteering();
             groups.Clear();
         }
         velocity += steering.linear * Time.deltaTime;
@@ -60,27 +60,27 @@ public class AnkyAgent : MonoBehaviour
         {
             velocity = Vector3.zero;
         }
-        steering = new AnkySteering();
+        steering = new Steering();
     }
-    public void SetAnkySteering(AnkySteering steering)
+    public void SetSteering(Steering steering)
     {
         this.steering = steering;
     }
 
-    public void SetAnkySteering(AnkySteering steering, float weight)
+    public void SetSteering(Steering steering, float weight)
     {
         this.steering.linear += (weight * steering.linear);
         this.steering.angular += (weight * steering.angular);
     }
-    public void SetAnkySteering(AnkySteering steering, int priority)
+    public void SetSteering(Steering steering, int priority)
     {
         if (!groups.ContainsKey(priority))
         {
-            groups.Add(priority, new List<AnkySteering>());
+            groups.Add(priority, new List<Steering>());
         }
         groups[priority].Add(steering);
     }
-    public void SetAnkySteering(AnkySteering steering, bool pipeline)
+    public void SetSteering(Steering steering, bool pipeline)
     {
         if (!pipeline)
         {
@@ -88,16 +88,16 @@ public class AnkyAgent : MonoBehaviour
             return;
         }
     }
-    private AnkySteering GetPriorityAnkySteering()
+    private Steering GetPrioritySteering()
     {
-        AnkySteering steering = new AnkySteering();
+        Steering steering = new Steering();
         float sqrThreshold = priorityThreshold * priorityThreshold;
         List<int> gIdList = new List<int>(groups.Keys);
         gIdList.Sort();
         foreach (int gid in gIdList)
         {
-            steering = new AnkySteering();
-            foreach (AnkySteering singleSteering in groups[gid])
+            steering = new Steering();
+            foreach (Steering singleSteering in groups[gid])
             {
                 steering.linear += singleSteering.linear;
                 steering.angular += singleSteering.angular;

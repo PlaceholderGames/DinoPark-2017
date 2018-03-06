@@ -1,30 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
-public class AnkyBehaviour : MonoBehaviour
+public class RaptyBehaviour : MonoBehaviour
 {
     public float weight = 1.0f;
     public int priority = 1;
     public GameObject target;
-    protected AnkyAgent agent;
+    protected RaptyAgent agent;
 
     public virtual void Awake()
     {
-        agent = gameObject.GetComponent<AnkyAgent>();
+        agent = gameObject.GetComponent<RaptyAgent>();
     }
     public virtual void Update()
     {
         if (agent.blendWeight)
-            agent.SetAnkySteering(GetAnkySteering(), weight);
+            agent.SetSteering(GetSteering(), weight);
         else if (agent.blendPriority)
-            agent.SetAnkySteering(GetAnkySteering(), priority);
+            agent.SetSteering(GetSteering(), priority);
         else if (agent.blendPipeline)
-            agent.SetAnkySteering(GetAnkySteering(), true);
+            agent.SetSteering(GetSteering(), true);
         else
-            agent.SetAnkySteering(GetAnkySteering());
+            agent.SetSteering(GetSteering());
     }
-    public virtual AnkySteering GetAnkySteering()
+    public virtual Steering GetSteering()
     {
-        return new AnkySteering();
+        return new Steering();
     }
     public float MapToRange(float rotation)
     {
