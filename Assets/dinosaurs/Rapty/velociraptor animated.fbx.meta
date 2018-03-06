@@ -1,0 +1,746 @@
+fileFormatVersion: 2
+guid: 177ad22f7d6952b41bad200a68dfd346
+timeCreated: 1520187097
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Back
+    100004: Chest
+    100006: Cube
+    100008: Cube.001
+    100010: Cube.002
+    100012: Cube.003
+    100014: DownMouth
+    100016: DownMouth Rig
+    100018: DownMouth Rig_end
+    100020: DownMouth Rig_end_end
+    100022: Estomach
+    100024: Head
+    100026: LeftArmy
+    100028: LeftArmyStart
+    100030: LeftHand
+    100032: LeftHand_end
+    100034: LeftHand_end_end
+    100036: LeftHandStart
+    100038: LeftHip
+    100040: LeftKnee
+    100042: LeftKneeRig
+    100044: LeftKneeRig_end
+    100046: LeftKneeRig_end_end
+    100048: LeftKneeStart
+    100050: LeftShoulder
+    100052: Neck
+    100054: RightArmy
+    100056: RightArmyStart
+    100058: RightHand
+    100060: RightHand_end
+    100062: RightHand_end_end
+    100064: RightHandStart
+    100066: RightHip
+    100068: RightKnee
+    100070: RightKneeRig
+    100072: RightKneeRig_end
+    100074: RightKneeRig_end_end
+    100076: RightKneeStart
+    100078: RightShoulder
+    100080: Tail1
+    100082: Tail2
+    100084: Tail3
+    100086: Tail4
+    100088: Tail5
+    100090: TailRig
+    100092: TailRig_end
+    100094: TailRig_end_end
+    100096: TailStart
+    100098: UpMouth
+    100100: UpMouthRig
+    100102: UpMouthRig_end
+    100104: UpMouthRig_end_end
+    100106: //RootNode
+    400000: Armature
+    400002: Back
+    400004: Chest
+    400006: Cube
+    400008: Cube.001
+    400010: Cube.002
+    400012: Cube.003
+    400014: DownMouth
+    400016: DownMouth Rig
+    400018: DownMouth Rig_end
+    400020: DownMouth Rig_end_end
+    400022: Estomach
+    400024: Head
+    400026: LeftArmy
+    400028: LeftArmyStart
+    400030: LeftHand
+    400032: LeftHand_end
+    400034: LeftHand_end_end
+    400036: LeftHandStart
+    400038: LeftHip
+    400040: LeftKnee
+    400042: LeftKneeRig
+    400044: LeftKneeRig_end
+    400046: LeftKneeRig_end_end
+    400048: LeftKneeStart
+    400050: LeftShoulder
+    400052: Neck
+    400054: RightArmy
+    400056: RightArmyStart
+    400058: RightHand
+    400060: RightHand_end
+    400062: RightHand_end_end
+    400064: RightHandStart
+    400066: RightHip
+    400068: RightKnee
+    400070: RightKneeRig
+    400072: RightKneeRig_end
+    400074: RightKneeRig_end_end
+    400076: RightKneeStart
+    400078: RightShoulder
+    400080: Tail1
+    400082: Tail2
+    400084: Tail3
+    400086: Tail4
+    400088: Tail5
+    400090: TailRig
+    400092: TailRig_end
+    400094: TailRig_end_end
+    400096: TailStart
+    400098: UpMouth
+    400100: UpMouthRig
+    400102: UpMouthRig_end
+    400104: UpMouthRig_end_end
+    400106: //RootNode
+    4300000: Cube.001
+    4300002: Cube
+    4300004: Cube.002
+    4300006: Cube.003
+    7400000: Alert
+    7400002: Walk
+    7400004: Attack
+    7400006: Idle
+    9500000: //RootNode
+    13700000: Cube
+    13700002: Cube.001
+    13700004: Cube.002
+    13700006: Cube.003
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Alert
+      takeName: Armature|ArmatureAction
+      firstFrame: 0
+      lastFrame: 34
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Chest
+        weight: 1
+      - path: Armature/Chest/LeftShoulder
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand/LeftHand_end
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand/LeftHand_end/LeftHand_end_end
+        weight: 1
+      - path: Armature/Chest/Neck
+        weight: 1
+      - path: Armature/Chest/Neck/Head
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig/DownMouth Rig_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig/DownMouth Rig_end/DownMouth
+          Rig_end_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig/UpMouthRig_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig/UpMouthRig_end/UpMouthRig_end_end
+        weight: 1
+      - path: Armature/Chest/RightShoulder
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand/RightHand_end
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand/RightHand_end/RightHand_end_end
+        weight: 1
+      - path: Armature/Estomach
+        weight: 1
+      - path: Armature/Estomach/Back
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig/TailRig_end
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig/TailRig_end/TailRig_end_end
+        weight: 1
+      - path: Armature/Estomach/LeftHip
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig/LeftKneeRig_end
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig/LeftKneeRig_end/LeftKneeRig_end_end
+        weight: 1
+      - path: Armature/Estomach/RightHip
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig/RightKneeRig_end
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig/RightKneeRig_end/RightKneeRig_end_end
+        weight: 1
+      - path: Cube
+        weight: 1
+      - path: Cube.001
+        weight: 1
+      - path: Cube.002
+        weight: 1
+      - path: Cube.003
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Walk
+      takeName: Armature|ArmatureAction
+      firstFrame: 55
+      lastFrame: 105
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Chest
+        weight: 1
+      - path: Armature/Chest/LeftShoulder
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand/LeftHand_end
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand/LeftHand_end/LeftHand_end_end
+        weight: 1
+      - path: Armature/Chest/Neck
+        weight: 1
+      - path: Armature/Chest/Neck/Head
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig/DownMouth Rig_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig/DownMouth Rig_end/DownMouth
+          Rig_end_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig/UpMouthRig_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig/UpMouthRig_end/UpMouthRig_end_end
+        weight: 1
+      - path: Armature/Chest/RightShoulder
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand/RightHand_end
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand/RightHand_end/RightHand_end_end
+        weight: 1
+      - path: Armature/Estomach
+        weight: 1
+      - path: Armature/Estomach/Back
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig/TailRig_end
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig/TailRig_end/TailRig_end_end
+        weight: 1
+      - path: Armature/Estomach/LeftHip
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig/LeftKneeRig_end
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig/LeftKneeRig_end/LeftKneeRig_end_end
+        weight: 1
+      - path: Armature/Estomach/RightHip
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig/RightKneeRig_end
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig/RightKneeRig_end/RightKneeRig_end_end
+        weight: 1
+      - path: Cube
+        weight: 1
+      - path: Cube.001
+        weight: 1
+      - path: Cube.002
+        weight: 1
+      - path: Cube.003
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Attack
+      takeName: Armature|ArmatureAction
+      firstFrame: 120
+      lastFrame: 175
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Chest
+        weight: 1
+      - path: Armature/Chest/LeftShoulder
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand/LeftHand_end
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand/LeftHand_end/LeftHand_end_end
+        weight: 1
+      - path: Armature/Chest/Neck
+        weight: 1
+      - path: Armature/Chest/Neck/Head
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig/DownMouth Rig_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig/DownMouth Rig_end/DownMouth
+          Rig_end_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig/UpMouthRig_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig/UpMouthRig_end/UpMouthRig_end_end
+        weight: 1
+      - path: Armature/Chest/RightShoulder
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand/RightHand_end
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand/RightHand_end/RightHand_end_end
+        weight: 1
+      - path: Armature/Estomach
+        weight: 1
+      - path: Armature/Estomach/Back
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig/TailRig_end
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig/TailRig_end/TailRig_end_end
+        weight: 1
+      - path: Armature/Estomach/LeftHip
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig/LeftKneeRig_end
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig/LeftKneeRig_end/LeftKneeRig_end_end
+        weight: 1
+      - path: Armature/Estomach/RightHip
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig/RightKneeRig_end
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig/RightKneeRig_end/RightKneeRig_end_end
+        weight: 1
+      - path: Cube
+        weight: 1
+      - path: Cube.001
+        weight: 1
+      - path: Cube.002
+        weight: 1
+      - path: Cube.003
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Idle
+      takeName: Armature|ArmatureAction
+      firstFrame: 180
+      lastFrame: 240
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Chest
+        weight: 1
+      - path: Armature/Chest/LeftShoulder
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand/LeftHand_end
+        weight: 1
+      - path: Armature/Chest/LeftShoulder/LeftArmyStart/LeftArmy/LeftHandStart/LeftHand/LeftHand_end/LeftHand_end_end
+        weight: 1
+      - path: Armature/Chest/Neck
+        weight: 1
+      - path: Armature/Chest/Neck/Head
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig/DownMouth Rig_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/DownMouth/DownMouth Rig/DownMouth Rig_end/DownMouth
+          Rig_end_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig/UpMouthRig_end
+        weight: 1
+      - path: Armature/Chest/Neck/Head/UpMouth/UpMouthRig/UpMouthRig_end/UpMouthRig_end_end
+        weight: 1
+      - path: Armature/Chest/RightShoulder
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand/RightHand_end
+        weight: 1
+      - path: Armature/Chest/RightShoulder/RightArmyStart/RightArmy/RightHandStart/RightHand/RightHand_end/RightHand_end_end
+        weight: 1
+      - path: Armature/Estomach
+        weight: 1
+      - path: Armature/Estomach/Back
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig/TailRig_end
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail1/Tail2/Tail3/Tail4/Tail5/TailRig/TailRig_end/TailRig_end_end
+        weight: 1
+      - path: Armature/Estomach/LeftHip
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig/LeftKneeRig_end
+        weight: 1
+      - path: Armature/Estomach/LeftHip/LeftKneeStart/LeftKnee/LeftKneeRig/LeftKneeRig_end/LeftKneeRig_end_end
+        weight: 1
+      - path: Armature/Estomach/RightHip
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig/RightKneeRig_end
+        weight: 1
+      - path: Armature/Estomach/RightHip/RightKneeStart/RightKnee/RightKneeRig/RightKneeRig_end/RightKneeRig_end_end
+        weight: 1
+      - path: Cube
+        weight: 1
+      - path: Cube.001
+        weight: 1
+      - path: Cube.002
+        weight: 1
+      - path: Cube.003
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

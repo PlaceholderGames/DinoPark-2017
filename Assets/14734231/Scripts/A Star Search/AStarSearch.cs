@@ -58,7 +58,11 @@ public class AStarSearch : MonoBehaviour
             if (!end.walkable) // If the end isn't a walkable tile
                 end = findWalkableNeighbour(end); // Find the closest walkable tile
 
+<<<<<<< HEAD
             if (start != end) // If the enviroment isn't dynamic and agent hasn't reached end
+=======
+            if (start != end) // If the agent hasn't reached end
+>>>>>>> master
                 search(); // only search if the target has moved
         }
 
@@ -205,8 +209,21 @@ public class AStarSearch : MonoBehaviour
         {
             path.nodes.Add(currentTile.pathNode); // Add the currentTile to the path
 
+<<<<<<< HEAD
             currentTile = currentTile.previousTile; // Move backwards and set it as the next currentTile
 
+=======
+            if (currentTile.previousTile == null) // No valid path found 
+            {
+                path.nodes.Clear(); // Clear path
+                return; // Return early 
+            }
+
+            currentTile = currentTile.previousTile; // Move backwards and set it as the next currentTile
+
+
+
+>>>>>>> master
             distance = (start.position - currentTile.tile.position).magnitude; // Set the distance from the new currentTile to the start
         }
 

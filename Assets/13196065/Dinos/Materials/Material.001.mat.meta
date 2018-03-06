@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+<<<<<<< HEAD:Assets/dinosaurs/Materials/Material.001.mat.meta
+<<<<<<< HEAD
+<<<<<<< HEAD
+guid: 95e188470fd06654a8afcc5715a6413b
+timeCreated: 1517314479
+licenseType: Free
+=======
+guid: 0dc85e62321f6c345b5131c924a7505c
+timeCreated: 1517217461
+licenseType: Pro
+>>>>>>> master
+=======
+guid: 3c2fd1110fcd11242b5320564dce8e0e
+timeCreated: 1517314744
+licenseType: Free
+>>>>>>> origin/AStar
+=======
+guid: 808af22c8c900b34482f8c8c2c22ad03
+timeCreated: 1520113593
+licenseType: Free
+>>>>>>> master:Assets/13196065/Dinos/Materials/Material.001.mat.meta
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

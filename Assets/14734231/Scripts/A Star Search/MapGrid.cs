@@ -1,14 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+<<<<<<< HEAD
+=======
+using System.IO;
+>>>>>>> master
 
 public class MapGrid : MonoBehaviour {
 
     public Vector2 gridWorldSize; // Size of the map grid
     public float tileSize = 1.0f;  // Size of each tile
+<<<<<<< HEAD
     public float heightThreshold = 1.0f;
     public float seaLevel = 0.0f;
         
+=======
+    public float heightThreshold = 1.0f; // The maximum height distance between each corner of a tile to determine if walkable
+    public float seaLevel = 0.0f; // Minimum walkable height
+
+>>>>>>> master
     [HideInInspector]
     public MapTile[,] tiles;
 
