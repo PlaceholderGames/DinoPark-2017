@@ -5,11 +5,12 @@ using System.Collections.Generic;
 public class AvoidAgent : AgentBehaviour
 {
     public float collisionRadius = 0.4f;
+    public string targetTag = "Agent";
     GameObject[] targets;
 
     void Start ()
     {
-        targets = GameObject.FindGameObjectsWithTag("Agent");
+        targets = GameObject.FindGameObjectsWithTag(targetTag);
     }
 
     public override Steering GetSteering()

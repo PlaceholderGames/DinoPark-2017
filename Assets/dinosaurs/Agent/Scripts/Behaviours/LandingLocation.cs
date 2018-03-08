@@ -4,7 +4,7 @@ public class LandingLocation : MonoBehaviour
 {
     public void OnTriggerEnter(Collider other)
     {
-        if (!other.gameObject.CompareTag("Agent"))
+        if (!other.gameObject.CompareTag("Anky") && !other.gameObject.CompareTag("Rapty") && !other.gameObject.CompareTag("Agent"))
             return;
         Agent agent = other.GetComponent<Agent>();
         Jump jump = other.GetComponent<Jump>();
