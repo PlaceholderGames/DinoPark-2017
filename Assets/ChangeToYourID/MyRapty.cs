@@ -2,19 +2,18 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MyAnky : Agent
+public class MyRapty : Agent
 {
-    public enum ankyState
+    public enum raptyState
     {
         IDLE,       // The default state on creation.
-        EATING,     // This is for eating depending on y value of the object to denote grass level
+        EATING,     // This is for eating depending on location of a target object (killed prey)
         DRINKING,   // This is for Drinking, depending on y value of the object to denote water level
-        ALERTED,      // This is for hightened awareness, such as looking around
-        GRAZING,    // Moving with the intent to find food (will happen after a random period)
+        ALERT,      // This is for hightened awareness, such as looking around
+        HUNTING,    // Moving with the intent to hunt
         ATTACKING,  // Causing damage to a specific target
         FLEEING     // Running away from a specific target
     };
-
     public Animator anim;
 
     // Use this for initialization
