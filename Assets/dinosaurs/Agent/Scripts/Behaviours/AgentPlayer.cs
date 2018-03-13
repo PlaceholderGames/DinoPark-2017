@@ -4,7 +4,7 @@ using System.Collections;
 public class AgentPlayer : Agent
 {
 
-    public override void Update()
+    protected override void Update() // Changed to allow inheritance
     {
         velocity.x = Input.GetAxis("Horizontal");
         velocity.z = Input.GetAxis("Vertical");

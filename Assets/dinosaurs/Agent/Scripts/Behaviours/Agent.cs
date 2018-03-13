@@ -16,13 +16,14 @@ public class Agent : MonoBehaviour
     public Vector3 velocity;
     protected Steering steering;
     private Dictionary<int, List<Steering>> groups;
-	void Start ()
+
+	protected virtual void Start () // Changed so we can inherit
     {
         velocity = Vector3.zero;
         steering = new Steering();
         groups = new Dictionary<int, List<Steering>>();
 	}
-	public virtual void Update ()
+	protected virtual void Update () // Changed so we can inherit
     {
         Vector3 displacement = velocity * Time.deltaTime;
         orientation += rotation * Time.deltaTime;
@@ -34,7 +35,7 @@ public class Agent : MonoBehaviour
         transform.rotation = new Quaternion();
         transform.Rotate(Vector3.up, orientation);
 	}
-    public virtual void LateUpdate ()
+    protected virtual void LateUpdate () // Changed so we can inherit
     {
         if (blendPriority)
         {
