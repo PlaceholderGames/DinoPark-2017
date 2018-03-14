@@ -15,7 +15,10 @@ public class FieldOfView : MonoBehaviour {
     //public LayerMask obstacleMask; // Not using raytracing to determine visibility right now
 
     [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
-    public List<Transform> visibleTargets = new List<Transform>(); // this is the list of visible dinosaurs.
+    public List<Transform> visibleTargets = new List<Transform>(); // this is the list of visible dinosaurs
+
+    [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
+    public List<Transform> stereoVisibleTargets = new List<Transform>(); // this is the list of visible dinosaurs in stereo
 
 	private void Start()
 	{
@@ -39,16 +42,23 @@ public class FieldOfView : MonoBehaviour {
             Transform target = targetsInViewRadius[i].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
 
-            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle/2)
+            if (Vector3.Angle(transform.forward, dirToTarget) < stereoAngle / 2) //Can be seen in stereo
+            {
+                //float distanceToTarget = Vector3.Distance(transform.position, target.position); // Only if we see it do we know how far away it is, due to stereo vision
+                //Debug.Log("Relative distance: " + distanceToTarget); // This will be used to determine states, such as attack, alert, etc
+
+                //float orientationOfTarget = target.eulerAngles.y; // This gives the relative angle of the target. 0 is directly facing, 180 is facing away
+                // Note, if the animal has you on its left side, the value will be in the high 300s and will switch to low values if it crosses to having you
+                // on the right side. You might want to subtract 180 to allow 0 to be facing away, and very low and very high values are facing towards you
+                //Debug.Log("Relative angle: " + orientationOfTarget);
+                stereoVisibleTargets.Add(target);
+            }
+            else if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle/2)
             {
                 //float directionToTarget = Vector3.Angle(transform.forward, dirToTarget); // We need the direction of the object only for checking with raytracing
                 visibleTargets.Add(target); // For now, if it is in range and angle of eyesight we can see it
             }
-            if (Vector3.Angle(transform.forward, dirToTarget) < stereoAngle / 2) //Can be seen in stereo. We might want/need to do this elsewhere
-            {
-                // float distanceToTarget = Vector3.Distance(transform.position, target.position); // Only if we see it do we know how far away it is, due to stereo vision
-                // float orientationOfTarget = target.eulerAngles.y // Not sure of the Maths of this one, so will have to check.
-            }
+         
         }
     }
 	
