@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Wander : Face {
 
+    //public
     public float offset;
     public float radius;
     public float rate;
