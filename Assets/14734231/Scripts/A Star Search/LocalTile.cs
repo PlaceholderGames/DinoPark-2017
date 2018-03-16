@@ -16,7 +16,7 @@ class LocalTile
     public bool inFringe = false; // Whether or not this tile is in the fringe
     public LocalTile previousTile; // The tile that the current cost has been found from
 
-    public PathNode pathNode; // A node to build a path 
+    public ASPathNode pathNode; // A node to build a path 
 
     public LocalTile(MapTile tile)
     {
