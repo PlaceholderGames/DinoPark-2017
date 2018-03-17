@@ -12,10 +12,10 @@ public class AStarSearch : MonoBehaviour
 
     private Vector3 targetPos; // Position of the target to be updated each frame
 
-    public PathNode nodeType;
+    public ASPathNode nodeType;
 
     [HideInInspector]
-    public Path path; // The path created from the A* search
+    public ASPath path; // The path created from the A* search
 
     private MapTile start; // The tile at the start of the search (where this game object is placed)
     private MapTile end; // The tile at the end of the search (where the target is placed)
@@ -24,7 +24,7 @@ public class AStarSearch : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        path = gameObject.AddComponent<Path>(); // Create a path attached to this game object
+        path = gameObject.AddComponent<ASPath>(); // Create a path attached to this game object
 
         tileData = new LocalTile[mapGrid.tiles.GetLength(0), mapGrid.tiles.GetLength(1)]; // Allocate size of local tileData array
 

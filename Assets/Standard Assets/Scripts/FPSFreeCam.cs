@@ -8,9 +8,9 @@ public class FPSFreeCam : MonoBehaviour {
     public float maxVelocityChange = 10.0f;
     //public Vector3 speed = new Vector3(3, 3, 3);
     //public GameObject cameraTransform;
-    public GameObject freeCam;
+    //public GameObject freeCam;
     public GameObject firstPersonCamera;
-    public Transform freecam;
+    public Transform freecamPosition;
     public MoveFPS movefpsScript;
     public GameObject fpsCam;
     public GameObject FreeCamera;
@@ -36,8 +36,8 @@ public class FPSFreeCam : MonoBehaviour {
     }
     public void movePosition()
     {
-        
-        freecam.transform.position = firstPersonCamera.transform.position;
+
+        freecamPosition.transform.position = firstPersonCamera.transform.position;
         FreeCamera.SetActive(true);
         fpsCam.SetActive(false);
     }
