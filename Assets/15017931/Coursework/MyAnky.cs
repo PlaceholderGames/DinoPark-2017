@@ -17,11 +17,19 @@ public class MyAnky : Agent
     };
 
     public Animator anim;
+	// list of objects we want to stay away from
+	//contains the tags of objects that we will check are in our FOV
+	public string[] predators = {"Rapty"};
+	public FieldOfView eyes;
 
     // Use this for initialization
     protected override void Start()
     {
         anim = GetComponent<Animator>();
+
+		//Get our field of view script
+		eyes = GetComponent<FieldOfView> ();
+
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
         anim.SetBool("isEating", false);
@@ -42,11 +50,32 @@ public class MyAnky : Agent
     {
         // Idle - should only be used at startup
 
-        // Eating - requires a box collision with a dead dino
+        // Eating - if on grass and we are hungry
 
         // Drinking - requires y value to be below 32 (?)
 
         // Alerted - up to the student what you do here
+		//If we have a predator in our vision
+		//possibly if predator is within a certain distance
+		//Use FOV Script 
+
+		//check all objects in our FOV
+		//Check if we are not in current state
+		if (!anim.GetBool("isAlerted"))
+		{
+			foreach (Transform o in eyes.visibleTargets) 
+			{	
+				//Check if any of those objects are a predator
+				foreach (string pTag in predators) 
+				{
+					if (o.gameObject.CompareTag (pTag)) 
+					{
+						Debug.Log (o.gameObject.tag);
+						anim.SetBool ("isAlerted", true);
+					}
+				}
+			}
+		}
 
         // Hunting - up to the student what you do here
 
