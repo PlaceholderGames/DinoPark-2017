@@ -20,15 +20,22 @@ public class MyAnky : Agent
 	// list of objects we want to stay away from
 	//contains the tags of objects that we will check are in our FOV
 	public string[] predators = {"Rapty"};
-	public FieldOfView eyes;
+	[Range(0,100)]
+	public float alertRadius = 45;
+
+	private FieldOfView eyes;
+	private ankyState currentState = ankyState.IDLE;
+	private List<Transform> predatorsInRange;
 
     // Use this for initialization
     protected override void Start()
     {
         anim = GetComponent<Animator>();
+		currentState = ankyState.IDLE;
 
 		//Get our field of view script
 		eyes = GetComponent<FieldOfView> ();
+		predatorsInRange = new List<Transform> ();
 
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -48,6 +55,7 @@ public class MyAnky : Agent
 
     protected override void Update()
     {
+		anim.SetBool("isGrazing", true);
         // Idle - should only be used at startup
 
         // Eating - if on grass and we are hungry
@@ -61,8 +69,34 @@ public class MyAnky : Agent
 
 		//check all objects in our FOV
 		//Check if we are not in current state
-		if (!anim.GetBool("isAlerted"))
-		{
+	
+		foreach (Transform o in eyes.visibleTargets) {	
+			//Check if any of those objects are a predator
+			foreach (string pTag in predators) {
+				if (o.gameObject.CompareTag (pTag)) {
+					predatorsInRange.Add (o);
+					//Debug.Log (o.gameObject.tag);
+				}
+			}
+		}
+
+	
+		if (predatorsInRange.Count > 0) {
+			//currentState = ankyState.ALERTED;
+			anim.SetBool ("isAlerted", true);
+		} else {
+			//currentState = ankyState.ALERTED;
+			anim.SetBool ("isAlerted", false);
+		}
+
+
+
+
+        // Hunting - up to the student what you do here
+
+        // Fleeing - up to the student what you do here
+		if (currentState == ankyState.ALERTED) {
+			//check if raptor is within our 'Worry Range'
 			foreach (Transform o in eyes.visibleTargets) 
 			{	
 				//Check if any of those objects are a predator
@@ -70,19 +104,17 @@ public class MyAnky : Agent
 				{
 					if (o.gameObject.CompareTag (pTag)) 
 					{
-						Debug.Log (o.gameObject.tag);
-						anim.SetBool ("isAlerted", true);
+
 					}
 				}
 			}
 		}
-
-        // Hunting - up to the student what you do here
-
-        // Fleeing - up to the student what you do here
-
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
+
+
+		//
+		blink();
         base.Update();
     }
 
@@ -90,4 +122,9 @@ public class MyAnky : Agent
     {
         base.LateUpdate();
     }
+
+	void blink()
+	{
+		predatorsInRange.Clear ();
+	}
 }
