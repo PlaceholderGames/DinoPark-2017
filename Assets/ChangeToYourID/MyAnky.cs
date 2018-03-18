@@ -17,6 +17,10 @@ public class MyAnky : Agent
     };
 
     public Animator anim;
+	public Flee run;
+	private Transform player = null;
+	private Transform ankyT = null;
+	public float fleeDistance = 5.0f;
 
     // Use this for initialization
     protected override void Start()
@@ -34,8 +38,12 @@ public class MyAnky : Agent
         anim.SetFloat("speedMod", 1.0f);
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
-        base.Start();
+		base.Start();
 
+		GameObject obj = GameObject.FindWithTag("Player");
+		player = obj.transform;
+		ankyT = transform;
+		run = gameObject.GetComponent<Flee> ();
     }
 
     protected override void Update()
@@ -51,7 +59,9 @@ public class MyAnky : Agent
         // Hunting - up to the student what you do here
 
         // Fleeing - up to the student what you do here
-
+		float dist = (player.position- ankyT.position).magnitude;
+		if (dist > fleeDistance) 
+			run.isFlee();
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
         base.Update();
