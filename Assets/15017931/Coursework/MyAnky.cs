@@ -29,12 +29,23 @@ public class MyAnky : Agent
 	private ankyState currentState = ankyState.IDLE;
 	private List<Transform> predatorsInRange;
 
+	//Behaviour scripts
+	private Flee fleeBehaviourScript;
+	private Wander wanderBehaviourScript;
+
 	private float running = 0;
+
+	private float distance = 0;
+	float closestHazardDist = 100;
+	Transform closestHazard = null;
 
     // Use this for initialization
     protected override void Start()
     {
         anim = GetComponent<Animator>();
+		fleeBehaviourScript = GetComponent<Flee> ();
+		wanderBehaviourScript = GetComponent<Wander> ();
+
 		currentState = ankyState.IDLE;
 
 		//Get our field of view script
@@ -53,6 +64,10 @@ public class MyAnky : Agent
         anim.SetFloat("speedMod", 1.0f);
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
+
+		fleeBehaviourScript.enabled = false;
+		wanderBehaviourScript.enabled = true;
+
         base.Start();
 
     }
@@ -82,8 +97,8 @@ public class MyAnky : Agent
         // Hunting - up to the student what you do here
 
         // Fleeing - up to the student what you do here
-	
-		fleeBehaviour ();		
+		if (currentState == ankyState.FLEEING)
+			fleeBehaviour ();		
 	
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
@@ -138,19 +153,7 @@ public class MyAnky : Agent
 	/// predators, this will be used by other methods to determin behaviour
 	/// </summary>
 	void alertBehaviour()
-	{
-		//Check the dinos FOV for predators and store them in a list 
-		foreach (Transform o in eyes.visibleTargets) 
-		{	
-			foreach (string pTag in predators) 
-			{
-				if (o.gameObject.CompareTag (pTag)) 
-				{
-					predatorsInRange.Add (o);
-				}
-			}
-		}
-
+	{			
 		//if we have a predator in our vision, set our alerted state to true
 		if (predatorsInRange.Count > 0) 
 		{
@@ -165,6 +168,44 @@ public class MyAnky : Agent
 			currentState = ankyState.ALERTED;
 			anim.SetBool ("isAlerted", false);
 		}
+
+
+
+		//Cycle through our list of visible predators and find out closest hazard
+		foreach (Transform i in predatorsInRange) {	
+			distance = Vector3.Distance (i.transform.position, this.transform.position);
+
+			//check for our closest predator is closer than our current known closest 
+			if (distance < closestHazardDist) {
+				//Debug.Log ("Found something closer");
+				closestHazardDist = distance;
+				closestHazard = i;
+			}
+
+			Debug.Log ("Closest Hazard = " + closestHazard);
+		}
+
+
+		//Determine best behaviour for given scenario 
+
+		//Should we flee?
+		//If our hazard is within our flee radius
+		if (closestHazardDist < fleeDistance)  // is there a predator in our safe space * 
+		{
+			currentState = ankyState.FLEEING;
+			anim.SetBool ("isFleeing", true);
+
+			wanderBehaviourScript.enabled = false;
+			fleeBehaviourScript.target = closestHazard.gameObject;
+			fleeBehaviourScript.enabled = true;
+		}
+		//else if () // are we outnumbered 
+		//Do we outnumber them
+		//Is our health high enough that it is worth fighting
+		//do we have the high ground
+		//should we try it aniken
+		//did you bring him here to kill me 
+
 	}
 
 	/// <summary>
@@ -174,42 +215,22 @@ public class MyAnky : Agent
 	/// </summary>
 	void fleeBehaviour()
 	{
-		float distance;
-		float closestHazardDist = 100;
-		Transform closestHazard = null;
-
-		//Cycle through our list of visible predators and find out closest hazard
-		foreach (Transform i in predatorsInRange) {	
-			distance = Vector3.Distance (i.transform.position, this.transform.position);
-			Debug.Log (distance);
-
-			//check for our closest predator is closer than our current known closest 
-			if (distance < closestHazardDist) {
-				//Debug.Log ("Found something closer");
-				closestHazardDist = distance;
-				closestHazard = i;
-			}
-
-			//Debug.Log ("Closest Hazard = " + closestHazard);
-		}
-
-		//If our hazard is within our flee radius
-		if (closestHazardDist < fleeDistance) {
-			currentState = ankyState.FLEEING;
-			anim.SetBool ("isFleeing", true);
-		}
-	
+		Debug.Log ("FLEEING");	
 		//If we can no longer see a predator, continue running for n.. seconds
 		if (predatorsInRange.Count < 0) {
 			//if we are currently fleeing 
 			if (running < fleeNoVisTime) {
+				Debug.Log (running);
 				running += Time.deltaTime;
 			} else {
-				running = 0;
 				anim.SetBool ("isFleeing", false);
 				currentState = ankyState.ALERTED;
+				wanderBehaviourScript.enabled = true;
+				fleeBehaviourScript.enabled = false;
+				Debug.Log ("End Running");
+				running = 0;
 			}
-		} else {
+		} else if(closestHazardDist < fleeDistance) {
 			running = 0;
 		}
 	}
@@ -225,6 +246,18 @@ public class MyAnky : Agent
 	void blink()
 	{
 		predatorsInRange.Clear ();
+
+		//Check the dinos FOV for predators and store them in a list 
+		foreach (Transform o in eyes.visibleTargets) 
+		{	
+			foreach (string pTag in predators) 
+			{
+				if (o.gameObject.CompareTag (pTag)) 
+				{
+					predatorsInRange.Add (o);
+				}
+			}
+		}
 	}
 
 
