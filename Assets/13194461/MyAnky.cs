@@ -16,17 +16,20 @@ public class MyAnky : Agent
         DEAD
     };
 
+    ankyState currentState;
+    ankyState previousState;
     public Animator anim;
 
     // Use this for initialization
     protected override void Start()
     {
+
         anim = GetComponent<Animator>();
         // Assert default animation booleans and floats
-        anim.SetBool("isIdle", true);
+        anim.SetBool("isIdle", false);
         anim.SetBool("isEating", false);
         anim.SetBool("isDrinking", false);
-        anim.SetBool("isAlerted", false);
+        anim.SetBool("isAlerted", true);
         anim.SetBool("isGrazing", false);
         anim.SetBool("isAttacking", false);
         anim.SetBool("isFleeing", false);
@@ -60,5 +63,61 @@ public class MyAnky : Agent
     protected override void LateUpdate()
     {
         base.LateUpdate();
+    }
+
+    void SetState()
+    {
+        switch(currentState)
+        {
+            case ankyState.EATING:
+                anim.SetBool("isEating", true);
+                break;
+            case ankyState.DRINKING:
+                anim.SetBool("isDrinking", true);
+                break;
+            case ankyState.ALERTED:
+                anim.SetBool("isAlerted", true);
+                break;
+            case ankyState.GRAZING:
+                anim.SetBool("isGrazing", true);
+                break;
+            case ankyState.ATTACKING:
+                anim.SetBool("isAttacking", true);
+                break;
+            case ankyState.FLEEING:
+                anim.SetBool("isFleeing", true);
+                break;
+            case ankyState.DEAD:
+                anim.SetBool("isDead", true);
+                break;
+        }
+
+        switch(previousState)
+        {
+            case ankyState.IDLE:
+                anim.SetBool("isIdle", false);
+                break;
+            case ankyState.EATING:
+                anim.SetBool("isEating", false);
+                break;
+            case ankyState.DRINKING:
+                anim.SetBool("isDrinking", false);
+                break;
+            case ankyState.ALERTED:
+                anim.SetBool("isAlerted", false);
+                break;
+            case ankyState.GRAZING:
+                anim.SetBool("isGrazing", false);
+                break;
+            case ankyState.ATTACKING:
+                anim.SetBool("isAttacking", false);
+                break;
+            case ankyState.FLEEING:
+                anim.SetBool("isFleeing", false);
+                break;
+            case ankyState.DEAD:
+                anim.SetBool("isDead", false);
+                break;
+        }
     }
 }
