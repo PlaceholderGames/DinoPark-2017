@@ -9,9 +9,11 @@ public class MyAnky : Agent
     public FieldOfView ankyView;
     public Flee ankyFlee;
     public Wander ankyWander;
+    public DrinkingS ankyDrinkingS;
     public List<Transform> ankyFriendlies = new List<Transform>();
     public int health = 52;
     int anky;
+    float closestDist = 9999;
     public enum ankyState
     {
         IDLE,       // The default state on creation.
@@ -92,48 +94,10 @@ public class MyAnky : Agent
         anky = 0;
         // Drinking - requires y value to be below 32 (?)
 
-        if (this.transform.position.y < 35.5)
+        if (this.transform.position.y < 35.5 && anim.GetBool("isGrazing") == true || this.transform.position.y < 35.5 && anim.GetBool("isAlerted") == true)
         {
-
             currentState = ankyState.DRINKING;
-            if (anim.GetBool("isGrazing") == true)
-            {
-                anky = 1;
-            }
-            anim.SetBool("isDrinking", true);
-            anim.SetTrigger("isDrinking");
-            if (anim.GetBool("isDrinking") == true)
-            {
-                anim.SetBool("isIdle", false);
-                anim.SetBool("isEating", false);
-                anim.SetBool("isAlerted", false);
-                anim.SetBool("isGrazing", false);
-                anim.SetBool("isAttacking", false);
-                anim.SetBool("isFleeing", false);
-                anim.SetBool("isDead", false);
-                Debug.Log("its getting in this Drink");
-                //StartCoroutine(myCoroutine());
-                health = 100;
-            }
-            else
-            {
-                if (anky == 1)
-                {
-                    anim.SetBool("isGrazing", true);
-                    currentState = ankyState.GRAZING;
-                }
-                else
-                {
-                    anim.SetBool("isAlerted", true);
-                    currentState = ankyState.ALERTED;
-                }
-                anim.SetBool("isDrinking", false);
-                anim.SetBool("isIdle", false);
-                anim.SetBool("isEating", false);
-                anim.SetBool("isAttacking", false);
-                anim.SetBool("isFleeing", false);
-                anim.SetBool("isDead", false);
-            }
+            drinking();
         }
         anky = 0;
         // Hunting - up to the student what you do here
@@ -142,7 +106,7 @@ public class MyAnky : Agent
         for (int i = 0; i < ankyView.visibleTargets.Count; i++)
         {
             Transform target = ankyView.visibleTargets[i];
-            if (ankyView.visibleTargets[i].tag == "Rapty" && Vector3.Distance(target.position, this.transform.position) < 40)
+            if (ankyView.visibleTargets[i].tag == "Rapty" && Vector3.Distance(target.position, this.transform.position) < 40 && anim.GetBool("isAlerted") == true || ankyView.visibleTargets[i].tag == "Rapty" && Vector3.Distance(target.position, this.transform.position) < 40 && anim.GetBool("isAttacking") == true && health < 20)
             {
                 currentState = ankyState.FLEEING;
                 anim.SetTrigger("isFleeing");
@@ -178,30 +142,37 @@ public class MyAnky : Agent
         }
 
         // aligning ToDo: figure out how to get it to to find the nearest anky in its circle and then move to a distance close by. 
-        //for (int i = 0; i < ankyView.visibleTargets.Count; i++)
-        //{
-        //    Transform target = ankyView.visibleTargets[i];
-        //    if (target.tag == "Anky")
-        //    {
-        //        ankyFriendlies.Add(target);
-        //    }
-        //}
-        //for (int i = 0; i < ankyFriendlies.Count; i++)
-        //{
-        //    currentState = ankyState.ALIGNING;
-        //    anim.SetBool("isAlerted", false);
-        //    anim.SetBool("isDrinking", false);
-        //    anim.SetBool("isGrazing", false);
-        //    anim.SetBool("isIdle", false);
-        //    anim.SetBool("isEating", false);
-        //    anim.SetBool("isAttacking", false);
-        //    anim.SetBool("isFleeing", false);
-        //    anim.SetBool("isDead", false);
-        //    anim.SetBool("isAligning", true);
-        //    ankyAlign.enabled = true;
-        //    ankyWander.enabled = false;
-        //    ankyAlign.target = ankyFriendlies[i].gameObject;
-        //} 
+        for (int i = 0; i < ankyView.visibleTargets.Count; i++)
+        {
+            Transform target = ankyView.visibleTargets[i];
+            if (target.tag == "Anky")
+            {
+                ankyFriendlies.Add(target);
+            }
+        }
+        for (int i = 0; i < ankyFriendlies.Count; i++)
+        {
+            Transform target = ankyFriendlies[i];
+            float dist = Vector3.Distance(target.position, this.transform.position);
+            
+            if (closestDist > dist)
+            {
+                closestDist = dist;
+            }
+            //currentState = ankyState.ALIGNING;
+            //anim.SetBool("isAlerted", false);
+            //anim.SetBool("isDrinking", false);
+            //anim.SetBool("isGrazing", false);
+            //anim.SetBool("isIdle", false);
+            //anim.SetBool("isEating", false);
+            //anim.SetBool("isAttacking", false);
+            //anim.SetBool("isFleeing", false);
+            //anim.SetBool("isDead", false);
+            //anim.SetBool("isAligning", true);
+            ////ankyAlign.enabled = true;
+            //ankyWander.enabled = false;
+            //ankyAlign.target = ankyFriendlies[i].gameObject;
+        }
 
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
@@ -217,5 +188,49 @@ public class MyAnky : Agent
     {
         Debug.Log("its getting in this myCoroutine");
         yield return new WaitForSeconds(20);
+    }
+    public void drinking()
+    {
+        //AnimatorStateInfo ankyStateInfo;
+        //currentState = ankyState.DRINKING;
+        //currentState = ankyState.DRINKING;
+        if (anim.GetBool("isGrazing") == true)
+        {
+            anky = 1;
+        }
+        anim.SetBool("isDrinking", true);
+        anim.SetTrigger("isDrinking");
+        if (anim.GetBool("isDrinking") == true)
+        {
+            anim.SetBool("isIdle", false);
+            anim.SetBool("isEating", false);
+            anim.SetBool("isAlerted", false);
+            anim.SetBool("isGrazing", false);
+            anim.SetBool("isAttacking", false);
+            anim.SetBool("isFleeing", false);
+            anim.SetBool("isDead", false);
+            Debug.Log("its getting in this Drink");
+            //StartCoroutine(myCoroutine());
+            //health = 100;
+        }
+        else
+        {
+            if (anky == 1)
+            {
+                anim.SetBool("isGrazing", true);
+                currentState = ankyState.GRAZING;
+            }
+            else
+            {
+                anim.SetBool("isAlerted", true);
+                currentState = ankyState.ALERTED;
+            }
+            anim.SetBool("isDrinking", false);
+            anim.SetBool("isIdle", false);
+            anim.SetBool("isEating", false);
+            anim.SetBool("isAttacking", false);
+            anim.SetBool("isFleeing", false);
+            anim.SetBool("isDead", false);
+        }
     }
 }
