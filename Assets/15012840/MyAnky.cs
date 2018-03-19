@@ -27,11 +27,16 @@ public class MyAnky : Agent
     Drinking drinking;
     
     FieldOfView view;
-    GameObject target;
+    FieldOfView alerted;
+    
+    public GameObject target;
+    public ASAgentInstance aS;
     // Use this for initialization
     void Awake()
     {
         view = GetComponent<FieldOfView>();
+        alerted = GetComponent<FieldOfView>();
+        alerted.viewRadius = 100;
         wander = GetComponent<Wander>();
         drinking = GetComponent<Drinking>();
         flee = GetComponent<Flee>();
@@ -63,14 +68,15 @@ public class MyAnky : Agent
         // Idle - should only be used at startup
         if(state.ToString() == "IDLE")
         {
-            TurnOffTheScripts();
-            wander.enabled = true;
+            Debug.Log("idle");
+            //
         }
         // Eating - requires a box collision with a dead dino
 
         // Drinking - requires y value to be below 32 (?)
-        if (state.ToString() == "DRINKING")
+        else if (state.ToString() == "DRINKING")
         {
+            Debug.Log("drink");
             flee.enabled = false;
             drinking.enabled = true;
             drinking.Drink();
@@ -80,12 +86,17 @@ public class MyAnky : Agent
         // Hunting - up to the student what you do here
 
         // Fleeing - up to the student what you do here
-        if (state.ToString() == "FLEEING")
+        else if (state.ToString() == "FLEEING")
         {
+            Debug.Log("flee");
             wander.enabled = false;
             //TurnOffTheScripts();
             flee.target = target;
             flee.enabled = true;
+        }
+        if (state.ToString() == "ALERTED")
+        {
+            Debug.Log("alerted");
         }
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
@@ -94,15 +105,31 @@ public class MyAnky : Agent
 
     private void TransformToState()
     {
-        TransformToFleeing();
+        TransformToAlert();
         TransformToDrinking();
-        //idl
+        TransformToFleeing();
+        TransformToWonder();
+        //idle
         //eating
+    }
+
+    private void TransformToAlert()
+    {
+        foreach (Transform animal in alerted.visibleTargets)
+        {
+            if (animal.tag == "Rapty" && state.ToString() != "FLEEING")
+            {
+                Debug.Log("hh");
+                wander.enabled = false;
+                state = ankyState.ALERTED;
+            }
+        }
     }
 
     private void TransformToDrinking()
     {
-        if(transform.position.y < 35)
+        //look for water
+        if (transform.position.y < 35 && this.health < 80)
         {
             state = ankyState.DRINKING;
         }
@@ -112,12 +139,20 @@ public class MyAnky : Agent
     {
         foreach (Transform animal in view.visibleTargets)
         {
-            if(animal.tag == "Rapty")
+            if (animal.tag == "Rapty")
             {
                 state = ankyState.FLEEING;
                 target = animal.gameObject;
             }
         }
+        if(view.visibleTargets.Count == 0)
+        {
+            state = ankyState.IDLE;
+        }
+    }
+    private void TransformToWonder()
+    {
+        wander.enabled = true;
     }
 
     private void TurnOffTheScripts()
