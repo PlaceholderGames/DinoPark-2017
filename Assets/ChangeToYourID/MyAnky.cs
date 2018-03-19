@@ -18,9 +18,11 @@ public class MyAnky : Agent
 
     public Animator anim;
 	public Flee run;
+    private FieldOfView fov;
 	private Transform player = null;
 	private Transform ankyT = null;
 	public float fleeDistance = 5.0f;
+    GameObject[] raptors = null;
 
     // Use this for initialization
     protected override void Start()
@@ -44,10 +46,16 @@ public class MyAnky : Agent
 		player = obj.transform;
 		ankyT = transform;
 		run = gameObject.GetComponent<Flee> ();
+        fov = gameObject.GetComponent<FieldOfView>();
     }
 
     protected override void Update()
     {
+        for (int i = 0; i < fov.visibleTargets.Count; i++)
+        {
+            if (fov.visibleTargets)
+        }
+
         // Idle - should only be used at startup
 
         // Eating - requires a box collision with a dead dino
