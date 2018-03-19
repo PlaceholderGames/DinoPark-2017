@@ -2,8 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
+using StateMachine;
+
 public class MyAnky : Agent
 {
+
     public enum ankyState
     {
         IDLE,       // The default state on creation.
@@ -27,9 +31,11 @@ public class MyAnky : Agent
 	public float fleeNoVisTime = 2;
 
 	private FieldOfView eyes;
-	private ankyState currentState = ankyState.IDLE;
-	private List<Transform> predatorsInRange;
-	private List<Transform> friendsInRange;
+
+    private ankyState currentState = ankyState.IDLE;
+
+    public List<Transform> predatorsInRange;
+	public List<Transform> friendsInRange;
 
 	//Behaviour scripts
 	private Flee fleeBehaviourScript;
@@ -37,9 +43,9 @@ public class MyAnky : Agent
 
 	private float running = 0;
 
-	private float distance = 0;
-	float closestHazardDist = 100;
-	Transform closestHazard = null;
+	public float distance = 0;
+	public float closestHazardDist = 100;
+	public Transform closestHazard = null;
 
 	[Range(0,30)]
 	public float energyPerBite = 10;
@@ -49,6 +55,9 @@ public class MyAnky : Agent
 	private float hunger = 100;
 	private float thirst = 100;
 
+
+    public StateMachine<MyAnky> stateMachine { get; set; }
+    public int State = 0;
 
     // Use this for initialization
     protected override void Start()
@@ -80,12 +89,21 @@ public class MyAnky : Agent
 		fleeBehaviourScript.enabled = false;
 		wanderBehaviourScript.enabled = true;
 
+
+
+        stateMachine = new StateMachine<MyAnky>(this);
+        stateMachine.ChangeState(GrazingState.Instance);
+
         base.Start();
 
     }
 
     protected override void Update()
     {
+
+         stateMachine.Update();
+   
+       /*
 
         // Idle - should only be used at startup
 		if(currentState == ankyState.IDLE)
@@ -128,10 +146,9 @@ public class MyAnky : Agent
 		}
 
 		Debug.Log ("In Vision: " + predatorsInRange.Count);
-
+        */
         base.Update();
     }
-
 
 	/// <summary>
 	/// Check latest positions after each physics update
@@ -247,17 +264,6 @@ public class MyAnky : Agent
 	/// </summary>
 	void alertBehaviour()
 	{
-		//Check distance between us and our closest hazard
-		foreach (Transform pred in predatorsInRange) {
-			//Distance between us and predator
-			distance = Vector3.Distance (this.transform.position, pred.transform.position);
-			//find the closets predator
-			if (distance < closestHazardDist) {
-				closestHazard = pred;
-				closestHazardDist = distance;
-			}
-		}
-
 		//if there are predators in range
 		if (predatorsInRange.Count > 0) {
 			//Should we flee?
@@ -383,6 +389,7 @@ public class MyAnky : Agent
 					friendsInRange.Add (o);
 				}
 			}
+
 		}
 	}
 
@@ -393,4 +400,9 @@ public class MyAnky : Agent
 	{
 		Debug.Log (currentState);
 	}
+
+    public void setCurrentState(ankyState newState)
+    {
+        currentState = newState;
+    }   
 }
