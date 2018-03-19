@@ -1,0 +1,298 @@
+fileFormatVersion: 2
+guid: a3955eb23f6b1334d88355301b1bb0db
+timeCreated: 1520114217
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Armature
+    100004: Back
+    100006: Chest
+    100008: Cube
+    100010: Cube_001
+    100012: Cube_002
+    100014: Cube_003
+    100016: Cube_004
+    100018: DownMouthRig
+    100020: DownMouthRig_end
+    100022: DownMouthStart
+    100024: Estomach
+    100026: HeadRig
+    100028: leftBackHip
+    100030: LeftBackKnee2
+    100032: LeftBackKneeRig
+    100034: LeftBackKneeRig_end
+    100036: LeftBackKneeStart
+    100038: LeftHip
+    100040: LeftKnee2
+    100042: LeftKneeRig
+    100044: LeftKneeRig_end
+    100046: LeftKneeStart
+    100048: Neck
+    100050: RightBackHip
+    100052: RightBackKnee2
+    100054: RightBackKneeRig
+    100056: RightBackKneeRig_end
+    100058: RightBackKneeStart
+    100060: RightHip
+    100062: RightKnee2
+    100064: RightKneeRig
+    100066: RightKneeRig_end
+    100068: RightKneeStart
+    100070: Tail2
+    100072: Tail3
+    100074: Tail4
+    100076: Tail5
+    100078: TailRig
+    100080: TailRig_end
+    100082: TailStart
+    100084: UpMouthRig
+    100086: UpMouthRig_end
+    100088: UpMouthStart
+    400000: //RootNode
+    400002: Armature
+    400004: Back
+    400006: Chest
+    400008: Cube
+    400010: Cube_001
+    400012: Cube_002
+    400014: Cube_003
+    400016: Cube_004
+    400018: DownMouthRig
+    400020: DownMouthRig_end
+    400022: DownMouthStart
+    400024: Estomach
+    400026: HeadRig
+    400028: leftBackHip
+    400030: LeftBackKnee2
+    400032: LeftBackKneeRig
+    400034: LeftBackKneeRig_end
+    400036: LeftBackKneeStart
+    400038: LeftHip
+    400040: LeftKnee2
+    400042: LeftKneeRig
+    400044: LeftKneeRig_end
+    400046: LeftKneeStart
+    400048: Neck
+    400050: RightBackHip
+    400052: RightBackKnee2
+    400054: RightBackKneeRig
+    400056: RightBackKneeRig_end
+    400058: RightBackKneeStart
+    400060: RightHip
+    400062: RightKnee2
+    400064: RightKneeRig
+    400066: RightKneeRig_end
+    400068: RightKneeStart
+    400070: Tail2
+    400072: Tail3
+    400074: Tail4
+    400076: Tail5
+    400078: TailRig
+    400080: TailRig_end
+    400082: TailStart
+    400084: UpMouthRig
+    400086: UpMouthRig_end
+    400088: UpMouthStart
+    4300000: Cube_002
+    4300002: Cube_003
+    4300004: Cube
+    4300006: Cube_004
+    4300008: Cube_001
+    7400000: Default Take
+    7400002: Armature_Take_001_BaseLayer
+    9500000: //RootNode
+    13700000: Cube
+    13700002: Cube_001
+    13700004: Cube_002
+    13700006: Cube_003
+    13700008: Cube_004
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Default Take
+      takeName: Default Take
+      firstFrame: 0
+      lastFrame: 249
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Chest
+        weight: 1
+      - path: Armature/Chest/LeftHip
+        weight: 1
+      - path: Armature/Chest/LeftHip/LeftKneeStart
+        weight: 1
+      - path: Armature/Chest/LeftHip/LeftKneeStart/LeftKnee2
+        weight: 1
+      - path: Armature/Chest/LeftHip/LeftKneeStart/LeftKnee2/LeftKneeRig
+        weight: 1
+      - path: Armature/Chest/Neck
+        weight: 1
+      - path: Armature/Chest/Neck/HeadRig
+        weight: 1
+      - path: Armature/Chest/Neck/HeadRig/DownMouthStart
+        weight: 1
+      - path: Armature/Chest/Neck/HeadRig/DownMouthStart/DownMouthRig
+        weight: 1
+      - path: Armature/Chest/Neck/HeadRig/UpMouthStart
+        weight: 1
+      - path: Armature/Chest/Neck/HeadRig/UpMouthStart/UpMouthRig
+        weight: 1
+      - path: Armature/Chest/RightHip
+        weight: 1
+      - path: Armature/Chest/RightHip/RightKneeStart
+        weight: 1
+      - path: Armature/Chest/RightHip/RightKneeStart/RightKnee2
+        weight: 1
+      - path: Armature/Chest/RightHip/RightKneeStart/RightKnee2/RightKneeRig
+        weight: 1
+      - path: Armature/Estomach
+        weight: 1
+      - path: Armature/Estomach/Back
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail2
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail2/Tail3
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail2/Tail3/Tail4
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail2/Tail3/Tail4/Tail5
+        weight: 1
+      - path: Armature/Estomach/Back/TailStart/Tail2/Tail3/Tail4/Tail5/TailRig
+        weight: 1
+      - path: Armature/Estomach/leftBackHip
+        weight: 1
+      - path: Armature/Estomach/leftBackHip/LeftBackKneeStart
+        weight: 1
+      - path: Armature/Estomach/leftBackHip/LeftBackKneeStart/LeftBackKnee2
+        weight: 1
+      - path: Armature/Estomach/leftBackHip/LeftBackKneeStart/LeftBackKnee2/LeftBackKneeRig
+        weight: 1
+      - path: Armature/Estomach/RightBackHip
+        weight: 1
+      - path: Armature/Estomach/RightBackHip/RightBackKneeStart
+        weight: 1
+      - path: Armature/Estomach/RightBackHip/RightBackKneeStart/RightBackKnee2
+        weight: 1
+      - path: Armature/Estomach/RightBackHip/RightBackKneeStart/RightBackKnee2/RightBackKneeRig
+        weight: 1
+      - path: Cube
+        weight: 1
+      - path: Cube_001
+        weight: 1
+      - path: Cube_002
+        weight: 1
+      - path: Cube_003
+        weight: 1
+      - path: Cube_004
+        weight: 1
+      - path: DownMouthRig_end
+        weight: 1
+      - path: LeftBackKneeRig_end
+        weight: 1
+      - path: LeftKneeRig_end
+        weight: 1
+      - path: RightBackKneeRig_end
+        weight: 1
+      - path: RightKneeRig_end
+        weight: 1
+      - path: TailRig_end
+        weight: 1
+      - path: UpMouthRig_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
