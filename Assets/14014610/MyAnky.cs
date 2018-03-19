@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 public class MyAnky : Agent
 {
+	public FieldOfView fov;
+    public Wander ankyWander;
+    public Flee ankyFlee;
+
     public enum ankyState
     {
         IDLE,       // The default state on creation.
@@ -17,10 +21,13 @@ public class MyAnky : Agent
     };
 
     public Animator anim;
+    private ankyState currentState;
+
 
     // Use this for initialization
     protected override void Start()
     {
+		
         anim = GetComponent<Animator>();
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -37,21 +44,52 @@ public class MyAnky : Agent
         base.Start();
 
     }
-
+    void Awake()
+    {
+        ankyWander = GetComponent<Wander>();
+        ankyFlee = GetComponent<Flee>();
+    }
     protected override void Update()
     {
         // Idle - should only be used at startup
-
+        
         // Eating - requires a box collision with a dead dino
 
         // Drinking - requires y value to be below 32 (?)
-
+        if(this.transform.position.y < 32)
+        {
+            currentState = ankyState.DRINKING;
+        }
         // Alerted - up to the student what you do here
-
+        foreach (Transform i in fov.visibleTargets)
+        {
+            if (i.tag == "Rapty" && Vector3.Distance(i.position, this.transform.position) > 60)
+            {
+                currentState = ankyState.ALERTED;
+            }
+        }
+        if (currentState == ankyState.ALERTED)
+        {
+            ankyWander.enabled = true;
+            ankyFlee.enabled = false;
+        }
         // Hunting - up to the student what you do here
 
         // Fleeing - up to the student what you do here
+        foreach (Transform i in fov.visibleTargets)
+        {
+            if (i.tag == "Rapty" && Vector3.Distance(i.position, this.transform.position) < 30)
+            {
+                currentState = ankyState.FLEEING;
+                ankyFlee.target = i.gameObject;
+            }
+        }
 
+        if (currentState == ankyState.FLEEING)
+        {
+            ankyFlee.enabled = true;
+            ankyWander.enabled = false;
+        }
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
         base.Update();
