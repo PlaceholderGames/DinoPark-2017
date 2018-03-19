@@ -41,6 +41,15 @@ public class MyAnky : Agent
 	float closestHazardDist = 100;
 	Transform closestHazard = null;
 
+	[Range(0,30)]
+	public float energyPerBite = 10;
+	private float decayAmmount = 0;
+
+	public float health = 100;
+	private float hunger = 100;
+	private float thirst = 100;
+
+
     // Use this for initialization
     protected override void Start()
     {
@@ -60,7 +69,7 @@ public class MyAnky : Agent
         anim.SetBool("isEating", false);
         anim.SetBool("isDrinking", false);
         anim.SetBool("isAlerted", false);
-        anim.SetBool("isGrazing", false);
+        anim.SetBool("isGrazing", true);
         anim.SetBool("isAttacking", false);
         anim.SetBool("isFleeing", false);
         anim.SetBool("isDead", false);
@@ -77,45 +86,60 @@ public class MyAnky : Agent
 
     protected override void Update()
     {
-		anim.SetBool("isGrazing", true);
+
         // Idle - should only be used at startup
-		idleBehaviour();
+		if(currentState == ankyState.IDLE)
+			idleBehaviour();
+
+		//Grazing - default state when we are happy
+		if (currentState == ankyState.GRAZING) {
+			Debug.Log ("GRAZING");
+			grazingBehaviour ();
+		}
         // Eating - if on grass and we are hungry
-		eatBehaviour();
-        // Drinking - requires y value to be below 32 (?)
-		drinkBehaviour();
-      
+		if (currentState == ankyState.EATING) {
+			Debug.Log ("EATING");
+			eatBehaviour ();
+		}
+		// Drinking - requires y value to be below 32 (?)
+		if (currentState == ankyState.DRINKING) {
+			Debug.Log ("DRINK");
+			drinkBehaviour ();
+		}
 		// Alerted - up to the student what you do here
-		//If we have a predator in our vision
-		//possibly if predator is within a certain distance
-		//Use FOV Script 
-
-		//check all objects in our FOV
-		//Check if we are not in current state
-	
-		alertBehaviour ();
-
-
-
-
+		if (currentState == ankyState.ALERTED) {
+			Debug.Log ("ALERT");
+			alertBehaviour ();
+		}
         // Hunting - up to the student what you do here
-
+		if (currentState == ankyState.ATTACKING) {
+			Debug.Log ("ATTACK");
+		}
+			
         // Fleeing - up to the student what you do here
-		if (currentState == ankyState.FLEEING)
+		if (currentState == ankyState.FLEEING) {
+			Debug.Log ("FLEE");
 			fleeBehaviour ();		
-	
+		}
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
+		if (currentState == ankyState.DEAD) {
+			Debug.Log ("DEAD");
+			deadBehaviour ();
+		}
 
 		Debug.Log ("In Vision: " + predatorsInRange.Count);
-		//
-		blink();
-		checkStatus ();
+
         base.Update();
     }
 
+
+	/// <summary>
+	/// Check latest positions after each physics update
+	/// </summary>
     protected override void LateUpdate()
     {
+		blink();
+		//checkStatus ();
         base.LateUpdate();
     }
 
@@ -125,9 +149,40 @@ public class MyAnky : Agent
 	/// </summary>
 	void idleBehaviour()
 	{
-
+		currentState = ankyState.GRAZING;
 	}
 
+	/// <summary>
+	/// Default state
+	/// will wander around deciding what to do next
+	/// </summary>
+	void grazingBehaviour()
+	{
+		wanderBehaviourScript.enabled = true;
+
+		//If we have predators in range
+		//if we have a predator in our vision, set our alerted state to true
+		if (predatorsInRange.Count > 0) {
+			anim.SetBool ("isAlerted", true);
+			anim.SetBool ("isGrazing", false);
+			currentState = ankyState.ALERTED;
+		} 
+		//Drinking
+		else if (false) {
+			anim.SetBool ("isGrazing", false);
+			anim.SetBool ("isDrinking", true);
+		}
+		//Eating
+		else if (false) {
+			anim.SetBool ("isGrazing", false);
+			anim.SetBool ("isEating", true);
+		}
+		//Stay in our current state
+		else {
+			anim.SetBool ("isGrazing", true);		
+		}
+
+	}
 
 	/// <summary>
 	/// Eating behaviour 
@@ -136,7 +191,24 @@ public class MyAnky : Agent
 	/// </summary>
 	void eatBehaviour()
 	{
-
+		//If there are predators near
+		if (predatorsInRange.Count > 0) 
+		{
+			currentState = ankyState.ALERTED;
+		} 
+		else 
+		{
+			//If we are still hungry 
+			if(false)
+			{
+				//eat - continue eating
+			}
+			//If not then go back to grazing
+			else
+			{
+				currentState = ankyState.GRAZING;
+			}
+		}
 	}
 
 
@@ -147,7 +219,24 @@ public class MyAnky : Agent
 	/// </summary>
 	void drinkBehaviour()
 	{
-
+		//If there are predators near
+		if (predatorsInRange.Count > 0) 
+		{
+			currentState = ankyState.ALERTED;
+		} 
+		else 
+		{
+			//If we are still thirsty 
+			if(false)
+			{
+				//drink - continue drinking
+			}
+			//If not then go back to grazing
+			else
+			{
+				currentState = ankyState.GRAZING;
+			}
+		}
 
 	}
 
@@ -157,59 +246,55 @@ public class MyAnky : Agent
 	/// predators, this will be used by other methods to determin behaviour
 	/// </summary>
 	void alertBehaviour()
-	{			
-		//if we have a predator in our vision, set our alerted state to true
-		if (predatorsInRange.Count > 0) 
-		{
-			currentState = ankyState.ALERTED;
-			anim.SetBool ("isAlerted", true);
-			anim.SetBool ("isGrazing", false);
-			anim.SetBool ("isDrinking", false);
-			anim.SetBool ("isEating", false);
-		} 
-		else 
-		{
-			currentState = ankyState.ALERTED;
-			anim.SetBool ("isAlerted", false);
-		}
-
-
-
-		//Cycle through our list of visible predators and find out closest hazard
-		foreach (Transform i in predatorsInRange) {	
-			distance = Vector3.Distance (i.transform.position, this.transform.position);
-
-			//check for our closest predator is closer than our current known closest 
+	{
+		//Check distance between us and our closest hazard
+		foreach (Transform pred in predatorsInRange) {
+			//Distance between us and predator
+			distance = Vector3.Distance (this.transform.position, pred.transform.position);
+			//find the closets predator
 			if (distance < closestHazardDist) {
-				//Debug.Log ("Found something closer");
+				closestHazard = pred;
 				closestHazardDist = distance;
-				closestHazard = i;
 			}
-
-			Debug.Log ("Closest Hazard = " + closestHazard);
 		}
 
+		//if there are predators in range
+		if (predatorsInRange.Count > 0) {
+			//Should we flee?
+			//If our hazard is within our flee radius
+			if (closestHazardDist <= fleeDistance) {  // is there a predator in our safe space * 
+				wanderBehaviourScript.enabled = false;
+				fleeBehaviourScript.target = closestHazard.gameObject;
+				fleeBehaviourScript.enabled = true;
 
-		//Determine best behaviour for given scenario 
+				anim.SetBool ("isFleeing", true);
+				currentState = ankyState.FLEEING;
 
-		//Should we flee?
-		//If our hazard is within our flee radius
-		if (closestHazardDist < fleeDistance)  // is there a predator in our safe space * 
-		{
-			currentState = ankyState.FLEEING;
-			anim.SetBool ("isFleeing", true);
-
-			wanderBehaviourScript.enabled = false;
-			fleeBehaviourScript.target = closestHazard.gameObject;
-			fleeBehaviourScript.enabled = true;
+			} else {
+				wanderBehaviourScript.enabled = true;
+				fleeBehaviourScript.enabled = false;
+				fleeBehaviourScript.target = null;
+			}
 		}
-		//else if () // are we outnumbered 
-		//Do we outnumber them
-		//Is our health high enough that it is worth fighting
-		//do we have the high groundff
-		//should we try it aniken
-		//did you bring him here to kill me 
-
+		//if there are no longer predators in range
+		else{
+			//Should we Graze
+			if (true) {
+				wanderBehaviourScript.enabled = true;
+				anim.SetBool ("isGrazing", true);
+				currentState = ankyState.GRAZING;
+			}
+			//Should we Eat
+			else if (false) {
+				anim.SetBool ("isEating", true);
+				currentState = ankyState.EATING;
+			}
+			//Should we Drink
+			else if (false) {
+				anim.SetBool ("isDrinking", true);
+				currentState = ankyState.DRINKING;
+			}
+		}
 	}
 
 	/// <summary>
@@ -219,30 +304,52 @@ public class MyAnky : Agent
 	/// </summary>
 	void fleeBehaviour(){
 
-		if (currentState == ankyState.FLEEING) {
-			Debug.Log ("FLEEING");	
-			//If we can no longer see a predator, continue running for n.. seconds
-			if (predatorsInRange.Count <= 0) {
-				Debug.Log ("No Predators are visibleq");
-				//if we are currently fleeing 
-				if (running <= fleeNoVisTime) {
-					Debug.Log ("Still Running");
-					running += Time.deltaTime;
-					Debug.Log (running);
-				} else {
-					anim.SetBool ("isFleeing", false);
-					currentState = ankyState.ALERTED;
-					fleeBehaviourScript.enabled = false;
-					fleeBehaviourScript.target = null;
-					wanderBehaviourScript.enabled = true;
+		//If we can no longer see a predator, continue running for n.. seconds
+		if (predatorsInRange.Count <= 0) {
+			//if we are currently fleeing 
+			if (running < fleeNoVisTime) {
+				running += Time.deltaTime;
+			} else {
+				anim.SetBool ("isFleeing", false);
+				fleeBehaviourScript.enabled = false;
+				fleeBehaviourScript.target = null;
+				running = 0;
+				anim.SetBool ("isAlerted", true);
+				currentState = ankyState.ALERTED;
 
-					Debug.Log ("End Running");
-				}
 			}
 		}
 	}
 
+	/// <summary>
+	/// Method that controls what happens after the death of dino
+	/// </summary>
+	void deadBehaviour()
+	{
+		//If we have been eaten
+		if (decayAmmount >= 100)
+			GameObject.Destroy (this.gameObject);
+	}
 
+
+	/// <summary>
+	/// Method for if our dino is dead and another dino is eating us.
+	/// allows predator to replenish its energy per bite.
+	/// </summary>
+	/// <returns>energy</returns>
+	/// <param name="biteSize">Bite size.</param>
+	public float eatForEnergy(float biteSize)
+	{
+		decayAmmount += biteSize;
+
+		//allow dino to take bigger bites of victim
+		if (biteSize < 20)
+			return 10;
+		else if (biteSize < 50)
+			return 20;
+		else
+			return 30;
+	}
 
 	/// <summary>
 	/// Causes the dino to 'blink' at the end of every frame,
@@ -277,14 +384,11 @@ public class MyAnky : Agent
 		}
 	}
 
-
+	/// <summary>
+	/// update our FSM Bools based on our current state
+	/// </summary>
 	void checkStatus()
 	{
-		if (currentState != ankyState.IDLE) {
-			anim.SetBool ("isIdle", false);
-		} else {
-			anim.SetBool ("isIdle", true);
-		}
-
+		Debug.Log (currentState);
 	}
 }
