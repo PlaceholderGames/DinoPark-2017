@@ -17,6 +17,16 @@ public class MyAnky : Agent
     };
 
     public Animator anim;
+    private ankyState state;
+
+    public int health = 100;
+
+    
+    Flee flee;
+    Wander wander;
+    Drink drink;
+
+
 
     // Use this for initialization
     protected override void Start()
