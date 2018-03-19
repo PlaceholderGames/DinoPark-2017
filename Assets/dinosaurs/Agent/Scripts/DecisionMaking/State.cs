@@ -8,19 +8,19 @@ public class State : MonoBehaviour
     public virtual void Awake()
     {
         transitions = new List<Transition>();
-        // TO-DO
+        // TO-DO populate all possible transitions.
         // setup your transitions here
     }
     
     public virtual void Update()
     {
-        // TO-DO
+        // TO-DO, check if transition needs to be executed.
         // develop behaviour here
     }
 
     public virtual void OnEnable()
     {
-        // TO-DO
+        // TO-DO // 
         // develop initialization here
     }
 
