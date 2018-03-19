@@ -20,6 +20,7 @@ public class MyAnky : Agent
 	// list of objects we want to stay away from
 	//contains the tags of objects that we will check are in our FOV
 	public string[] predators = {"Rapty"};
+	public string[] friends = {"Anky"};
 	[Range(0,100)]
 	public float fleeDistance = 45;
 	//Time that dino will continue to flee when they cant see a predator
@@ -28,6 +29,7 @@ public class MyAnky : Agent
 	private FieldOfView eyes;
 	private ankyState currentState = ankyState.IDLE;
 	private List<Transform> predatorsInRange;
+	private List<Transform> friendsInRange;
 
 	//Behaviour scripts
 	private Flee fleeBehaviourScript;
@@ -51,6 +53,7 @@ public class MyAnky : Agent
 		//Get our field of view script
 		eyes = GetComponent<FieldOfView> ();
 		predatorsInRange = new List<Transform> ();
+		friendsInRange = new List<Transform> ();
 
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -80,8 +83,9 @@ public class MyAnky : Agent
         // Eating - if on grass and we are hungry
 		eatBehaviour();
         // Drinking - requires y value to be below 32 (?)
-
-        // Alerted - up to the student what you do here
+		drinkBehaviour();
+      
+		// Alerted - up to the student what you do here
 		//If we have a predator in our vision
 		//possibly if predator is within a certain distance
 		//Use FOV Script 
@@ -103,7 +107,7 @@ public class MyAnky : Agent
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
 
-
+		Debug.Log ("In Vision: " + predatorsInRange.Count);
 		//
 		blink();
 		checkStatus ();
@@ -202,7 +206,7 @@ public class MyAnky : Agent
 		//else if () // are we outnumbered 
 		//Do we outnumber them
 		//Is our health high enough that it is worth fighting
-		//do we have the high ground
+		//do we have the high groundff
 		//should we try it aniken
 		//did you bring him here to kill me 
 
@@ -213,25 +217,28 @@ public class MyAnky : Agent
 	/// and cause the dino to change state depending on how close the hazard is.
 	/// predators can be within a threshold before behaviour will change to fleeing
 	/// </summary>
-	void fleeBehaviour()
-	{
-		Debug.Log ("FLEEING");	
-		//If we can no longer see a predator, continue running for n.. seconds
-		if (predatorsInRange.Count < 0) {
-			//if we are currently fleeing 
-			if (running < fleeNoVisTime) {
-				Debug.Log (running);
-				running += Time.deltaTime;
-			} else {
-				anim.SetBool ("isFleeing", false);
-				currentState = ankyState.ALERTED;
-				wanderBehaviourScript.enabled = true;
-				fleeBehaviourScript.enabled = false;
-				Debug.Log ("End Running");
-				running = 0;
+	void fleeBehaviour(){
+
+		if (currentState == ankyState.FLEEING) {
+			Debug.Log ("FLEEING");	
+			//If we can no longer see a predator, continue running for n.. seconds
+			if (predatorsInRange.Count <= 0) {
+				Debug.Log ("No Predators are visibleq");
+				//if we are currently fleeing 
+				if (running <= fleeNoVisTime) {
+					Debug.Log ("Still Running");
+					running += Time.deltaTime;
+					Debug.Log (running);
+				} else {
+					anim.SetBool ("isFleeing", false);
+					currentState = ankyState.ALERTED;
+					fleeBehaviourScript.enabled = false;
+					fleeBehaviourScript.target = null;
+					wanderBehaviourScript.enabled = true;
+
+					Debug.Log ("End Running");
+				}
 			}
-		} else if(closestHazardDist < fleeDistance) {
-			running = 0;
 		}
 	}
 
@@ -250,11 +257,21 @@ public class MyAnky : Agent
 		//Check the dinos FOV for predators and store them in a list 
 		foreach (Transform o in eyes.visibleTargets) 
 		{	
+			//add to our predator list
 			foreach (string pTag in predators) 
 			{
 				if (o.gameObject.CompareTag (pTag)) 
 				{
 					predatorsInRange.Add (o);
+				}
+			}
+
+			//Add to our friends list
+			foreach (string fTag in friends) 
+			{
+				if (o.gameObject.CompareTag (fTag)) 
+				{
+					friendsInRange.Add (o);
 				}
 			}
 		}
