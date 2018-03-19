@@ -18,15 +18,54 @@ public class MyAnky : Agent
 
     public Animator anim;
     private ankyState state;
-
-    public int health = 100;
+    
+    public int health = 40;
 
     
     Flee flee;
     Wander wander;
     Drink drink;
 
+  
+    private void ChangeState()
+    {
+       // ChangeToFlee();
+        ChangeToDrinking();
 
+    }
+
+
+
+    private void ChangeToDrinking()
+    {
+        if (transform.position.y < 32 && this.health < 50)
+        {
+            state = ankyState.DRINKING;
+        }
+    }
+
+    private void ChangeToEating()
+    {
+        if (health < 50)
+        {
+            // go find grass
+
+            // state = ankyState.EATING;
+        }
+
+    }
+    //private void ChangeToFlee()
+    //{
+    //    foreach (Transform animal in view.VisibleTargets)
+    //    {
+    //        if (animal.tag == "Rapty")
+    //        {
+    //            state = ankyState.FLEEING;
+    //            target = animal.gameObject;
+    //        }
+    //    }
+
+    //}
 
     // Use this for initialization
     protected override void Start()
@@ -72,3 +111,4 @@ public class MyAnky : Agent
         base.LateUpdate();
     }
 }
+
