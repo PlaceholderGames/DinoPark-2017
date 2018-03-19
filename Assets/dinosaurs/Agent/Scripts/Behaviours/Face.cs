@@ -4,6 +4,7 @@ using System.Collections;
 public class Face : Align {
 
     protected GameObject targetAux;
+    
 
     public override void Awake()
     {

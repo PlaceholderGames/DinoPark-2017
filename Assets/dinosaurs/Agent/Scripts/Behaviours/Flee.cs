@@ -8,10 +8,12 @@ public class Flee : AgentBehaviour {
         {
             float targetOrientation = Mathf.Atan2(direction.x, direction.z);
             targetOrientation *= Mathf.Rad2Deg;
-            agent.orientation = targetOrientation - 180;
             
+            //Rotates the model and not field of view currently
+            //agent.orientation = targetOrientation;
         }
         Steering steering = new Steering();
+        
         steering.linear = transform.position - target.transform.position;
         steering.linear.Normalize();
         steering.linear = steering.linear * agent.maxAccel;

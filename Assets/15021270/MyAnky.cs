@@ -20,6 +20,7 @@ public class MyAnky : Agent
     public Wander wander;
     public FieldOfView view;
     public Flee flee;
+    public Face face;
     public ankyState currentState;
 
     // Use this for initialization
@@ -29,6 +30,7 @@ public class MyAnky : Agent
         wander = GetComponent<Wander>();
         view = GetComponent<FieldOfView>();
         flee = GetComponent<Flee>();
+        face = GetComponent<Face>();
         currentState = GetComponent<ankyState>();
 
         // Assert default animation booleans and floats
@@ -80,6 +82,7 @@ public class MyAnky : Agent
         {
             wander.enabled = false;
             flee.enabled = true;
+            
         }
         else if (currentState == ankyState.DEAD)
         {
@@ -101,17 +104,18 @@ public class MyAnky : Agent
 
     protected override void LateUpdate()
     {
-        base.LateUpdate();
+        //base.LateUpdate();
     }
 
     protected void rapterCheck()
     {
-        foreach (Transform i in view.visibleTargets)
+        foreach (Transform i in view.stereoVisibleTargets)
         {
             if (i.tag == "Rapty")
             {
-                currentState = ankyState.FLEEING;
                 flee.target = i.gameObject;
+                currentState = ankyState.FLEEING;
+                
             }
         }
     }
