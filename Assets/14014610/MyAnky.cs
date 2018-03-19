@@ -60,19 +60,19 @@ public class MyAnky : Agent
         {
             currentState = ankyState.DRINKING;
         }
+
+
         // Alerted - up to the student what you do here
         foreach (Transform i in fov.visibleTargets)
         {
             if (i.tag == "Rapty" && Vector3.Distance(i.position, this.transform.position) > 60)
             {
                 currentState = ankyState.ALERTED;
+                anim.SetBool("isAlerted", true);
             }
+            else { anim.SetBool("isAlerted", false); }
         }
-        if (currentState == ankyState.ALERTED)
-        {
-            ankyWander.enabled = true;
-            ankyFlee.enabled = false;
-        }
+        
         // Hunting - up to the student what you do here
 
         // Fleeing - up to the student what you do here
@@ -82,15 +82,26 @@ public class MyAnky : Agent
             {
                 currentState = ankyState.FLEEING;
                 ankyFlee.target = i.gameObject;
+                anim.SetBool("isFleeing", true);
             }
+            else { anim.SetBool("isFleeing", false); }
         }
 
+
+        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
+
+
+        if (currentState == ankyState.ALERTED)
+        {
+            ankyWander.enabled = true;
+            ankyFlee.enabled = false;
+        }
         if (currentState == ankyState.FLEEING)
         {
             ankyFlee.enabled = true;
             ankyWander.enabled = false;
         }
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
+
 
         base.Update();
     }
