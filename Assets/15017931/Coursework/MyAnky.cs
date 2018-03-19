@@ -315,6 +315,8 @@ public class MyAnky : Agent
 				fleeBehaviourScript.target = null;
 				running = 0;
 				anim.SetBool ("isAlerted", true);
+				closestHazardDist = 100;
+				closestHazard = null;
 				currentState = ankyState.ALERTED;
 
 			}
