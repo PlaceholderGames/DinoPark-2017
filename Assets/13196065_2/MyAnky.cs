@@ -18,6 +18,9 @@ public class MyAnky : Agent
 
     public Animator anim;
 
+    ankyState currentSate;
+    ankyState previousState;
+
     // Use this for initialization
     protected override void Start()
     {
@@ -61,4 +64,13 @@ public class MyAnky : Agent
     {
         base.LateUpdate();
     }
+
+
+    void setState ()
+    {
+
+    }
+
+
+        
 }
