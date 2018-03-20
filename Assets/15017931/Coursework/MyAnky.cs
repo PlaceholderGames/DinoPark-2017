@@ -1,9 +1,16 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
-
 using StateMachine;
+
+[System.Serializable]
+public struct dinoStats
+{
+    public int health;
+    public int hunger;
+    public int thirst;
+    public int energy;
+}
 
 public class MyAnky : Agent
 {
@@ -20,44 +27,67 @@ public class MyAnky : Agent
         DEAD
     };
 
+
+    [Header("15017931")]
+    public ankyState currentState = ankyState.IDLE;
+    public dinoStats myStats;
     public Animator anim;
-	// list of objects we want to stay away from
-	//contains the tags of objects that we will check are in our FOV
+    [Space(10)]
+
+    // list of objects we want to stay away from
+    //contains the tags of objects that we will check are in our FOV
+    [Header("Friend/Foe Tag Lists")]
 	public string[] predators = {"Rapty"};
 	public string[] friends = {"Anky"};
-	[Range(0,100)]
-	public float fleeDistance = 45;
-	//Time that dino will continue to flee when they cant see a predator
-	public float fleeNoVisTime = 2;
+    [Space(10)]
 
-	private FieldOfView eyes;
 
-    private ankyState currentState = ankyState.IDLE;
-
+    [Header("Vision")]
+    public List<Transform> dinosInVision;
     public List<Transform> predatorsInRange;
 	public List<Transform> friendsInRange;
+    public float distance = 0;
+    public float closestHazardDist = 100;
+    public Transform closestHazard = null;
+    [Range(0, 100)]
+    public float fleeDistance = 45;
+    private FieldOfView eyes;
+    [Space(10)]
 
-	//Behaviour scripts
-	public Flee fleeBehaviourScript;
+    //Behaviour scripts
+    [Header("Behaviour Scripts")]
+    public Flee fleeBehaviourScript;
 	public Wander wanderBehaviourScript;
+    [Space(10)]
 
-	private float running = 0;
+    //If we are attacked 
+    [Header("Other")]
+    [Header("What We Gain")]
+    public int drink = 5;
+    public int eat = 5;
+    [Header("What We Lose")]
+    public int energyOverTime = 5;
+    [Space(10)]
 
-	public float distance = 0;
-	public float closestHazardDist = 100;
-	public Transform closestHazard = null;
 
-	[Range(0,30)]
-	public float energyPerBite = 10;
-	private float decayAmmount = 0;
 
-	public float health = 100;
-	private float hunger = 100;
-	private float thirst = 100;
+    [Header("Combat")]
+    [Header("if We are Hit")]
+    public int headDamage = 10;
+    public int bodyDamage = 30;
+    public int tailDamage = 10;
 
+    [Header("if We Hit")]
+    public int tailImpact = 20;
+    public int headImpact = 15;
+    [Space(10)]
+
+
+    [Header("Death")]
+    private float decayAmmount = 0;
 
     public StateMachine<MyAnky> stateMachine { get; set; }
-    public int State = 0;
+
 
     // Use this for initialization
     protected override void Start()
@@ -70,8 +100,15 @@ public class MyAnky : Agent
 
 		//Get our field of view script
 		eyes = GetComponent<FieldOfView> ();
-		predatorsInRange = new List<Transform> ();
+        dinosInVision = new List<Transform>();
+        predatorsInRange = new List<Transform> ();
 		friendsInRange = new List<Transform> ();
+
+        //set dino stats
+        myStats.health = 100;
+        myStats.hunger = 100;
+        myStats.thirst = 100;
+        myStats.energy = 100;
 
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -101,52 +138,8 @@ public class MyAnky : Agent
     protected override void Update()
     {
 
-         stateMachine.Update();
+        stateMachine.Update();
    
-       /*
-
-        // Idle - should only be used at startup
-		if(currentState == ankyState.IDLE)
-			idleBehaviour();
-
-		//Grazing - default state when we are happy
-		if (currentState == ankyState.GRAZING) {
-			Debug.Log ("GRAZING");
-			grazingBehaviour ();
-		}
-        // Eating - if on grass and we are hungry
-		if (currentState == ankyState.EATING) {
-			Debug.Log ("EATING");
-			eatBehaviour ();
-		}
-		// Drinking - requires y value to be below 32 (?)
-		if (currentState == ankyState.DRINKING) {
-			Debug.Log ("DRINK");
-			drinkBehaviour ();
-		}
-		// Alerted - up to the student what you do here
-		if (currentState == ankyState.ALERTED) {
-			Debug.Log ("ALERT");
-			alertBehaviour ();
-		}
-        // Hunting - up to the student what you do here
-		if (currentState == ankyState.ATTACKING) {
-			Debug.Log ("ATTACK");
-		}
-			
-        // Fleeing - up to the student what you do here
-		if (currentState == ankyState.FLEEING) {
-			Debug.Log ("FLEE");
-			fleeBehaviour ();		
-		}
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-		if (currentState == ankyState.DEAD) {
-			Debug.Log ("DEAD");
-			deadBehaviour ();
-		}
-
-		Debug.Log ("In Vision: " + predatorsInRange.Count);
-        */
         base.Update();
     }
 
@@ -160,14 +153,7 @@ public class MyAnky : Agent
         base.LateUpdate();
     }
 
-
-	/// <summary>
-	/// Default Behaviour (when no paramaters are set)
-	/// </summary>
-	void idleBehaviour()
-	{
-		currentState = ankyState.GRAZING;
-	}
+    
 
 	/// <summary>
 	/// Default state
@@ -303,31 +289,7 @@ public class MyAnky : Agent
 		}
 	}
 
-	/// <summary>
-	/// Method will check our predators in range list for distance to closest hazard 
-	/// and cause the dino to change state depending on how close the hazard is.
-	/// predators can be within a threshold before behaviour will change to fleeing
-	/// </summary>
-	void fleeBehaviour(){
-
-		//If we can no longer see a predator, continue running for n.. seconds
-		if (predatorsInRange.Count <= 0) {
-			//if we are currently fleeing 
-			if (running < fleeNoVisTime) {
-				running += Time.deltaTime;
-			} else {
-				anim.SetBool ("isFleeing", false);
-				fleeBehaviourScript.enabled = false;
-				fleeBehaviourScript.target = null;
-				running = 0;
-				anim.SetBool ("isAlerted", true);
-				closestHazardDist = 100;
-				closestHazard = null;
-				currentState = ankyState.ALERTED;
-
-			}
-		}
-	}
+	
 
 	/// <summary>
 	/// Method that controls what happens after the death of dino
@@ -368,10 +330,29 @@ public class MyAnky : Agent
 	void blink()
 	{
 		predatorsInRange.Clear ();
+        friendsInRange.Clear();
+        dinosInVision.Clear();
+
         closestHazardDist = 100;
         closestHazard = null;
+
+        //Ensure a dino cannot be seen in stereo and mono vision
+        //if dino is in stereo vision
+        foreach (Transform sDino in eyes.stereoVisibleTargets)
+        {
+            dinosInVision.Add(sDino);   
+        }
+
+     
+        //if dino is in mono vision
+        foreach (Transform mDino in eyes.visibleTargets)
+        {
+            dinosInVision.Add(mDino);
+        }
+
+
         //Check the dinos FOV for predators and store them in a list 
-        foreach (Transform o in eyes.visibleTargets) 
+        foreach (Transform o in dinosInVision) 
 		{	
 			//add to our predator list
 			foreach (string pTag in predators) 
@@ -390,9 +371,8 @@ public class MyAnky : Agent
 					friendsInRange.Add (o);
 				}
 			}
-
 		}
-	}
+    }
 
 	/// <summary>
 	/// update our FSM Bools based on our current state

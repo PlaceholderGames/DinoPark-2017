@@ -49,18 +49,20 @@ public class GrazingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        //Drinking
-        //_owner.stateMachine.ChangeState(DrinkingState.Instance);
-
-        //Eating
-        //_owner.stateMachine.ChangeState(EatingState.Instance);
-
+      
         //Alert
         if (_owner.predatorsInRange.Count > 0)
         {
             Debug.Log(_owner.predatorsInRange.Count);
             _owner.stateMachine.ChangeState(AlertState.Instance);
         }
+        //Eating
+        if(_owner.myStats.hunger < 80)
+            _owner.stateMachine.ChangeState(EatingState.Instance);
+
+        //Drinking
+        if (_owner.myStats.thirst < 80)
+            _owner.stateMachine.ChangeState(DrinkingState.Instance);
 
         //Idle
         //_owner.stateMachine.ChangeState(IdleState.Instance);

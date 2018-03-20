@@ -67,18 +67,27 @@ public class AlertState : State<MyAnky>
 
         //Attack
         //_owner.stateMachine.ChangeState(AttackingState.Instance);
-        
-        //Grazing
-        if(_owner.predatorsInRange.Count  <= 0)
-            _owner.stateMachine.ChangeState(GrazingState.Instance);
-
-        //Drinking
-        //_owner.stateMachine.ChangeState(DrinkingState.Instance);
-        //Eating
-        //_owner.stateMachine.ChangeState(EatingState.Instance);
+         
         //Fleeing
-        else if (_owner.closestHazardDist <= _owner.fleeDistance)
+        if (_owner.closestHazardDist <= _owner.fleeDistance)
+        {
             _owner.stateMachine.ChangeState(FleeState.Instance);
-
+        }
+        //Grazing
+        else if (_owner.predatorsInRange.Count <= 0)
+        {
+            _owner.stateMachine.ChangeState(GrazingState.Instance);
+        }
+        //Eating
+        else if (_owner.myStats.hunger < 30)
+        {
+            _owner.stateMachine.ChangeState(EatingState.Instance);
+        }
+        //Drinking
+        else if (_owner.myStats.thirst < 30)
+        {
+            _owner.stateMachine.ChangeState(DrinkingState.Instance);
+        }
+       
     }
 }

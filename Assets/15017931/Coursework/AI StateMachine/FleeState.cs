@@ -62,14 +62,14 @@ public class FleeState : State<MyAnky>
             if (waitForSeconds <= 0)
             { 
                 //check we are not dead
-                if (_owner.health <= 0)
+                if (_owner.myStats.health <= 0)
                     _owner.stateMachine.ChangeState(DeadState.Instance);
                 //Go back to alert when we cant see any predators anymore
                 else
                     _owner.stateMachine.ChangeState(AlertState.Instance);
             }
             //Check if we are dead
-            else if (_owner.health <= 0)
+            else if (_owner.myStats.health <= 0)
             {
                 _owner.stateMachine.ChangeState(DeadState.Instance);
             }
