@@ -35,6 +35,7 @@ public class FieldOfView : MonoBehaviour {
     void FindVisibleTargets()
     {
         visibleTargets.Clear ();
+        stereoVisibleTargets.Clear();
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
         for (int i = 0; i < targetsInViewRadius.Length; i++)
