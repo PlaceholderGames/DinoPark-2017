@@ -1,8 +1,15 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/15021270.meta
 guid: a61ac11f77c0ea242b1d66117b479934
 folderAsset: yes
 timeCreated: 1521566126
 licenseType: Pro
+=======
+guid: 413de532d7fed4c44ab320ae238d3f05
+folderAsset: yes
+timeCreated: 1521482772
+licenseType: Free
+>>>>>>> ec4dd5f889f9bcf3325e4f7f90f1bd86fc247337:Assets/15021270.meta
 DefaultImporter:
   userData: 
   assetBundleName: 

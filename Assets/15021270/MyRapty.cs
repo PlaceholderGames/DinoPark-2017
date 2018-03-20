@@ -16,25 +16,11 @@ public class MyRapty : Agent
         DEAD
     };
     private Animator anim;
-    private FieldOfView view;
-    private Face face;
-    private Wander wander;
-    private Pursue pursue;
-    public raptyState currentState;
-    public int health;
 
     // Use this for initialization
-    void Awake()
-    {
-        view = GetComponent<FieldOfView>();
-        anim = GetComponent<Animator>();
-        face = GetComponent<Face>();
-        wander = GetComponent<Wander>();
-        pursue = GetComponent<Pursue>();
-    }
-
     protected override void Start()
     {
+        anim = GetComponent<Animator>();
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
         anim.SetBool("isEating", false);
@@ -44,9 +30,6 @@ public class MyRapty : Agent
         anim.SetBool("isAttacking", false);
         anim.SetBool("isFleeing", false);
         anim.SetBool("isDead", false);
-
-        currentState = raptyState.IDLE;
-
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
         base.Start();
@@ -54,71 +37,21 @@ public class MyRapty : Agent
 
     protected override void Update()
     {
-        if (currentState == raptyState.IDLE)
-        {
-            checkForAnky();
-            //wander.enabled = true;
-            Debug.Log("idle!");
-        }
-        else if (currentState == raptyState.EATING)
-        {
+        // Idle - should only be used at startup
 
-        }
-        else if (currentState == raptyState.DRINKING)
-        {
+        // Eating - requires a box collision with a dead dino
 
-        }
-        else if (currentState == raptyState.ALERTED)
-        {
+        // Drinking - requires y value to be below 32 (?)
 
-        }
-        else if (currentState == raptyState.HUNTING)
-        {
+        // Alerted - up to the student what you do here
 
-            wander.enabled = false;
-            face.enabled = true;
-            pursue.enabled = true;
+        // Hunting - up to the student what you do here
 
-            this.SetSteering(face.GetSteering());
-            this.SetSteering(pursue.GetSteering());
-            Debug.Log("Hunting!");
-            
-        }
-        else if (currentState == raptyState.ATTACKING)
-        {
+        // Fleeing - up to the student what you do here
 
-        }
-            // Idle - should only be used at startup
+        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
-            // Eating - requires a box collision with a dead dino
-
-            // Drinking - requires y value to be below 32 (?)
-
-            // Alerted - up to the student what you do here
-
-            // Hunting - up to the student what you do here
-
-
-            // Fleeing - up to the student what you do here
-
-            // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
-
-
-            base.Update();
-    }
-
-
-
-    private void checkForAnky()
-    {
-        foreach (Transform i in view.visibleTargets)
-        {
-            if (i.tag == "Anky")
-            {
-                currentState = raptyState.HUNTING;
-            }
-        }
+        base.Update();
     }
 
     protected override void LateUpdate()
