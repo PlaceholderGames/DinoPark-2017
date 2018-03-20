@@ -1,0 +1,3 @@
+﻿1>------ Build started: Project: Assembly-CSharp-firstpass, Configuration: Debug Any CPU ------
+1>  Assembly-CSharp-firstpass -> F:\DinoPark\DinoPark-2017\Temp\bin\Debug\Assembly-CSharp-firstpass.dll
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========

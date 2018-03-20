@@ -8,7 +8,6 @@ public class AnkyBase : MonoBehaviour {
     // Use this for initialization
     void Start () {
         anim = GetComponent<Animator>();
-
     }
 
 	// Update is called once per frame
