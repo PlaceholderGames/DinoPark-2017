@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Face : Align {
-
+    internal static Transform RaptyInSight;
     protected GameObject targetAux;
 
     public override void Awake()

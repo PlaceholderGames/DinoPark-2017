@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 public class Flee : AgentBehaviour {
+    internal static Transform RaptyInSight;
+
     public override Steering GetSteering()
     {
         Steering steering = new Steering();
