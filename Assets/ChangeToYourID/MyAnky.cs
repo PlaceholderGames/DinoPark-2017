@@ -1,9 +1,10 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using Statestuff;
 public class MyAnky : Agent
 {
+    
     public enum ankyState
     {
         IDLE,       // The default state on creation.
@@ -15,13 +16,31 @@ public class MyAnky : Agent
         FLEEING,     // Running away from a specific target
         DEAD
     };
-
+    public List<Transform> RaptorsInView;
+    public FieldOfView fov;
     public Animator anim;
+    public Flee fleeScript;
+    public Wander wanderScript;
+    public ankyState currentAnkyState;
+     
+    public StateMachine<MyAnky> stateMachine { get; set; }
+
+    void Awake()
+    {
+        fleeScript = GetComponent<Flee>();
+        wanderScript = GetComponent<Wander>();
+    }
 
     // Use this for initialization
     protected override void Start()
     {
+
+        stateMachine = new StateMachine<MyAnky>(this);
+        stateMachine.ChangeState(GrazingState.Instance);
+
         anim = GetComponent<Animator>();
+        
+
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
         anim.SetBool("isEating", false);
@@ -34,6 +53,7 @@ public class MyAnky : Agent
         anim.SetFloat("speedMod", 1.0f);
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
+        
         base.Start();
 
     }
@@ -42,18 +62,41 @@ public class MyAnky : Agent
     {
         // Idle - should only be used at startup
 
+
         // Eating - requires a box collision with a dead dino
+
 
         // Drinking - requires y value to be below 32 (?)
 
         // Alerted - up to the student what you do here
 
+
         // Hunting - up to the student what you do here
 
         // Fleeing - up to the student what you do here
+        /* foreach (Transform i in fov.visibleTargets)
+         {
+             if(i.tag == "Rapty")
+             {
 
+                 currentState = ankyState.FLEEING;
+                 anim.SetBool("isFleeing", true);
+                 wanderScript.enabled = false;
+                 fleeScript.target = i.gameObject;
+                 fleeScript.enabled = true;
+             }
+             else
+             {
+                 currentState = ankyState.ALERTED;
+                 anim.SetBool("isAlerted", true);
+                 anim.SetBool("isFleeing", false);
+                 wanderScript.enabled = true;
+                 fleeScript.enabled = false;
+
+             }
+         }*/
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
+        stateMachine.Update();
         base.Update();
     }
 

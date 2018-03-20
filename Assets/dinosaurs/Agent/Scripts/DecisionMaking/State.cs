@@ -10,6 +10,7 @@ public class State : MonoBehaviour
         transitions = new List<Transition>();
         // TO-DO
         // setup your transitions here
+        
     }
     
     public virtual void Update()
