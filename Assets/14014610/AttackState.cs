@@ -43,10 +43,5 @@ public class attackingState : State<MyAnky>
     public override void UpdateState(MyAnky _owner)
     {
 
-
-        if (_owner.switchState)
-        {
-            //_owner.stateMachine.ChangeState(SecondState.Instance);
-        }
     }
 }

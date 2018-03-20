@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using Statestuff;
 
-public class dinkingState : State<MyAnky>
+public class drinkingState : State<MyAnky>
 {
-    private static dinkingState _instance;
+    private static drinkingState _instance;
 
-    private dinkingState()
+    private drinkingState()
     {
         if (_instance != null)
         {
@@ -15,13 +15,13 @@ public class dinkingState : State<MyAnky>
 
     }
 
-    public static dinkingState Instance
+    public static drinkingState Instance
     {
         get
         {
             if (_instance == null)
             {
-                new dinkingState();
+                new drinkingState();
             }
             return _instance;
         }
@@ -42,11 +42,9 @@ public class dinkingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-
-
-        if (_owner.switchState)
+        if (_owner.transform.position.y > 35)
         {
-            //_owner.stateMachine.ChangeState(SecondState.Instance);
+            _owner.stateMachine.ChangeState(grazingState.Instance);
         }
     }
 }

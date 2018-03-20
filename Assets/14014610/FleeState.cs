@@ -41,13 +41,31 @@ public class fleeState : State<MyAnky>
         _owner.ankyFlee.enabled = false;
     }
 
+    public Vector3 closestEnemy = new Vector3(1000, 1000, 1000);
+    public int closestenemyIndex = 0;
+    public GameObject Raptor = new GameObject();
+
     public override void UpdateState(MyAnky _owner)
     {
+        //for (int i = 0; i < _owner.enemies.Count; i++)
+        //{
+        //    Vector3 Difference = new Vector3();
+        //    Difference = (_owner.transform.position - _owner.enemies[i].position);
+        //    if (Difference.magnitude < closestEnemy.magnitude)
+        //    {
+        //        closestEnemy = Difference;
+        //        closestenemyIndex = 1;
+        //        Raptor = _owner.enemies[i].gameObject;
+        //    }
+        //}
 
-
-        if (_owner.switchState)
+        foreach (Transform enemy in _owner.enemies)
         {
-            //_owner.stateMachine.ChangeState(SecondState.Instance);
+            float distance = Vector3.Distance(enemy.position, _owner.transform.position);
+            if (distance > 40)
+            {
+                _owner.stateMachine.ChangeState(alertState.Instance);
+            }
         }
     }
 }

@@ -43,19 +43,30 @@ public class alertState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        foreach (Transform i in _owner.fov.visibleTargets)
+        foreach (Transform enemy in _owner.enemies)
         {
-            float distance = Vector3.Distance(i.position, _owner.transform.position);
-            if (i.tag == "Rapty" && distance < 30)
+            float distance = Vector3.Distance(enemy.position, _owner.transform.position);
+            if (distance < 30 && distance  > 5)
             {
                 _owner.stateMachine.ChangeState(fleeState.Instance);
-                _owner.ankyFlee.target = i.gameObject;
+                _owner.ankyFlee.target = enemy.gameObject;
             }
-            if (i.tag == "Rapty" && distance < 5)
+            
+            if (distance > 100)
             {
-                _owner.stateMachine.ChangeState(attackingState.Instance);
-                _owner.ankyFlee.target = i.gameObject;
+                _owner.enemies.Remove(enemy);
+                _owner.enemies.TrimExcess();
             }
+            //if (target.tag == "Rapty" && distance < 5)
+            //{
+            //    _owner.stateMachine.ChangeState(attackingState.Instance);
+            //    _owner.ankyFlee.target = target.gameObject;
+            //}
+        }
+
+        if (_owner.enemies.Count <= 0)
+        {
+            _owner.stateMachine.ChangeState(grazingState.Instance);
         }
     }
 }

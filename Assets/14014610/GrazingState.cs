@@ -43,12 +43,29 @@ public class grazingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        foreach (Transform i in _owner.fov.visibleTargets)
+        //foreach (Transform target in _owner.fov.visibleTargets)
+        //{
+        //    if (target.tag == "Rapty" && !_owner.enemies.Contains(target))
+        //    {
+        //        _owner.enemies.Add(target);
+        //    }
+        //}
+        //foreach (Transform target in _owner.fov.stereoVisibleTargets)
+        //{
+        //    if (target.tag == "Rapty" && !_owner.enemies.Contains(target))
+        //    {
+        //        _owner.enemies.Add(target);
+        //    }
+        //}
+
+       if (_owner.enemies.Count > 0)
         {
-            if (i.tag == "Rapty")
-            {
-                _owner.stateMachine.ChangeState(alertState.Instance);
-            }
+            _owner.stateMachine.ChangeState(alertState.Instance);
+        }
+
+        if (_owner.transform.position.y < 35)
+        {
+            _owner.stateMachine.ChangeState(drinkingState.Instance);
         }
     }
 }

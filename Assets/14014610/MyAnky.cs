@@ -10,10 +10,13 @@ public class MyAnky : Agent
     public bool switchState = false;
     public StateMachine<MyAnky> stateMachine { get; set; }
 
-    
+    public List<Transform> enemies = new List<Transform>();
+    public List<Transform> friendlies = new List<Transform>();
     public FieldOfView fov;
     public Wander ankyWander;
     public Flee ankyFlee;
+
+    public double hydration = 100;
 
     public enum ankyState
     {
@@ -28,7 +31,7 @@ public class MyAnky : Agent
     };
 
     public Animator anim;
-    private ankyState currentState;
+    public ankyState currentAnkyState;
 
 
     // Use this for initialization
@@ -52,6 +55,7 @@ public class MyAnky : Agent
         stateMachine = new StateMachine<MyAnky>(this);
         stateMachine.ChangeState(grazingState.Instance);
 
+
         base.Start();
 
     }
@@ -60,23 +64,43 @@ public class MyAnky : Agent
         ankyWander = GetComponent<Wander>();
         ankyFlee = GetComponent<Flee>();
     }
+
+    
     protected override void Update()
     {
+
         // Idle - should only be used at startup
 
         // Eating - requires a box collision with a dead dino
-        
+
         // Alerted - up to the student what you do here
-        
+
         // Hunting - up to the student what you do here
 
         // Fleeing - up to the student what you do here
-        
+
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
+        foreach (Transform target in fov.visibleTargets)
+        {
+            if (target.tag == "Rapty" && !enemies.Contains(target))
+            {
+                enemies.Add(target);
+            }
+        }
+        foreach (Transform target in fov.stereoVisibleTargets)
+        {
+            if (target.tag == "Rapty" && !enemies.Contains(target))
+            {
+                enemies.Add(target);
+            }
+        }
+
+        hydration -= (Time.deltaTime * 0.2) * 1;
         stateMachine.Update();
         base.Update();
     }
+
 
     protected override void LateUpdate()
     {
