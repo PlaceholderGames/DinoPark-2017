@@ -36,6 +36,7 @@ public class GrazingState : State<MyAnky>
         Debug.Log("Entering Grazing State");
         _owner.anim.SetBool("isGrazing", true);
         _owner.setCurrentState(MyAnky.ankyState.GRAZING);
+        _owner.wanderBehaviourScript.enabled = true;
 
     }
 
@@ -43,17 +44,24 @@ public class GrazingState : State<MyAnky>
     {
         Debug.Log("Exiting Grazing State");
         _owner.anim.SetBool("isGrazing", false);
+        _owner.wanderBehaviourScript.enabled = false;
     }
 
     public override void UpdateState(MyAnky _owner)
     {
-
         //Drinking
         //_owner.stateMachine.ChangeState(DrinkingState.Instance);
+
         //Eating
         //_owner.stateMachine.ChangeState(EatingState.Instance);
+
         //Alert
-        _owner.stateMachine.ChangeState(AlertState.Instance);
+        if (_owner.predatorsInRange.Count > 0)
+        {
+            Debug.Log(_owner.predatorsInRange.Count);
+            _owner.stateMachine.ChangeState(AlertState.Instance);
+        }
+
         //Idle
         //_owner.stateMachine.ChangeState(IdleState.Instance);
     }

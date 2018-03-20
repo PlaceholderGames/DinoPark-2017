@@ -42,6 +42,8 @@ public class AlertState : State<MyAnky>
     public override void ExitState(MyAnky _owner)
     {
         Debug.Log("Exiting Alert State");
+        _owner.anim.SetBool("isAlerted", false);
+
     }
 
     public override void UpdateState(MyAnky _owner)
@@ -63,15 +65,18 @@ public class AlertState : State<MyAnky>
 
         //Attack
         //_owner.stateMachine.ChangeState(AttackingState.Instance);
+        
         //Grazing
-        _owner.stateMachine.ChangeState(GrazingState.Instance);
+        if(_owner.predatorsInRange.Count  <= 0)
+            _owner.stateMachine.ChangeState(GrazingState.Instance);
 
         //Drinking
         //_owner.stateMachine.ChangeState(DrinkingState.Instance);
         //Eating
         //_owner.stateMachine.ChangeState(EatingState.Instance);
         //Fleeing
-        _owner.stateMachine.ChangeState(FleeState.Instance);
+        else if (_owner.closestHazardDist <= _owner.fleeDistance)
+            _owner.stateMachine.ChangeState(FleeState.Instance);
 
     }
 }

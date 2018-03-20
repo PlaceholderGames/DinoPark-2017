@@ -38,8 +38,8 @@ public class MyAnky : Agent
 	public List<Transform> friendsInRange;
 
 	//Behaviour scripts
-	private Flee fleeBehaviourScript;
-	private Wander wanderBehaviourScript;
+	public Flee fleeBehaviourScript;
+	public Wander wanderBehaviourScript;
 
 	private float running = 0;
 
@@ -78,7 +78,7 @@ public class MyAnky : Agent
         anim.SetBool("isEating", false);
         anim.SetBool("isDrinking", false);
         anim.SetBool("isAlerted", false);
-        anim.SetBool("isGrazing", true);
+        anim.SetBool("isGrazing", false);
         anim.SetBool("isAttacking", false);
         anim.SetBool("isFleeing", false);
         anim.SetBool("isDead", false);
@@ -92,7 +92,7 @@ public class MyAnky : Agent
 
 
         stateMachine = new StateMachine<MyAnky>(this);
-        stateMachine.ChangeState(GrazingState.Instance);
+        stateMachine.ChangeState(IdleState.Instance);
 
         base.Start();
 
@@ -368,9 +368,10 @@ public class MyAnky : Agent
 	void blink()
 	{
 		predatorsInRange.Clear ();
-
-		//Check the dinos FOV for predators and store them in a list 
-		foreach (Transform o in eyes.visibleTargets) 
+        closestHazardDist = 100;
+        closestHazard = null;
+        //Check the dinos FOV for predators and store them in a list 
+        foreach (Transform o in eyes.visibleTargets) 
 		{	
 			//add to our predator list
 			foreach (string pTag in predators) 
