@@ -17,7 +17,6 @@ public class MyAnky : Agent
     };
 
     public Animator anim;
-<<<<<<< HEAD:Assets/15021270/MyAnky.cs
     public int health = 100;
 
     public int getHealth()
@@ -30,19 +29,16 @@ public class MyAnky : Agent
         Debug.Log(health);
         health += h;
     }
-=======
     public Wander wander;
     public FieldOfView view;
     public Flee flee;
     public Face face;
     public ankyState currentState;
->>>>>>> ec4dd5f889f9bcf3325e4f7f90f1bd86fc247337:Assets/15021270/MyAnky.cs
 
     // Use this for initialization
     protected override void Start()
     {
         //anim = GetComponent<Animator>();
-<<<<<<< HEAD:Assets/15021270/MyAnky.cs
         //// Assert default animation booleans and floats
         //anim.SetBool("isIdle", true);
         //anim.SetBool("isEating", false);
@@ -53,7 +49,6 @@ public class MyAnky : Agent
         //anim.SetBool("isFleeing", false);
         //anim.SetBool("isDead", false);
         //anim.SetFloat("speedMod", 1.0f);
-=======
         wander = GetComponent<Wander>();
         view = GetComponent<FieldOfView>();
         flee = GetComponent<Flee>();
@@ -74,7 +69,6 @@ public class MyAnky : Agent
 
         currentState = ankyState.IDLE;
 
->>>>>>> ec4dd5f889f9bcf3325e4f7f90f1bd86fc247337:Assets/15021270/MyAnky.cs
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
         base.Start();
