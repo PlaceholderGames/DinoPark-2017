@@ -19,10 +19,24 @@ public class MyAnky : Agent
     };
 
     public Animator anim;
+    public Flee ankyFlee;
+    public Wander ankyWander;
     public bool switchState = false;
     public float gameTimer;
     public int seconds = 0;
+    public List<Transform> Enemies = new List<Transform>();
+
     public StateMachine<MyAnky> stateMachine { get; set; }
+
+
+    //void Awake()
+    //{
+    //    ankyFlee = GetComponent<Flee>();
+    //    ankyWander = GetComponent<Wander>();
+    //    fov = GetComponent<FieldOfView>();
+
+    //}
+
 
     // Use this for initialization
     protected override void Start()
@@ -32,6 +46,10 @@ public class MyAnky : Agent
         gameTimer = Time.time;
 
         anim = GetComponent<Animator>();
+        ankyFlee = GetComponent<Flee>();
+        ankyWander = GetComponent<Wander>();
+        fov = GetComponent<FieldOfView>();
+
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
         anim.SetBool("isEating", false);
@@ -45,27 +63,18 @@ public class MyAnky : Agent
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
         base.Start();
-
+      
     }
 
     // Update is called once per frame
     protected override void Update()
     {
-        if (Time.time > gameTimer + 1)
-        {
-            gameTimer = Time.time;
-           
-            seconds++;
-            Debug.Log(seconds);
-        }
+       
 
-        if (seconds == 5)
-        {
-            seconds = 0;
-            switchState = !switchState;
-        }
         stateMachine.Update();
         // Eating - requires a box collision with a dead dino
+
+
 
         // Drinking - requires y value to be below 32 (?)
 

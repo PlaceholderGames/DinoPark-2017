@@ -43,7 +43,7 @@ public class DeadState : State<MyAnky>
     {
         if (_owner.switchState)
         {
-            _owner.stateMachine.ChangeState(AlertState.Instance);
+            _owner.stateMachine.ChangeState(DeadState.Instance);
         }
     }
 }

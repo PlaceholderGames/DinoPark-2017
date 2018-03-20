@@ -29,21 +29,37 @@ public class AlertState : State<MyAnky>
 
     public override void EnterState(MyAnky _owner)
     {
-        _owner.anim.SetBool("isAlert", true);
+        _owner.anim.SetBool("isAlerted", true);
         Debug.Log("entering alert state");
+        _owner.ankyWander.enabled = true;
     }
 
     public override void ExitState(MyAnky _owner)
     {
-        _owner.anim.SetBool("isAlert", false);
+        _owner.anim.SetBool("isAlerted", false);
         Debug.Log("exiting alertState");
+        _owner.ankyWander.enabled = false;
     }
 
     public override void UpdateState(MyAnky _owner)
     {
-        if (_owner.switchState)
+
+        foreach (Transform x in _owner.Enemies)
         {
-            _owner.stateMachine.ChangeState(FleeingState.Instance);
-        }
+      
+            float Distance = Vector3.Distance(x.position, _owner.transform.position);
+            if (Distance > 5 && Distance <30)
+            {
+                
+                _owner.stateMachine.ChangeState(FleeingState.Instance);
+                _owner.ankyFlee.target = x.gameObject;
+
+            }
+            else if (Distance < 5)
+            {
+
+            };
+        };
+
     }
 }

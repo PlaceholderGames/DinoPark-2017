@@ -29,7 +29,7 @@ public class IdleState : State<MyAnky>
 
     public override void EnterState(MyAnky _owner)
     {
-        _owner.anim.SetBool("isIdle", true);
+
         Debug.Log("entering Idlestate");
     }
 
@@ -41,9 +41,8 @@ public class IdleState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        if (_owner.switchState)
-        {
-            _owner.stateMachine.ChangeState(GrazeState.Instance);
-        }
+     
+     _owner.stateMachine.ChangeState(GrazeState.Instance);
+     
     }
 }

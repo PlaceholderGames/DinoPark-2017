@@ -26,7 +26,7 @@ public class FieldOfViewEditor : Editor {
 
         Handles.color = Color.green;
 
-        foreach (Transform visibleTarget in fow.visibleTargets)
+        foreach (Transform visibleTarget in fow.stereoVisibleTargets)
         {
             Handles.DrawLine(fow.transform.position, visibleTarget.position);
         }

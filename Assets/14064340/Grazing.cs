@@ -31,19 +31,30 @@ public class GrazeState : State<MyAnky>
     {
         _owner.anim.SetBool("isGrazing", true);
         Debug.Log("entering Grazingstate");
+        _owner.ankyFlee.enabled = false;
+        _owner.ankyWander.enabled = true;
     }
 
     public override void ExitState(MyAnky _owner)
     {
         _owner.anim.SetBool("isGrazing", false);
         Debug.Log("exiting GrazeState");
+        _owner.ankyWander.enabled = false;
     }
 
     public override void UpdateState(MyAnky _owner)
     {
-        if (_owner.switchState)
+        Debug.Log("0");
+        foreach(Transform i in _owner.fov.visibleTargets)
         {
-            _owner.stateMachine.ChangeState(AlertState.Instance);
+            Debug.Log("1");
+            if(i.tag == "Rapty")
+            {
+                Debug.Log("2");
+                _owner.Enemies.Add(i);
+                _owner.stateMachine.ChangeState(AlertState.Instance);
+            }
         }
+      
     }
 }
