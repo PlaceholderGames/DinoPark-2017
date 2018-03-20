@@ -37,12 +37,14 @@ public class AlertState : State<MyAnky>
         Debug.Log("Entering Alert State");
         _owner.anim.SetBool("isAlerted", true);
         _owner.setCurrentState(MyAnky.ankyState.ALERTED);
+        _owner.wanderBehaviourScript.enabled = true;
     }
 
     public override void ExitState(MyAnky _owner)
     {
         Debug.Log("Exiting Alert State");
         _owner.anim.SetBool("isAlerted", false);
+        _owner.wanderBehaviourScript.enabled = false;
 
     }
 
