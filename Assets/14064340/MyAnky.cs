@@ -2,8 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+using Statestuff;
 public class MyAnky : Agent
 {
+    public FieldOfView fov;
     public enum ankyState
     {
         IDLE,       // The default state on creation.
@@ -17,10 +19,18 @@ public class MyAnky : Agent
     };
 
     public Animator anim;
+    public bool switchState = false;
+    public float gameTimer;
+    public int seconds = 0;
+    public StateMachine<MyAnky> stateMachine { get; set; }
 
     // Use this for initialization
     protected override void Start()
     {
+        stateMachine = new StateMachine<MyAnky>(this);
+        stateMachine.ChangeState(IdleState.Instance);
+        gameTimer = Time.time;
+
         anim = GetComponent<Animator>();
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -38,10 +48,23 @@ public class MyAnky : Agent
 
     }
 
+    // Update is called once per frame
     protected override void Update()
     {
-        // Idle - should only be used at startup
+        if (Time.time > gameTimer + 1)
+        {
+            gameTimer = Time.time;
+           
+            seconds++;
+            Debug.Log(seconds);
+        }
 
+        if (seconds == 5)
+        {
+            seconds = 0;
+            switchState = !switchState;
+        }
+        stateMachine.Update();
         // Eating - requires a box collision with a dead dino
 
         // Drinking - requires y value to be below 32 (?)
