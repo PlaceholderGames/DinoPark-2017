@@ -39,9 +39,27 @@ public class FleeingState : State<MyAnky>
         _owner.fleeScript.enabled = false;
     }
 
+    public Vector3 closestRaptor = new Vector3(10000, 10000, 10000);
+    public int closestRaptorIndex = 0;
+    public GameObject Raptor = new GameObject();
+
     public override void UpdateState(MyAnky _owner)
     {
-
+        for (int i = 0; i < _owner.RaptorsInView.Count; i++)
+        {
+            Vector3 Difference = new Vector3();
+            Difference = (_owner.transform.position - _owner.RaptorsInView[i].position);
+            if (Difference.magnitude < closestRaptor.magnitude)
+            {
+                closestRaptor = Difference;
+                closestRaptorIndex = 1;
+                Raptor = _owner.RaptorsInView[i].gameObject;
+            }
+        }
+        if (Raptor)
+        {
+            _owner.fleeScript.target = Raptor;
+        }
         ////////////////////////////
         //Attack State//
         ////////////////////////////

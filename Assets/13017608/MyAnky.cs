@@ -16,7 +16,8 @@ public class MyAnky : Agent
         FLEEING,     // Running away from a specific target
         DEAD
     };
-    public List<Transform> RaptorsInView;
+
+    public List<Transform> RaptorsInView = new List<Transform>();
     public FieldOfView fov;
     public Animator anim;
     public Flee fleeScript;
@@ -61,43 +62,20 @@ public class MyAnky : Agent
     protected override void Update()
     {
         // Idle - should only be used at startup
-
-
+        
         // Eating - requires a box collision with a dead dino
-
-
+        
         // Drinking - requires y value to be below 32 (?)
 
         // Alerted - up to the student what you do here
-
-
+        
         // Hunting - up to the student what you do here
 
         // Fleeing - up to the student what you do here
-        /* foreach (Transform i in fov.visibleTargets)
-         {
-             if(i.tag == "Rapty")
-             {
-
-                 currentState = ankyState.FLEEING;
-                 anim.SetBool("isFleeing", true);
-                 wanderScript.enabled = false;
-                 fleeScript.target = i.gameObject;
-                 fleeScript.enabled = true;
-             }
-             else
-             {
-                 currentState = ankyState.ALERTED;
-                 anim.SetBool("isAlerted", true);
-                 anim.SetBool("isFleeing", false);
-                 wanderScript.enabled = true;
-                 fleeScript.enabled = false;
-
-             }
-         }*/
+        
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
         stateMachine.Update();
-        base.Update();
+        //base.Update();
     }
 
     protected override void LateUpdate()

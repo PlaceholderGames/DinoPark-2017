@@ -32,6 +32,7 @@ public class GrazingState : State<MyAnky>
         Debug.Log("Entering Grazing State");
         _owner.anim.SetBool("isGrazing",true);
         _owner.wanderScript.enabled = true;
+        _owner.RaptorsInView.Clear();
     }
 
     public override void ExitState(MyAnky _owner)
@@ -45,12 +46,35 @@ public class GrazingState : State<MyAnky>
     {
         foreach (Transform i in _owner.fov.visibleTargets)
         {
-            if (i.tag == "Rapty")
+            if (i.tag == "Rapty" && !_owner.RaptorsInView.Contains(i))
             {
+                _owner.RaptorsInView.Add(i);
                 _owner.currentAnkyState = MyAnky.ankyState.ALERTED;
-                _owner.stateMachine.ChangeState(AlertState.Instance);
             }
-        }/*
+        }
+
+        foreach (Transform i in _owner.fov.stereoVisibleTargets)
+        {
+            if (i.tag == "Rapty" && !_owner.RaptorsInView.Contains(i))
+            {
+                _owner.RaptorsInView.Add(i);
+                _owner.currentAnkyState = MyAnky.ankyState.ALERTED;
+            }
+        }
+
+        if(_owner.transform.position.y <35)
+        {
+            _owner.stateMachine.ChangeState(DrinkingState.Instance);
+        }
+
+        ////////////////////////////
+        //Alert State//
+        ////////////////////////////
+        if (_owner.currentAnkyState == MyAnky.ankyState.ALERTED)
+        {
+            _owner.stateMachine.ChangeState(AlertState.Instance);
+        }
+        /*
         ////////////////////////////
         //Drinking State//
         ////////////////////////////
@@ -61,6 +85,7 @@ public class GrazingState : State<MyAnky>
         ////////////////////////////
         //Eating State//
         ////////////////////////////
+        
         else if (_owner.currentAnkyState == MyAnky.ankyState.EATING)
         {
             _owner.stateMachine.ChangeState(EatingState.Instance);
