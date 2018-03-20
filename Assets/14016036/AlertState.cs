@@ -44,9 +44,12 @@ public class AlertState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
+        int checker = 0;
         _owner.currentState = MyAnky.ankyState.ALERTED;
         _owner.ankyFlee.enabled = false;
         _owner.ankyWander.enabled = true;
+        _owner.ankyEnemies.Clear();
+
         if (_owner.transform.position.y < 35.5 && _owner.anim.GetBool("isAlerted") == true)
         {
             _owner.stateMachine.ChangeState(DrinkingState.Instance);
@@ -56,7 +59,7 @@ public class AlertState : State<MyAnky>
         for (int i = 0; i < _owner.ankyView.visibleTargets.Count; i++)
         {
             Transform target = _owner.ankyView.visibleTargets[i];
-            if (_owner.ankyView.visibleTargets[i].tag == "Rapty" && Vector3.Distance(target.position, _owner.transform.position) > 200)
+            if (_owner.ankyView.visibleTargets[i].tag == "Rapty" && Vector3.Distance(target.position, _owner.transform.position) > 150)
             {
                 _owner.anky = 1;
                 _owner.anim.SetTrigger("isAlert");
@@ -78,18 +81,35 @@ public class AlertState : State<MyAnky>
         for (int i = 0; i < _owner.ankyView.visibleTargets.Count; i++)
         {
             Transform target = _owner.ankyView.visibleTargets[i];
-            if (target.tag == "Rapty")
-            {
-                _owner.ankyEnemies.Add(target);
-            }
-            
+
             if (_owner.ankyView.visibleTargets[i].tag == "Rapty" && Vector3.Distance(target.position, _owner.transform.position) < 40)
             {
+                _owner.ankyEnemies.Add(target);
                 _owner.ankyFlee.target = _owner.ankyView.visibleTargets[i].gameObject;
                 _owner.fleeingIndex = i;
                 //_owner.ankyAgent.maxSpeed = 3;
                 _owner.stateMachine.ChangeState(FleeingState.Instance);
+                checker++;
+                Debug.Log(checker);
             }
+        }
+        
+        for(int i = 0; i < _owner.ankyView.visibleTargets.Count; i++)
+        {
+            Transform target = _owner.ankyView.visibleTargets[i];
+
+            if(_owner.ankyView.visibleTargets[i].tag == "Anky" && Vector3.Distance(target.position, _owner.transform.position) > 30)
+            {
+                _owner.ankyFriendliesFar.Add(target);
+            }
+            else
+            {
+                _owner.ankyFriendliesClose.Add(target);
+            }
+        }
+        if (_owner.ankyFriendliesClose == null)
+        {
+            _owner.stateMachine.ChangeState(HerdingState.Instance);
         }
     }
 }

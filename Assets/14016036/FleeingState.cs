@@ -7,7 +7,7 @@ using System;
 public class FleeingState : State<MyAnky>
 {
     private static FleeingState _instance;
-
+    
     private FleeingState()
     {
         if (_instance != null)
@@ -48,7 +48,8 @@ public class FleeingState : State<MyAnky>
         //{
         //    _owner.stateMachine.ChangeState(WanderingState.Instance);
         //}
-
+        
+        int checker = 0;
         _owner.currentState = MyAnky.ankyState.FLEEING;
         // _owner.anim.SetTrigger("isFleeing");
         _owner.anim.SetBool("isAlerted", false);
@@ -64,24 +65,35 @@ public class FleeingState : State<MyAnky>
         _owner.ankyWander.enabled = false;
         _owner.ankyAgent.maxSpeed = 3;
 
+        Debug.Log(_owner.ankyEnemies.Count);
         for (int i = 0; i < _owner.ankyEnemies.Count; i++)
         {
-            Transform target = _owner.ankyEnemies[i];
-            if (Vector3.Distance(target.position, _owner.transform.position) > 50)
+            if (_owner.ankyEnemies.Count != 0)
             {
-                _owner.ankyAgent.maxSpeed = 1;
-                _owner.anim.SetBool("isAlerted", true);
-                _owner.anim.SetBool("isDrinking", false);
-                _owner.anim.SetBool("isGrazing", false);
-                _owner.anim.SetBool("isIdle", false);
-                _owner.anim.SetBool("isEating", false);
-                _owner.anim.SetBool("isAttacking", false);
-                _owner.anim.SetBool("isFleeing", false);
-                _owner.anim.SetBool("isDead", false);
-                _owner.stateMachine.ChangeState(AlertState.Instance);
-                
+                Transform target = _owner.ankyEnemies[i];
+                if (Vector3.Distance(target.position, _owner.transform.position) > 50 && _owner.ankyEnemies.Count != 0)
+                {
+                    _owner.ankyAgent.maxSpeed = 1;
+                    _owner.anim.SetBool("isAlerted", true);
+                    _owner.anim.SetBool("isDrinking", false);
+                    _owner.anim.SetBool("isGrazing", false);
+                    _owner.anim.SetBool("isIdle", false);
+                    _owner.anim.SetBool("isEating", false);
+                    _owner.anim.SetBool("isAttacking", false);
+                    _owner.anim.SetBool("isFleeing", false);
+                    _owner.anim.SetBool("isDead", false);
+                    checker++;
+                    Debug.Log(checker);
+                    _owner.stateMachine.ChangeState(AlertState.Instance);
+
+                }
+            }
+            else
+            {
+                break;
             }
         }
+        
 
     }
 }

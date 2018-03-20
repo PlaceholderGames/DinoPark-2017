@@ -11,8 +11,9 @@ public class MyAnky : Agent
     public FieldOfView ankyView;
     public Flee ankyFlee;
     public Wander ankyWander;
-    public DrinkingS ankyDrinkingS;
-    public List<Transform> ankyFriendlies = new List<Transform>();
+    public Seek ankySeek;
+    public List<Transform> ankyFriendliesClose = new List<Transform>();
+    public List<Transform> ankyFriendliesFar = new List<Transform>();
     public List<Transform> ankyEnemies = new List<Transform>();
     public StateMachine<MyAnky> stateMachine { get; set; }
     public Transform target;
@@ -30,7 +31,7 @@ public class MyAnky : Agent
         GRAZING,    // Moving with the intent to find food (will happen after a random period)
         ATTACKING,  // Causing damage to a specific target
         FLEEING,     // Running away from a specific target
-        ALIGNING,
+        HERDING,
         DEAD
     };
 
