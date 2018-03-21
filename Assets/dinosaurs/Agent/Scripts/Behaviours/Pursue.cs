@@ -17,8 +17,6 @@ public class Pursue : Seek
 
     public override Steering GetSteering()
     {
-
-
         Vector3 direction = targetAux.transform.position - transform.position;
         float distance = direction.magnitude;
         float speed = agent.velocity.magnitude;

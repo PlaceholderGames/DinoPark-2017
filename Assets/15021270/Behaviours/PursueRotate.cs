@@ -4,8 +4,9 @@ using System.Collections;
 public class PursueRotate : Seek
 {
     public float maxPrediction;
-    private GameObject targetAux;
-    private Agent targetAgent;
+    public GameObject targetAux;
+    public Agent targetAgent;
+    public int orientation = 0;
 
     public override void Awake()
     {
@@ -18,8 +19,8 @@ public class PursueRotate : Seek
 
     public override Steering GetSteering()
     {
+        //Moves the raptor towards the enemy
         Vector3 direction = targetAux.transform.position - transform.position;
-
         float distance = direction.magnitude;
         float speed = agent.velocity.magnitude;
         float prediction;
@@ -27,16 +28,15 @@ public class PursueRotate : Seek
             prediction = maxPrediction;
         else
             prediction = distance / speed;
-
         target.transform.position = targetAux.transform.position;
         target.transform.position += targetAgent.velocity * prediction;
 
-        //Doesn't currently work
+        //Rotates the raptor!
        if (direction.magnitude > 0.0f)
        {
            float targetOrientation = Mathf.Atan2(direction.x, direction.z);
            targetOrientation *= Mathf.Rad2Deg;
-           target.GetComponent<Agent>().orientation = targetOrientation;
+           targetAgent.GetComponent<Agent>().orientation = targetOrientation - orientation;
        }
        
         return base.GetSteering();

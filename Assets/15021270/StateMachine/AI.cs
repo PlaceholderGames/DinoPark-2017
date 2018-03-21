@@ -12,6 +12,8 @@ public class AI : MonoBehaviour
     public Wander wander;
     public PursueRotate pursue;
     public Agent agent;
+    public GameObject prey;
+    public FleeRotate flee;
 
     //Can be changed depending on state
     //Hunting for example takes more energy
@@ -19,12 +21,15 @@ public class AI : MonoBehaviour
     public float removeHunger = 1;
 
     public int distance;
+    public float fleeingTime;
+    public bool enemy;
 
     private float hungerTimer; 
 
     public int hunger = 100;
     public int thirst = 100;
     public int health = 100;
+
 
     public StateMachine<AI> stateMachine { get; set; }
 
@@ -36,6 +41,7 @@ public class AI : MonoBehaviour
         face = GetComponent<Face>();
         wander = GetComponent<Wander>();
         pursue = GetComponent<PursueRotate>();
+        flee = GetComponent<FleeRotate>();
     }
 
     private void Start()
@@ -50,9 +56,10 @@ public class AI : MonoBehaviour
         hungerTimer += Time.deltaTime;
         if(hungerTimer >= removeHunger)
         {
-            Debug.Log(hunger);
             hunger -= 1;
             hungerTimer = 0;
+            health -= 10;
+            Debug.Log(health);
         }
         stateMachine.Update();
     }

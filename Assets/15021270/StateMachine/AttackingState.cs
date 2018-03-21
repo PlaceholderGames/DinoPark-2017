@@ -31,20 +31,24 @@ public class AttackingState : State<AI>
     public override void EnterState(AI _owner)
     {
         _owner.agent.maxSpeed = 20;
-        _owner.removeHunger = 1;
+        _owner.removeHunger = 4;
         Debug.Log("Entering Attacking State");
     }
 
     public override void ExitState(AI _owner)
     {
-
+        _owner.pursue.target = _owner.prey;
+        _owner.pursue.targetAux = _owner.prey;
+        _owner.pursue.targetAgent = _owner.agent;
         Debug.Log("Exiting Attacking State");
     }
 
     public override void UpdateState(AI _owner)
     {
-
-        if(_owner.hunger <= 0)
+        //_owner.agent.SetSteering(_owner.pursue.GetSteering());
+        //_owner.agent.SetSteering(_owner.face.GetSteering());
+        
+        if (_owner.hunger <= 0 || _owner.health <= 0)
         {
             _owner.stateMachine.ChangeState(DeadState.Instance);
         }
@@ -53,6 +57,7 @@ public class AttackingState : State<AI>
         {
             if (i.tag == "Anky" && Vector3.Distance(_owner.transform.position, i.transform.position) > 35)
             {
+                _owner.prey = i.gameObject;
                 _owner.stateMachine.ChangeState(HuntingState.Instance);
             }
         }
