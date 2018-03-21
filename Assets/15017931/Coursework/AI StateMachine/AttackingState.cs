@@ -84,8 +84,8 @@ public class AttackingState : State<MyAnky>
                 _owner.anim.SetBool("isFleeing", true);
                 _owner.stateMachine.ChangeState(FleeState.Instance);
             }
-            //check if the state of our target is dead
-            else if (false)
+            //check if the state of our target is dead or no targets within range
+            else if (_owner.predatorsInRange.Count <=0)
             {
                 _owner.stateMachine.ChangeState(AlertState.Instance);
             }

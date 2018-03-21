@@ -10,6 +10,7 @@ public struct dinoStats
     public int hunger;
     public int thirst;
     public int energy;
+    public int deathEnergy;
 }
 
 public class MyAnky : Agent
@@ -59,6 +60,7 @@ public class MyAnky : Agent
     [Header("Behaviour Scripts")]
     public Flee fleeBehaviourScript;
 	public Wander wanderBehaviourScript;
+    public Face faceBehaviourScript;
     [Space(10)]
 
     //If we are attacked 
@@ -87,7 +89,7 @@ public class MyAnky : Agent
 
 
     [Header("Death")]
-    private float decayAmmount = 0;
+    public int decayAmmount = 5;
 
     public StateMachine<MyAnky> stateMachine { get; set; }
 
@@ -113,6 +115,7 @@ public class MyAnky : Agent
         myStats.hunger = 100;
         myStats.thirst = 100;
         myStats.energy = 100;
+        myStats.deathEnergy = 100;
 
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -148,183 +151,15 @@ public class MyAnky : Agent
         base.Update();
     }
 
-	/// <summary>
-	/// Check latest positions after each physics update
-	/// </summary>
+    /// <summary>
+    /// Check latest positions after each physics update
+    /// </summary>
     protected override void LateUpdate()
     {
-		blink();
-		//checkStatus ();
+        blink();
+        //checkStatus ();
         base.LateUpdate();
     }
-
-    
-
-	/// <summary>
-	/// Default state
-	/// will wander around deciding what to do next
-	/// </summary>
-	void grazingBehaviour()
-	{
-		wanderBehaviourScript.enabled = true;
-
-		//If we have predators in range
-		//if we have a predator in our vision, set our alerted state to true
-		if (predatorsInRange.Count > 0) {
-			anim.SetBool ("isAlerted", true);
-			anim.SetBool ("isGrazing", false);
-			currentState = ankyState.ALERTED;
-		} 
-		//Drinking
-		else if (false) {
-			anim.SetBool ("isGrazing", false);
-			anim.SetBool ("isDrinking", true);
-		}
-		//Eating
-		else if (false) {
-			anim.SetBool ("isGrazing", false);
-			anim.SetBool ("isEating", true);
-		}
-		//Stay in our current state
-		else {
-			anim.SetBool ("isGrazing", true);		
-		}
-
-	}
-
-	/// <summary>
-	/// Eating behaviour 
-	/// If dino is on food and health is not 100%
-	/// eat to regain health
-	/// </summary>
-	void eatBehaviour()
-	{
-		//If there are predators near
-		if (predatorsInRange.Count > 0) 
-		{
-			currentState = ankyState.ALERTED;
-		} 
-		else 
-		{
-			//If we are still hungry 
-			if(false)
-			{
-				//eat - continue eating
-			}
-			//If not then go back to grazing
-			else
-			{
-				currentState = ankyState.GRAZING;
-			}
-		}
-	}
-
-
-	/// <summary>
-	/// Drink behaviour
-	/// Will likely make use of A* to allow the dino to find
-	/// local source of water to allow dino to drink
-	/// </summary>
-	void drinkBehaviour()
-	{
-		//If there are predators near
-		if (predatorsInRange.Count > 0) 
-		{
-			currentState = ankyState.ALERTED;
-		} 
-		else 
-		{
-			//If we are still thirsty 
-			if(false)
-			{
-				//drink - continue drinking
-			}
-			//If not then go back to grazing
-			else
-			{
-				currentState = ankyState.GRAZING;
-			}
-		}
-
-	}
-
-	/// <summary>
-	/// Checks the dinos vision to see if there are any hazards approaching
-	/// any objects with a given predator tag will be added to a list of visible
-	/// predators, this will be used by other methods to determin behaviour
-	/// </summary>
-	void alertBehaviour()
-	{
-		//if there are predators in range
-		if (predatorsInRange.Count > 0) {
-			//Should we flee?
-			//If our hazard is within our flee radius
-			if (closestHazardDist <= fleeDistance) {  // is there a predator in our safe space * 
-				wanderBehaviourScript.enabled = false;
-				fleeBehaviourScript.target = closestHazard.gameObject;
-				fleeBehaviourScript.enabled = true;
-
-				anim.SetBool ("isFleeing", true);
-				currentState = ankyState.FLEEING;
-
-			} else {
-				wanderBehaviourScript.enabled = true;
-				fleeBehaviourScript.enabled = false;
-				fleeBehaviourScript.target = null;
-			}
-		}
-		//if there are no longer predators in range
-		else{
-			//Should we Graze
-			if (true) {
-				wanderBehaviourScript.enabled = true;
-				anim.SetBool ("isGrazing", true);
-				currentState = ankyState.GRAZING;
-			}
-			//Should we Eat
-			else if (false) {
-				anim.SetBool ("isEating", true);
-				currentState = ankyState.EATING;
-			}
-			//Should we Drink
-			else if (false) {
-				anim.SetBool ("isDrinking", true);
-				currentState = ankyState.DRINKING;
-			}
-		}
-	}
-
-	
-
-	/// <summary>
-	/// Method that controls what happens after the death of dino
-	/// </summary>
-	void deadBehaviour()
-	{
-		//If we have been eaten
-		if (decayAmmount >= 100)
-			GameObject.Destroy (this.gameObject);
-	}
-
-
-	/// <summary>
-	/// Method for if our dino is dead and another dino is eating us.
-	/// allows predator to replenish its energy per bite.
-	/// </summary>
-	/// <returns>energy</returns>
-	/// <param name="biteSize">Bite size.</param>
-	public float eatForEnergy(float biteSize)
-	{
-		decayAmmount += biteSize;
-
-		//allow dino to take bigger bites of victim
-		if (biteSize < 20)
-			return 10;
-		else if (biteSize < 50)
-			return 20;
-		else
-			return 30;
-	}
 
 	/// <summary>
 	/// Causes the dino to 'blink' at the end of every frame,
@@ -382,7 +217,15 @@ public class MyAnky : Agent
 			}
 		}
 
-        averageTargetPos = new Vector3(averageTargetPos.x / predatorsInRange.Count, averageTargetPos.y / predatorsInRange.Count, averageTargetPos.z / predatorsInRange.Count);
+        if (predatorsInRange.Count > 0)
+        {
+            averageTargetPos = new Vector3(averageTargetPos.x / predatorsInRange.Count, averageTargetPos.y / predatorsInRange.Count, averageTargetPos.z / predatorsInRange.Count);
+            
+        }
+        else
+        {
+            faceBehaviourScript.enabled = false;
+        }
     }
 
 	/// <summary>
@@ -396,5 +239,34 @@ public class MyAnky : Agent
     public void setCurrentState(ankyState newState)
     {
         currentState = newState;
-    }   
+    }
+
+
+    /// <summary>
+    /// Method that allows dino to decay based on a value passed in
+    /// this is to be used and determined by the dead state in or FSM
+    /// </summary>
+    /// <param name="decay"></param>
+    public int decay(int decay)
+    {
+        int energyReturn = 0;
+
+        //if we have no energy left
+        if (myStats.deathEnergy <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+        //if we have energy left
+        else
+        {
+            myStats.deathEnergy -= decay;
+            if (myStats.deathEnergy  < 0)
+                energyReturn = myStats.deathEnergy + decay;
+            else
+                energyReturn = decay;
+        }
+
+        Debug.Log("Energy: " + energyReturn);
+        return energyReturn;
+    }
 }
