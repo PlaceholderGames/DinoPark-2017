@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using StateStuff;
 
-public class IdleState : State<AI>
+public class AttackingState : State<AI>
 {
-    private static IdleState _instance;
+    private static AttackingState _instance;
 
-    private IdleState()
+    private AttackingState()
     {
         if (_instance != null)
         {
@@ -15,13 +15,13 @@ public class IdleState : State<AI>
         _instance = this;
     }
 
-    public static IdleState Instance
+    public static AttackingState Instance
     {
         get
         {
             if (_instance == null)
             {
-                new IdleState();
+                new AttackingState();
             }
 
             return _instance;
@@ -30,35 +30,31 @@ public class IdleState : State<AI>
 
     public override void EnterState(AI _owner)
     {
-        _owner.pursue.enabled = false;
-        _owner.agent.maxSpeed = 3;
-        _owner.removeHunger = 10;
-        Debug.Log("Entering idle State");
+        _owner.agent.maxSpeed = 20;
+        _owner.removeHunger = 1;
+        Debug.Log("Entering Attacking State");
     }
 
     public override void ExitState(AI _owner)
     {
 
-        Debug.Log("Exiting idle State");
+        Debug.Log("Exiting Attacking State");
     }
 
     public override void UpdateState(AI _owner)
     {
-        //Logic for patrolling and searching for a raptor
-        if(_owner.hunger <= 70)
+
+        if(_owner.hunger <= 0)
         {
-            _owner.stateMachine.ChangeState(HuntingState.Instance);
+            _owner.stateMachine.ChangeState(DeadState.Instance);
         }
 
-        //Check if there is an anky in range
-        //Better logic is needed for attacking the closest
         foreach (Transform i in _owner.view.visibleTargets)
         {
-            if (i.tag == "Anky")
+            if (i.tag == "Anky" && Vector3.Distance(_owner.transform.position, i.transform.position) > 35)
             {
                 _owner.stateMachine.ChangeState(HuntingState.Instance);
             }
         }
-        
     }
 }

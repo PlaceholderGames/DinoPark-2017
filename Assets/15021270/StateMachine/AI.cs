@@ -5,57 +5,55 @@ using StateStuff;
 
 public class AI : MonoBehaviour
 {
-    public bool switchState = false;
-    public float gameTimer;
-    public int seconds = 0;
 
     public Animator anim;
     public FieldOfView view;
     public Face face;
     public Wander wander;
-    public Pursue pursue;
+    public PursueRotate pursue;
     public Agent agent;
+
+    //Can be changed depending on state
+    //Hunting for example takes more energy
+    //Eating will stop hunger from being taken away
+    public float removeHunger = 1;
+
+    public int distance;
+
+    private float hungerTimer; 
+
+    public int hunger = 100;
+    public int thirst = 100;
+    public int health = 100;
 
     public StateMachine<AI> stateMachine { get; set; }
 
     void Awake()
     {
+        agent = GetComponent<Agent>();
         view = GetComponent<FieldOfView>();
         anim = GetComponent<Animator>();
         face = GetComponent<Face>();
         wander = GetComponent<Wander>();
-        pursue = GetComponent<Pursue>();
+        pursue = GetComponent<PursueRotate>();
     }
 
     private void Start()
     {
         stateMachine = new StateMachine<AI>(this);
         stateMachine.ChangeState(IdleState.Instance);
-        gameTimer = Time.time;
     }
 
     private void Update()
     {
-        // Idle - should only be used at startup
-
-        // Eating - requires a box collision with a dead dino
-
-        // Drinking - requires y value to be below 32 (?)
-
-        // Alerted - up to the student what you do here
-
-        // Hunting - up to the student what you do here
-
-        // Fleeing - up to the student what you do here
-
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
+        //un-specific changes to the raptor such as hunger slowly draining
+        hungerTimer += Time.deltaTime;
+        if(hungerTimer >= removeHunger)
+        {
+            Debug.Log(hunger);
+            hunger -= 1;
+            hungerTimer = 0;
+        }
         stateMachine.Update();
-    }
-
-    public void hunt()
-    {
-        //this.SetSteering(face.GetSteering());
-        //this.SetSteering(pursue.GetSteering());
     }
 }

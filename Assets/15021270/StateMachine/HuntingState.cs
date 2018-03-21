@@ -31,8 +31,9 @@ public class HuntingState : State<AI>
     public override void EnterState(AI _owner)
     {
         _owner.wander.enabled = false;
-        //_owner.face.enabled = true;
         _owner.pursue.enabled = true;
+        _owner.removeHunger = 5;
+        _owner.agent.maxSpeed = 15;
 
         Debug.Log("Entering Hunting State");
     }
@@ -44,11 +45,27 @@ public class HuntingState : State<AI>
 
     public override void UpdateState(AI _owner)
     {
-        _owner.hunt();
         //Update while in hunting state
         //_owner.SetSteering(_owner.face.GetSteering());
         //_owner.SetSteering(_owner.pursue.GetSteering());
 
-        //_owner.stateMachine.ChangeState(HuntingState.Instance);
+        //Check if there is an anky in range
+        //Better logic is needed for attacking the closest
+        foreach (Transform i in _owner.view.visibleTargets)
+        {
+            //Debug.Log(Vector3.Distance(_owner.transform.position, i.transform.position));
+            if (i.tag == "Anky" && Vector3.Distance(_owner.transform.position, i.transform.position) < 20)
+            {
+                _owner.stateMachine.ChangeState(AttackingState.Instance);
+            }
+        }
+
+        //_owner.stateMachine.ChangeState(EatingState.Instance);
+
+        //_owner.stateMachine.ChangeState(DrinkingState.Instance);
+
+        //_owner.stateMachine.ChangeState(FleeingState.Instance);
+
+        //_owner.stateMachine.ChangeState(IdleState.Instance);
     }
 }
