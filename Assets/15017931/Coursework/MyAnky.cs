@@ -52,6 +52,7 @@ public class MyAnky : Agent
     [Range(0, 100)]
     public float fleeDistance = 45;
     private FieldOfView eyes;
+    public Vector3 averageTargetPos = Vector3.zero;
     [Space(10)]
 
     //Behaviour scripts
@@ -72,6 +73,8 @@ public class MyAnky : Agent
 
 
     [Header("Combat")]
+    public int attackRange = 10;
+
     [Header("if We are Hit")]
     public int headDamage = 10;
     public int bodyDamage = 30;
@@ -103,6 +106,7 @@ public class MyAnky : Agent
         dinosInVision = new List<Transform>();
         predatorsInRange = new List<Transform> ();
 		friendsInRange = new List<Transform> ();
+
 
         //set dino stats
         myStats.health = 100;
@@ -139,7 +143,8 @@ public class MyAnky : Agent
     {
 
         stateMachine.Update();
-   
+        Debug.DrawLine(this.transform.position, averageTargetPos);
+
         base.Update();
     }
 
@@ -332,6 +337,7 @@ public class MyAnky : Agent
 		predatorsInRange.Clear ();
         friendsInRange.Clear();
         dinosInVision.Clear();
+        averageTargetPos = Vector3.zero;
 
         closestHazardDist = 100;
         closestHazard = null;
@@ -360,7 +366,10 @@ public class MyAnky : Agent
 				if (o.gameObject.CompareTag (pTag)) 
 				{
 					predatorsInRange.Add (o);
+                    averageTargetPos += (o.position);
 				}
+
+
 			}
 
 			//Add to our friends list
@@ -372,6 +381,8 @@ public class MyAnky : Agent
 				}
 			}
 		}
+
+        averageTargetPos = new Vector3(averageTargetPos.x / predatorsInRange.Count, averageTargetPos.y / predatorsInRange.Count, averageTargetPos.z / predatorsInRange.Count);
     }
 
 	/// <summary>

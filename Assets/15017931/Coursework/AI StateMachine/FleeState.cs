@@ -39,7 +39,7 @@ public class FleeState : State<MyAnky>
         _owner.anim.SetBool("isAlerted", true);
         _owner.setCurrentState(MyAnky.ankyState.FLEEING);
         _owner.fleeBehaviourScript.target = _owner.closestHazard.gameObject;
-        _owner.fleeBehaviourScript.enabled = true;  
+        _owner.fleeBehaviourScript.enabled = true;
         waitForSeconds = 2;
     }
 
@@ -53,36 +53,54 @@ public class FleeState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        //Alerted
+        //Check distance between us and our closest hazard
+        foreach (Transform pred in _owner.predatorsInRange)
+        {
+            //Distance between us and predator
+            _owner.distance = Vector3.Distance(_owner.transform.position, pred.transform.position);
+            //find the closets predator
+            if (_owner.distance < _owner.closestHazardDist)
+            {
+                _owner.closestHazard = pred;
+                _owner.closestHazardDist = _owner.distance;
+            }
+        }
+        //Alerted       
+        //Check if we are dead
+        if (_owner.myStats.health <= 0)
+        {
+            Debug.Log("WE are Dead");
+            _owner.stateMachine.ChangeState(DeadState.Instance);
+        }
         //If we can no longer see a predator
-        if (_owner.predatorsInRange.Count <= 0)
+        else if (_owner.predatorsInRange.Count <= 0)
         {
             waitForSeconds -= Time.deltaTime;
             //if we have waited and there are still no predators in our vision
             if (waitForSeconds <= 0)
-            { 
-                //check we are not dead
-                if (_owner.myStats.health <= 0)
-                    _owner.stateMachine.ChangeState(DeadState.Instance);
+            {
                 //Go back to alert when we cant see any predators anymore
-                else
-                    _owner.stateMachine.ChangeState(AlertState.Instance);
-            }
-            //Check if we are dead
-            else if (_owner.myStats.health <= 0)
-            {
-                _owner.stateMachine.ChangeState(DeadState.Instance);
-            }
-            //Attacking
-            //If we are being attacked and can see our target
-            else if (false)
-            {
-                _owner.stateMachine.ChangeState(AttackingState.Instance);
+                _owner.stateMachine.ChangeState(AlertState.Instance);
             }
         }
-        else
-        {
+        else if (_owner.predatorsInRange.Count > 0)
+        {          
+            //Attacking
+            //If we are being attacked and can see our target
+            if (_owner.closestHazardDist < _owner.attackRange)
+            {
+                Debug.Log("ATTACK");
+                if (_owner.myStats.health <= 100 && _owner.myStats.health >= 30)
+                {
+                    _owner.stateMachine.ChangeState(AttackingState.Instance);
+                }
+            }
+
+
+
+            //Remain in our currnet state
             waitForSeconds = 2;
+
         }
     }
 }
