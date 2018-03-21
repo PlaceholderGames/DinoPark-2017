@@ -30,6 +30,7 @@ public class attackingState : State<MyAnky>
     public override void EnterState(MyAnky _owner)
     {
         Debug.Log("entering attack state");
+        _owner.currentAnkyState = MyAnky.ankyState.ATTACKING;
         _owner.anim.SetBool("isAttacking", true);
 
     }

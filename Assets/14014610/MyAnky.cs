@@ -60,6 +60,7 @@ public class MyAnky : Agent
         stateMachine = new StateMachine<MyAnky>(this);
         stateMachine.ChangeState(grazingState.Instance);
 
+        currentAnkyState = ankyState.GRAZING;
 
         base.Start();
 
@@ -101,9 +102,26 @@ public class MyAnky : Agent
                 enemies.Add(target);
             }
         }
+        friendlies.Clear();
+        foreach (Transform target in fov.visibleTargets)
+        {
+            if (target.tag == "Anky" && !friendlies.Contains(target))
+            {
+                if (target.transform.position != transform.position)
+                    friendlies.Add(target);
+            }
+        }
+        foreach (Transform target in fov.stereoVisibleTargets)
+        {
+            if (target.tag == "Anky" && !friendlies.Contains(target))
+            {
+                if (target.transform.position != transform.position)
+                    friendlies.Add(target);
+            }
+        }
 
         hydration -= (Time.deltaTime * 0.2) * 1;
-        energy -= (Time.deltaTime * 0.2) * 1;
+        energy -= (Time.deltaTime * 0.1) * 1;
         stateMachine.Update();
         base.Update();
     }

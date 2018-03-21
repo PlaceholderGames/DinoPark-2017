@@ -30,6 +30,7 @@ public class alertState : State<MyAnky>
     public override void EnterState(MyAnky _owner)
     {
         Debug.Log("entering alert state");
+        _owner.currentAnkyState = MyAnky.ankyState.ALERTED;
         _owner.anim.SetBool("isAlerted", true);
         _owner.ankyWander.enabled = true;
     }
@@ -66,6 +67,22 @@ public class alertState : State<MyAnky>
         else if (_owner.energy < 35)
         {
             _owner.stateMachine.ChangeState(eatingState.Instance);
+        }
+
+        foreach (Transform friend in _owner.friendlies)
+        {
+            float distance = Vector3.Distance(friend.position, _owner.transform.position);
+            if (distance > 50)
+            {
+                _owner.ankySeek.target = friend.gameObject;
+                _owner.ankyWander.enabled = false;
+                _owner.ankySeek.enabled = true;
+            }
+            if (distance < 10)
+            {
+                _owner.ankySeek.enabled = false;
+                _owner.ankyWander.enabled = true;
+            }
         }
     }
 }

@@ -30,6 +30,7 @@ public class eatingState : State<MyAnky>
     public override void EnterState(MyAnky _owner)
     {
         Debug.Log("entering eating state");
+        _owner.currentAnkyState = MyAnky.ankyState.EATING;
         _owner.anim.SetBool("isEating", true);
 
     }

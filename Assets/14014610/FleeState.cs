@@ -30,7 +30,9 @@ public class fleeState : State<MyAnky>
     public override void EnterState(MyAnky _owner)
     {
         Debug.Log("entering flee state");
+        _owner.currentAnkyState = MyAnky.ankyState.FLEEING;
         _owner.anim.SetBool("isFleeing", true);
+        _owner.ankySeek.enabled = false;
         _owner.ankyFlee.enabled = true;
     }
 

@@ -30,6 +30,7 @@ public class deadState : State<MyAnky>
     public override void EnterState(MyAnky _owner)
     {
         Debug.Log("entering dead state");
+        _owner.currentAnkyState = MyAnky.ankyState.DEAD;
         _owner.anim.SetBool("isDead", true);
 
     }
