@@ -41,31 +41,33 @@ public class fleeState : State<MyAnky>
         _owner.ankyFlee.enabled = false;
     }
 
-    public Vector3 closestEnemy = new Vector3(1000, 1000, 1000);
-    public int closestenemyIndex = 0;
+    
     public GameObject Raptor = new GameObject();
 
     public override void UpdateState(MyAnky _owner)
     {
-        //for (int i = 0; i < _owner.enemies.Count; i++)
-        //{
-        //    Vector3 Difference = new Vector3();
-        //    Difference = (_owner.transform.position - _owner.enemies[i].position);
-        //    if (Difference.magnitude < closestEnemy.magnitude)
-        //    {
-        //        closestEnemy = Difference;
-        //        closestenemyIndex = 1;
-        //        Raptor = _owner.enemies[i].gameObject;
-        //    }
-        //}
-
         foreach (Transform enemy in _owner.enemies)
         {
-            float distance = Vector3.Distance(enemy.position, _owner.transform.position);
-            if (distance > 40)
+            Vector3 Difference = new Vector3();
+            Vector3 RaptorDif = new Vector3();
+            Difference = (_owner.transform.position - enemy.position);
+            RaptorDif = (_owner.transform.position - Raptor.transform.position);
+
+            if (Difference.magnitude < RaptorDif.magnitude)
             {
+                Raptor = enemy.gameObject;
+            }
+            float distance = Vector3.Distance(Raptor.transform.position, _owner.transform.position);
+            if (distance > 50)
+            {
+                _owner.enemies.Clear();
                 _owner.stateMachine.ChangeState(alertState.Instance);
             }
+        }
+
+        if (Raptor)
+        {
+            _owner.ankyFlee.target = Raptor;
         }
     }
 }

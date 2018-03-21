@@ -52,11 +52,11 @@ public class alertState : State<MyAnky>
                 _owner.ankyFlee.target = enemy.gameObject;
             }
             
-            if (distance > 100)
-            {
-                _owner.enemies.Remove(enemy);
-                _owner.enemies.TrimExcess();
-            }
+            //if (distance > 100)
+            //{
+            //    _owner.enemies.Remove(enemy);
+            //    _owner.enemies.TrimExcess();
+            //}
             //if (target.tag == "Rapty" && distance < 5)
             //{
             //    _owner.stateMachine.ChangeState(attackingState.Instance);

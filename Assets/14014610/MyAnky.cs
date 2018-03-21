@@ -68,7 +68,6 @@ public class MyAnky : Agent
     
     protected override void Update()
     {
-
         // Idle - should only be used at startup
 
         // Eating - requires a box collision with a dead dino
@@ -81,6 +80,7 @@ public class MyAnky : Agent
 
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
+        enemies.Clear();
         foreach (Transform target in fov.visibleTargets)
         {
             if (target.tag == "Rapty" && !enemies.Contains(target))
