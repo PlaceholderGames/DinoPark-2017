@@ -22,6 +22,7 @@ public class AgentBehaviour : MonoBehaviour
         else
             agent.SetSteering(GetSteering());
     }
+
     public virtual Steering GetSteering ()
     {
         return new Steering();

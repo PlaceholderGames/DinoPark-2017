@@ -3,34 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(FieldOfView))]
-public class FieldOfAlertEditor : Editor
-{
+[CustomEditor (typeof (FieldOfAlert))]
+public class FieldOfAlertEditor : Editor {
 
     // Use this for initialization
     void OnSceneGUI()
     {
-        FieldOfView fow = (FieldOfView)target;
+        FieldOfAlert foa = (FieldOfAlert)target;
         Handles.color = Color.white;
-        Handles.DrawWireArc(fow.transform.position, Vector3.up, Vector3.forward, 360, fow.viewRadius);
-        Vector3 viewAngleA = fow.DirFromAngle(-fow.viewAngle / 2, false);
-        Vector3 viewAngleB = fow.DirFromAngle(fow.viewAngle / 2, false);
+        Handles.DrawWireArc(foa.transform.position, Vector3.up, Vector3.forward, 360, foa.viewRadius);
+        Vector3 viewAngleA = foa.DirFromAngle(-foa.viewAngle / 2, false);
+        Vector3 viewAngleB = foa.DirFromAngle(foa.viewAngle / 2, false);
 
-        Handles.DrawLine(fow.transform.position, fow.transform.position + viewAngleA * fow.viewRadius);
-        Handles.DrawLine(fow.transform.position, fow.transform.position + viewAngleB * fow.viewRadius);
+        Handles.DrawLine(foa.transform.position, foa.transform.position + viewAngleA * foa.viewRadius);
+        Handles.DrawLine(foa.transform.position, foa.transform.position + viewAngleB * foa.viewRadius);
 
         Handles.color = Color.red;
-        Vector3 stereoAngleA = fow.DirFromAngle(-fow.stereoAngle / 2, false);
-        Vector3 stereoAngleB = fow.DirFromAngle(fow.stereoAngle / 2, false);
+        Vector3 stereoAngleA = foa.DirFromAngle(-foa.stereoAngle / 2, false);
+        Vector3 stereoAngleB = foa.DirFromAngle(foa.stereoAngle / 2, false);
 
-        Handles.DrawLine(fow.transform.position, fow.transform.position + stereoAngleA * fow.viewRadius);
-        Handles.DrawLine(fow.transform.position, fow.transform.position + stereoAngleB * fow.viewRadius);
+        Handles.DrawLine(foa.transform.position, foa.transform.position + stereoAngleA * foa.viewRadius);
+        Handles.DrawLine(foa.transform.position, foa.transform.position + stereoAngleB * foa.viewRadius);
 
         Handles.color = Color.green;
 
-        foreach (Transform visibleTarget in fow.visibleTargets)
+        foreach (Transform visibleTarget in foa.visibleTargets)
         {
-            Handles.DrawLine(fow.transform.position, visibleTarget.position);
+            Handles.DrawLine(foa.transform.position, visibleTarget.position);
         }
     }
 }
