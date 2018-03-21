@@ -12,12 +12,14 @@ public class MyAnky : Agent
     public Flee ankyFlee;
     public Wander ankyWander;
     public Seek ankySeek;
+    public Face ankyFace;
     public List<Transform> ankyFriendliesClose = new List<Transform>();
     public List<Transform> ankyFriendliesFar = new List<Transform>();
     public List<Transform> ankyEnemies = new List<Transform>();
     public StateMachine<MyAnky> stateMachine { get; set; }
     public Transform target;
     public int fleeingIndex = 0;
+    public Terrain ankyTerrain;
     
     public int health = 52;
     public int anky;
@@ -42,8 +44,8 @@ public class MyAnky : Agent
     protected override void Start()
     {
         stateMachine = new StateMachine<MyAnky>(this);
-        stateMachine.ChangeState(WanderingState.Instance);
         currentState = ankyState.IDLE;
+        stateMachine.ChangeState(WanderingState.Instance);
         ankyView = GetComponent<FieldOfView>();
         anim = GetComponent<Animator>();
         // Assert default animation booleans and floats
@@ -111,7 +113,8 @@ public class MyAnky : Agent
         //}
 
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
+        //ankyFriendliesFar.Clear();
+        //findFriendlies();
         base.Update();
     }
 
@@ -124,5 +127,46 @@ public class MyAnky : Agent
     {
         Debug.Log("its getting in this myCoroutine");
         yield return new WaitForSeconds(20);
+    }
+
+    public void findFriendlies()
+    {
+        //ankyFriendliesFar.Clear();
+        for (int i = 0; i < ankyView.visibleTargets.Count; i++)
+        {
+            target = ankyView.visibleTargets[i];
+            if (ankyView.visibleTargets[i].tag == "Anky" && Vector3.Distance(target.position, transform.position) > 80)
+            {
+                if (!ankyFriendliesFar.Contains(target))
+                {
+                    ankyFriendliesFar.Add(target);
+                }
+            }
+            else if (ankyView.visibleTargets[i].tag == "Anky" && Vector3.Distance(target.position, transform.position) <= 80)
+            {
+                if (!ankyFriendliesFar.Contains(target))
+                {
+                    ankyFriendliesClose.Add(target);
+                }
+            }
+        }
+        for (int i = 0; i < ankyView.stereoVisibleTargets.Count; i++)
+        {
+            target = ankyView.stereoVisibleTargets[i];
+            if (ankyView.stereoVisibleTargets[i].tag == "Anky" && Vector3.Distance(target.position, transform.position) > 80 && !ankyFriendliesFar.Contains(target))
+            {
+                if (!ankyFriendliesFar.Contains(target))
+                {
+                    ankyFriendliesFar.Add(target);
+                }
+            }
+            else if (ankyView.stereoVisibleTargets[i].tag == "Anky" && Vector3.Distance(target.position, transform.position) <= 80 && !ankyFriendliesFar.Contains(target))
+            {
+                if (!ankyFriendliesFar.Contains(target))
+                {
+                    ankyFriendliesClose.Add(target);
+                }
+            }
+        }
     }
 }

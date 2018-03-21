@@ -7,7 +7,7 @@ using System;
 public class WanderingState : State<MyAnky>
 {
     private static WanderingState _instance;
-
+    Transform target;
     private WanderingState()
     {
         if (_instance != null)
@@ -82,5 +82,35 @@ public class WanderingState : State<MyAnky>
             _owner.stateMachine.ChangeState(DrinkingState.Instance); 
         }
         _owner.anky = 0;
+
+
+
+
+        _owner.findFriendlies();
+
+        for (int i = 0; i < _owner.ankyView.visibleTargets.Count; i++)
+        {
+            target = _owner.ankyView.visibleTargets[i];
+            if (_owner.ankyView.visibleTargets[i].tag == "Anky")
+            {
+                if (Vector3.Distance(target.position, _owner.transform.position) > 60)
+                {
+                    _owner.anky = 1;
+                    _owner.stateMachine.ChangeState(HerdingState.Instance);
+                }
+            }
+        }
+        for (int i = 0; i < _owner.ankyView.stereoVisibleTargets.Count; i++)
+        {
+            target = _owner.ankyView.stereoVisibleTargets[i];
+            if (_owner.ankyView.stereoVisibleTargets[i].tag == "Anky")
+            {
+                if (Vector3.Distance(target.position, _owner.transform.position) > 60)
+                {
+                    _owner.anky = 1;
+                    _owner.stateMachine.ChangeState(HerdingState.Instance);
+                }
+            }
+        }
     }
 }
