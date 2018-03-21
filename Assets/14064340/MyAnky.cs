@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
 using Statestuff;
 public class MyAnky : Agent
 {
@@ -21,9 +20,14 @@ public class MyAnky : Agent
     public Animator anim;
     public Flee ankyFlee;
     public Wander ankyWander;
+    public Seek ankySeek;
     public bool switchState = false;
+    public double saturation = 100;
+    public double hydration = 100;
+    public double health = 100;
     public float gameTimer;
     public int seconds = 0;
+    public GameObject Water;
     public List<Transform> Enemies = new List<Transform>();
 
     public StateMachine<MyAnky> stateMachine { get; set; }
@@ -48,6 +52,7 @@ public class MyAnky : Agent
         anim = GetComponent<Animator>();
         //ankyFlee = GetComponent<Flee>();
         //ankyWander = GetComponent<Wander>();
+        //ankySeek = GetComponent<Seek>();
         //fov = GetComponent<FieldOfView>();
 
         // Assert default animation booleans and floats
@@ -72,14 +77,12 @@ public class MyAnky : Agent
        
 
         stateMachine.Update();
-        // Eating - requires a box collision with a dead dino
-
-
-
-        // Drinking - requires y value to be below 32 (?)
+        // Eating - Drinking (32?)
+        hydration -= (Time.deltaTime * 0.2) * 1.0;
+        saturation -= (Time.deltaTime * 0.1) * 1.0;
 
         // Alerted - up to the student what you do here
-           Enemies.Clear();
+        Enemies.Clear();
         foreach (Transform i in fov.visibleTargets)
         {
             
@@ -97,9 +100,7 @@ public class MyAnky : Agent
       
             if (i.tag == "Rapty")
             {
-           
-                Enemies.Add(i);
-              
+             Enemies.Add(i);
             }
         }
 

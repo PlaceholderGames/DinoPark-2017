@@ -41,9 +41,15 @@ public class DrinkingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        if (_owner.switchState)
+        if (-_owner.transform.position.y < 36)
         {
-            _owner.stateMachine.ChangeState(AlertState.Instance);
+            _owner.ankySeek.enabled = false;
+            _owner.hydration += (Time.deltaTime * 3) * 1.0;
         }
+        if(_owner.hydration>=100)
+        {
+            _owner.stateMachine.ChangeState(GrazeState.Instance);
+        }
+   
     }
 }

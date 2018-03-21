@@ -45,11 +45,15 @@ public class GrazeState : State<MyAnky>
     public override void UpdateState(MyAnky _owner)
     {
 
-       if(_owner.Enemies.Count > 0)
+        if (_owner.Enemies.Count > 0)
         {
             _owner.stateMachine.ChangeState(AlertState.Instance);
         }
-
+        else if (_owner.hydration < 50)
+        {
+            _owner.ankySeek.target = _owner.Water;
+            _owner.stateMachine.ChangeState(DrinkingState.Instance);
+        }
         //for (int i = 0; i < _owner.fov.visibleTargets.Count; i++)
         //{
         //    Debug.Log("1");

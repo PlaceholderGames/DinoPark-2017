@@ -26,7 +26,11 @@ public class AttackState : State<MyAnky>
             return _instance;
         }
     }
+    void takeDamage(MyAnky _owner)
+    {
+        _owner.health -= Time.deltaTime;
 
+    }
     public override void EnterState(MyAnky _owner)
     {
         _owner.anim.SetBool("isAttacking", true);

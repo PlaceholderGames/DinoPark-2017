@@ -57,7 +57,7 @@ public class AlertState : State<MyAnky>
             }
             else if (Distance < 5)
             {
-
+                _owner.stateMachine.ChangeState(AttackState.Instance);
             };
         };
 
