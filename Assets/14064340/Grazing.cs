@@ -44,17 +44,23 @@ public class GrazeState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        Debug.Log("0");
-        foreach(Transform i in _owner.fov.visibleTargets)
+
+       if(_owner.Enemies.Count > 0)
         {
-            Debug.Log("1");
-            if(i.tag == "Rapty")
-            {
-                Debug.Log("2");
-                _owner.Enemies.Add(i);
-                _owner.stateMachine.ChangeState(AlertState.Instance);
-            }
+            _owner.stateMachine.ChangeState(AlertState.Instance);
         }
-      
+
+        //for (int i = 0; i < _owner.fov.visibleTargets.Count; i++)
+        //{
+        //    Debug.Log("1");
+        //    Transform target = _owner.fov.visibleTargets[i];
+        //    if (target.tag == "Rapty")
+        //    {
+        //        Debug.Log("2");
+        //        _owner.Enemies.Add(target);
+        //        _owner.stateMachine.ChangeState(AlertState.Instance);
+        //    }
+        //}
+
     }
 }

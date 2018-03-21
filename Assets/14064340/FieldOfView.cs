@@ -2,29 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FieldOfView : MonoBehaviour {
+public class FieldOfView : MonoBehaviour
+{
 
-	public float viewRadius; // Range of vision. Anky = 100, Rapty = 200
-	[Range(0,360)]
+    public float viewRadius; // Range of vision. Anky = 100, Rapty = 200
+    [Range(0, 360)]
     public float viewAngle; // Field of Vision. Anky = 300, Rapty = 240
-	[Range(0,180)]
-	public float stereoAngle; // Not doing anything with this yet. Stereo FoV Anky = 30, Rapty = 60
+    [Range(0, 180)]
+    public float stereoAngle; // Not doing anything with this yet. Stereo FoV Anky = 30, Rapty = 60
     // Note: These values above are subject to change on game balancing
 
     public LayerMask targetMask;
     //public LayerMask obstacleMask; // Not using raytracing to determine visibility right now
 
     [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
-    public List<Transform> stereoVisibleTargets = new List<Transform>(); // this is the list of visible dinosaurs
+    public List<Transform> visibleTargets = new List<Transform>(); // this is the list of visible dinosaurs
 
     [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
-    public List<Transform> visibleTargets = new List<Transform>(); // this is the list of visible dinosaurs in stereo
+    public List<Transform> stereoVisibleTargets = new List<Transform>(); // this is the list of visible dinosaurs in stereo
 
-	private void Start()
-	{
+    private void Start()
+    {
         StartCoroutine("FindTargetsWithDelay", 0.2f);
-	}
-	IEnumerator FindTargetsWithDelay(float delay)
+    }
+    IEnumerator FindTargetsWithDelay(float delay)
     {
         while (true)
         {
@@ -34,8 +35,8 @@ public class FieldOfView : MonoBehaviour {
     }
     void FindVisibleTargets()
     {
-        stereoVisibleTargets.Clear ();
         visibleTargets.Clear();
+        stereoVisibleTargets.Clear();
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
         for (int i = 0; i < targetsInViewRadius.Length; i++)
@@ -54,20 +55,23 @@ public class FieldOfView : MonoBehaviour {
                 //Debug.Log("Relative angle: " + orientationOfTarget);
                 stereoVisibleTargets.Add(target);
             }
-            else if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle/2)
+            else if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
                 //float directionToTarget = Vector3.Angle(transform.forward, dirToTarget); // We need the direction of the object only for checking with raytracing
-                stereoVisibleTargets.Add(target); // For now, if it is in range and angle of eyesight we can see it
+                //Debug.Log("Relative direction: " + directionToTarget); // This will be used to determine states, such as attack, alert, etc
+                visibleTargets.Add(target); // For now, if it is in range and angle of eyesight we can see it
             }
-         
+
         }
+
     }
-	
-	public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
-	{
-		if (!angleIsGlobal) {
-			angleInDegrees += transform.eulerAngles.y;
-		}
-		return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad),0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
-	}
+
+    public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
+    {
+        if (!angleIsGlobal)
+        {
+            angleInDegrees += transform.eulerAngles.y;
+        }
+        return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+    }
 }

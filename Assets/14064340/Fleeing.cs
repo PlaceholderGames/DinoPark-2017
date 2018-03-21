@@ -41,9 +41,33 @@ public class FleeingState : State<MyAnky>
         _owner.ankyFlee.enabled = false;
     }
 
+    public GameObject priorityTarget = new GameObject();
     public override void UpdateState(MyAnky _owner)
     {
-   
+        foreach(Transform x in _owner.Enemies)
+        {
+            Vector3 Difference = new Vector3();
+            Vector3 RaptorDiff = new Vector3();
+
+            Difference = (_owner.transform.position - x.position);
+            RaptorDiff = (_owner.transform.position - priorityTarget.transform.position);
+
+            if (Difference.magnitude < RaptorDiff.magnitude)
+            {
+                priorityTarget = x.gameObject;
+            }
+            float Distance = Vector3.Distance(x.position, _owner.transform.position);
+            if (Distance > 50)
+            {
+                _owner.Enemies.Clear();
+                _owner.stateMachine.ChangeState(AlertState.Instance);
+            }
+        }
+
+        if(priorityTarget)
+        {
+            _owner.ankyFlee.target = priorityTarget;
+        }
      
     }
 }

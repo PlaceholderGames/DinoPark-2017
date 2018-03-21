@@ -46,9 +46,9 @@ public class MyAnky : Agent
         gameTimer = Time.time;
 
         anim = GetComponent<Animator>();
-        ankyFlee = GetComponent<Flee>();
-        ankyWander = GetComponent<Wander>();
-        fov = GetComponent<FieldOfView>();
+        //ankyFlee = GetComponent<Flee>();
+        //ankyWander = GetComponent<Wander>();
+        //fov = GetComponent<FieldOfView>();
 
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -79,6 +79,29 @@ public class MyAnky : Agent
         // Drinking - requires y value to be below 32 (?)
 
         // Alerted - up to the student what you do here
+           Enemies.Clear();
+        foreach (Transform i in fov.visibleTargets)
+        {
+            
+       
+            if (i.tag == "Rapty")
+            {
+                Enemies.Add(i);
+           
+            }
+        }
+
+
+        foreach (Transform i in fov.stereoVisibleTargets)
+        {
+      
+            if (i.tag == "Rapty")
+            {
+           
+                Enemies.Add(i);
+              
+            }
+        }
 
         // Hunting - up to the student what you do here
 
