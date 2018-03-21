@@ -15,8 +15,13 @@ public class MyAnky : Agent
     public FieldOfView fov;
     public Wander ankyWander;
     public Flee ankyFlee;
+    public Seek ankySeek;
+
+    public GameObject water;
 
     public double hydration = 100;
+    public double energy = 100;
+    public double health = 100;
 
     public enum ankyState
     {
@@ -63,6 +68,7 @@ public class MyAnky : Agent
     {
         ankyWander = GetComponent<Wander>();
         ankyFlee = GetComponent<Flee>();
+        ankySeek = GetComponent<Seek>();
     }
 
     
@@ -97,6 +103,7 @@ public class MyAnky : Agent
         }
 
         hydration -= (Time.deltaTime * 0.2) * 1;
+        energy -= (Time.deltaTime * 0.2) * 1;
         stateMachine.Update();
         base.Update();
     }

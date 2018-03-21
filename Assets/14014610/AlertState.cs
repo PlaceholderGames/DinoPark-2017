@@ -51,22 +51,21 @@ public class alertState : State<MyAnky>
                 _owner.stateMachine.ChangeState(fleeState.Instance);
                 _owner.ankyFlee.target = enemy.gameObject;
             }
-            
-            //if (distance > 100)
-            //{
-            //    _owner.enemies.Remove(enemy);
-            //    _owner.enemies.TrimExcess();
-            //}
-            //if (target.tag == "Rapty" && distance < 5)
-            //{
-            //    _owner.stateMachine.ChangeState(attackingState.Instance);
-            //    _owner.ankyFlee.target = target.gameObject;
-            //}
         }
 
         if (_owner.enemies.Count <= 0)
         {
             _owner.stateMachine.ChangeState(grazingState.Instance);
+        }
+
+
+        if (_owner.hydration < 35)
+        {
+            _owner.stateMachine.ChangeState(drinkingState.Instance);
+        }
+        else if (_owner.energy < 35)
+        {
+            _owner.stateMachine.ChangeState(eatingState.Instance);
         }
     }
 }

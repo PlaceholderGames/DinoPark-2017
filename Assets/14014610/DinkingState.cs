@@ -31,6 +31,7 @@ public class drinkingState : State<MyAnky>
     {
         Debug.Log("entering drinking state");
         _owner.anim.SetBool("isDrinking", true);
+        _owner.ankySeek.enabled = true;
 
     }
 
@@ -38,11 +39,18 @@ public class drinkingState : State<MyAnky>
     {
         Debug.Log("exiting drinking state");
         _owner.anim.SetBool("isDrinking", false);
+        _owner.ankySeek.enabled = false;
     }
 
     public override void UpdateState(MyAnky _owner)
     {
-        if (_owner.transform.position.y > 35)
+
+        if (_owner.transform.position.y < 36)
+        {
+            _owner.ankySeek.enabled = false;
+            _owner.hydration += (Time.deltaTime * 1) * 1;
+        }
+        if (_owner.hydration >= 100 && _owner.transform.position.y > 36)
         {
             _owner.stateMachine.ChangeState(grazingState.Instance);
         }

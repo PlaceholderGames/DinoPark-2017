@@ -63,8 +63,8 @@ public class grazingState : State<MyAnky>
             _owner.stateMachine.ChangeState(alertState.Instance);
         }
 
-        if (_owner.transform.position.y < 35)
-        {
+        if (_owner.hydration < 97) {
+            _owner.ankySeek.target = _owner.water;
             _owner.stateMachine.ChangeState(drinkingState.Instance);
         }
     }
