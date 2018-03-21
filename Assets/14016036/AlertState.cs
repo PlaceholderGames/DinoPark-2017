@@ -57,6 +57,7 @@ public class AlertState : State<MyAnky>
         _owner.anim.SetBool("isDead", false);
         int checker = 0;
         _owner.ankyFlee.enabled = false;
+        _owner.ankyFace.enabled = false;
         _owner.ankySeek.enabled = false;
         _owner.ankyWander.enabled = true;
         _owner.ankyEnemies.Clear();
@@ -148,7 +149,7 @@ public class AlertState : State<MyAnky>
             }
         }
 
-        if(_owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, 0, 0, 1) && _owner.health < 70)
+        //if(_owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, 0, 0, 1) && _owner.health < 70)
     }
 
 }

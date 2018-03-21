@@ -44,6 +44,6 @@ public class EatingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        _owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, 0, 0, 1);
+        //_owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, 0, 0, 1);
     }
 }

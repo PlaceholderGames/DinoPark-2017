@@ -45,6 +45,7 @@ public class WanderingState : State<MyAnky>
     public override void UpdateState(MyAnky _owner)
     {
         _owner.currentState = MyAnky.ankyState.GRAZING;
+        _owner.ankyFace.enabled = false;
         for (int i = 0; i < _owner.ankyView.visibleTargets.Count; i++)
         {
             Transform target = _owner.ankyView.visibleTargets[i];
