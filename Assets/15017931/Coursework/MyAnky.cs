@@ -33,6 +33,7 @@ public class MyAnky : Agent
     public ankyState currentState = ankyState.IDLE;
     public dinoStats myStats;
     public Animator anim;
+    public GameObject myTarget;
     [Space(10)]
 
     // list of objects we want to stay away from
@@ -100,6 +101,7 @@ public class MyAnky : Agent
         anim = GetComponent<Animator>();
 		fleeBehaviourScript = GetComponent<Flee> ();
 		wanderBehaviourScript = GetComponent<Wander> ();
+        faceBehaviourScript = GetComponent<Face>();
 
 		currentState = ankyState.IDLE;
 
@@ -109,6 +111,10 @@ public class MyAnky : Agent
         predatorsInRange = new List<Transform> ();
 		friendsInRange = new List<Transform> ();
 
+        myTarget = new GameObject("MyTarget");
+        myTarget.transform.SetParent(this.transform);
+        //myTarget = Instantiate(myTarget, this.transform);
+      
 
         //set dino stats
         myStats.health = 100;
@@ -130,6 +136,7 @@ public class MyAnky : Agent
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
 
+        faceBehaviourScript.enabled = false;
 		fleeBehaviourScript.enabled = false;
 		wanderBehaviourScript.enabled = true;
 
@@ -177,6 +184,7 @@ public class MyAnky : Agent
         closestHazardDist = 100;
         closestHazard = null;
 
+
         //Ensure a dino cannot be seen in stereo and mono vision
         //if dino is in stereo vision
         foreach (Transform sDino in eyes.stereoVisibleTargets)
@@ -217,14 +225,11 @@ public class MyAnky : Agent
 			}
 		}
 
+
         if (predatorsInRange.Count > 0)
         {
             averageTargetPos = new Vector3(averageTargetPos.x / predatorsInRange.Count, averageTargetPos.y / predatorsInRange.Count, averageTargetPos.z / predatorsInRange.Count);
-            
-        }
-        else
-        {
-            faceBehaviourScript.enabled = false;
+            myTarget.transform.position = averageTargetPos;
         }
     }
 

@@ -7,7 +7,8 @@ using System;
 public class EatingState : State<MyAnky>
 {
     private static EatingState _instance;
-
+    private float timeToEat = 2;
+    public float timeToWait = 2;
 
     private EatingState()
     {
@@ -37,17 +38,39 @@ public class EatingState : State<MyAnky>
         Debug.Log("Entering Eating State");
         _owner.anim.SetBool("isEating", true);
         _owner.setCurrentState(MyAnky.ankyState.EATING);
+        timeToEat = 0;
     }
 
     public override void ExitState(MyAnky _owner)
     {
         Debug.Log("Exiting Eating State");
         _owner.anim.SetBool("isEating", false);
+        timeToEat = 0;
     }
 
     public override void UpdateState(MyAnky _owner)
     {
+        if (timeToEat <= 0)
+        {
+            //Eat   
+            _owner.myStats.hunger += _owner.eat;
+            timeToEat = timeToWait;
+        }
+        timeToEat -= Time.deltaTime;
 
-
+        //If we still need to eat
+        if (_owner.myStats.hunger <= 100)
+        {
+            //Alert
+            if (_owner.predatorsInRange.Count > 0)
+            {
+                _owner.stateMachine.ChangeState(AlertState.Instance);
+            }
+        }
+        else if (_owner.myStats.hunger >= 100)
+        {
+            _owner.myStats.hunger = 100;
+            _owner.stateMachine.ChangeState(GrazingState.Instance);
+        }
     }
 }

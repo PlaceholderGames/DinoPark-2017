@@ -10,7 +10,6 @@ public class AttackingState : State<MyAnky>
     private float attackCooldown = 2;
     private float counter = 2;
     private List<Transform> targetInRange;
-    public GameObject pointToAim = null;
 
     private AttackingState()
     {
@@ -41,6 +40,7 @@ public class AttackingState : State<MyAnky>
         _owner.anim.SetBool("isAttacking", true);
         _owner.anim.SetBool("isAlerted", true);
         _owner.setCurrentState(MyAnky.ankyState.ATTACKING);
+        _owner.wanderBehaviourScript.enabled = false;
         targetInRange = new List<Transform>();
     }
 
@@ -48,6 +48,7 @@ public class AttackingState : State<MyAnky>
     {
         Debug.Log("Exiting Attacking State");
         _owner.anim.SetBool("isAttacking", false);
+        _owner.faceBehaviourScript.enabled = false;
     }
 
     public override void UpdateState(MyAnky _owner)
@@ -93,14 +94,21 @@ public class AttackingState : State<MyAnky>
             {
                 //What to do if we are still attacking
                 //Turn to face our main target
-
+                //=============================
+                //
+                //   Needs fixing, face script appears not to work
+                //  
+                //=============================
                 foreach (Transform target in targetInRange)
                 {
                     _owner.averageTargetPos += target.position;
                 }
 
                 _owner.averageTargetPos = new Vector3(_owner.averageTargetPos.x / targetInRange.Count, _owner.averageTargetPos.y / targetInRange.Count, _owner.averageTargetPos.z / targetInRange.Count);
+                _owner.myTarget.transform.position = _owner.averageTargetPos;
 
+               // _owner.faceBehaviourScript.target = _owner.myTarget;
+               // _owner.faceBehaviourScript.enabled = true;
 
                 //every 2 seconds, swing our tail/ attack
                 if (counter <= 0)

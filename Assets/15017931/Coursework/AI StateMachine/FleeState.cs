@@ -38,7 +38,7 @@ public class FleeState : State<MyAnky>
         _owner.anim.SetBool("isFleeing", true);
         _owner.anim.SetBool("isAlerted", true);
         _owner.setCurrentState(MyAnky.ankyState.FLEEING);
-        _owner.fleeBehaviourScript.target = _owner.closestHazard.gameObject;
+        _owner.fleeBehaviourScript.target = _owner.myTarget.gameObject;
         _owner.fleeBehaviourScript.enabled = true;
         waitForSeconds = 2;
     }
@@ -69,7 +69,6 @@ public class FleeState : State<MyAnky>
         //Check if we are dead
         if (_owner.myStats.health <= 0)
         {
-            Debug.Log("WE are Dead");
             _owner.stateMachine.ChangeState(DeadState.Instance);
         }
         //If we can no longer see a predator
@@ -89,7 +88,6 @@ public class FleeState : State<MyAnky>
             //If we are being attacked and can see our target
             if (_owner.closestHazardDist < _owner.attackRange)
             {
-                Debug.Log("ATTACK");
                 if (_owner.myStats.health <= 100 && _owner.myStats.health >= 30)
                 {
                     _owner.stateMachine.ChangeState(AttackingState.Instance);

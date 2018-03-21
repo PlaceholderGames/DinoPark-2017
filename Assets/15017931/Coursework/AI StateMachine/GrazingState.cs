@@ -57,12 +57,29 @@ public class GrazingState : State<MyAnky>
             _owner.stateMachine.ChangeState(AlertState.Instance);
         }
         //Eating
-        if(_owner.myStats.hunger < 80)
-            _owner.stateMachine.ChangeState(EatingState.Instance);
+        if(_owner.myStats.hunger < 50)
+            //If we arent on grass, go to grass
+            if (_owner.gameObject.transform.position.y < 52 || _owner.gameObject.transform.position.y > 94)
+            {
+                //Use A* to find closest point on map that is at y 52 - 94 (grass)
+            }
+            else
+            {
+                _owner.stateMachine.ChangeState(EatingState.Instance);
+            }
 
         //Drinking
-        if (_owner.myStats.thirst < 80)
-            _owner.stateMachine.ChangeState(DrinkingState.Instance);
+        if (_owner.myStats.thirst < 50)
+
+            //If we arent on water, go to water
+            if (_owner.gameObject.transform.position.y > 36)
+            {
+                //Use A* to find closest point on map that is at y 36 or less (water level)
+            }
+            else
+            {
+                _owner.stateMachine.ChangeState(DrinkingState.Instance);
+            }
 
         //Idle
         //_owner.stateMachine.ChangeState(IdleState.Instance);
