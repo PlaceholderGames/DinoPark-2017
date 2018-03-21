@@ -15,10 +15,10 @@ public class FieldOfView : MonoBehaviour
     public LayerMask targetMask;
     //public LayerMask obstacleMask; // Not using raytracing to determine visibility right now
 
-    [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
+    //[HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
     public List<Transform> visibleTargets = new List<Transform>(); // this is the list of visible dinosaurs
 
-    [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
+    //[HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
     public List<Transform> stereoVisibleTargets = new List<Transform>(); // this is the list of visible dinosaurs in stereo
 
     private void Start()
