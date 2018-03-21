@@ -65,6 +65,9 @@ public class MyAnky : Agent
         anim.SetBool("isFleeing", false);
         anim.SetBool("isDead", false);
         anim.SetFloat("speedMod", 1.0f);
+
+
+        ankySeek.target = Water;
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
         base.Start();

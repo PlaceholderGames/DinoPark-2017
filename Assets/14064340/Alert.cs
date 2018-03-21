@@ -58,8 +58,13 @@ public class AlertState : State<MyAnky>
             else if (Distance < 5)
             {
                 _owner.stateMachine.ChangeState(AttackState.Instance);
-            };
-        };
-
+            }
+   
+        }
+        if(_owner.Enemies.Count < 1)
+            {
+                Debug.Log("back to graze");
+                _owner.stateMachine.ChangeState(GrazeState.Instance);
+            } 
     }
 }

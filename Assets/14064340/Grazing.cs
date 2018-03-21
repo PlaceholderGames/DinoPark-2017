@@ -49,9 +49,9 @@ public class GrazeState : State<MyAnky>
         {
             _owner.stateMachine.ChangeState(AlertState.Instance);
         }
-        else if (_owner.hydration < 50)
+        if (_owner.hydration < 95)
         {
-            _owner.ankySeek.target = _owner.Water;
+
             _owner.stateMachine.ChangeState(DrinkingState.Instance);
         }
         //for (int i = 0; i < _owner.fov.visibleTargets.Count; i++)
