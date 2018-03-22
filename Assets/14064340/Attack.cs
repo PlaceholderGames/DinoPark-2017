@@ -31,6 +31,7 @@ public class AttackState : State<MyAnky>
         _owner.health -= Time.deltaTime;
 
     }
+
     public override void EnterState(MyAnky _owner)
     {
         _owner.anim.SetBool("isAttacking", true);
@@ -45,9 +46,17 @@ public class AttackState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        if (_owner.switchState)
+        if(_owner.Enemies.Count > 0)
+        {
+           //_owner.
+
+        }
+        if(_owner.Enemies.Count == 0)
         {
             _owner.stateMachine.ChangeState(AlertState.Instance);
         }
+       
+
+
     }
 }

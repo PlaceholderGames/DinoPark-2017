@@ -81,6 +81,17 @@ public class MyAnky : Agent
       
     }
 
+    public bool takeDamage(int damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            DestroyObject(gameObject);
+            return true;
+        }
+        return false;
+    }
+
     // Update is called once per frame
     protected override void Update()
     {
@@ -96,6 +107,13 @@ public class MyAnky : Agent
         {
             saturation -= (Time.deltaTime * 0.1) * 1.0;
         }
+
+        if (hydration <= 0 || saturation <=0 || health <= 0)
+        {
+
+            stateMachine.ChangeState(DeadState.Instance);
+        }
+        
 
         // Alerted - up to the student what you do here
         Enemies.Clear();

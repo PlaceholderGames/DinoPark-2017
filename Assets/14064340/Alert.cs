@@ -55,11 +55,11 @@ public class AlertState : State<MyAnky>
                 _owner.ankyFlee.target = x.gameObject;
 
             }
-            else if (Distance < 5)
+            else if (Distance < 10)//5 was too close
             {
-                //_owner.stateMachine.ChangeState(AttackState.Instance);
-                _owner.stateMachine.ChangeState(FleeingState.Instance);
-                _owner.ankyFlee.target = x.gameObject;
+                _owner.stateMachine.ChangeState(AttackState.Instance);
+               // _owner.stateMachine.ChangeState(FleeingState.Instance);
+              //  _owner.ankyFlee.target = x.gameObject;
             }
 
         }

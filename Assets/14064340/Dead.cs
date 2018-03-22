@@ -31,6 +31,9 @@ public class DeadState : State<MyAnky>
     {
         _owner.anim.SetBool("isDead", true);
         Debug.Log("entering Dead state");
+        _owner.ankyFlee.enabled = false;
+        _owner.ankySeek.enabled = false;
+        _owner.ankyWander.enabled = false;
     }
 
     public override void ExitState(MyAnky _owner)
@@ -41,9 +44,6 @@ public class DeadState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        if (_owner.switchState)
-        {
-            _owner.stateMachine.ChangeState(DeadState.Instance);
-        }
+       //you are dead now.
     }
 }
