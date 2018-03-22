@@ -46,7 +46,7 @@ public class WanderingState : State<MyAnky>
     public override void UpdateState(MyAnky _owner)
     {
         _owner.currentState = MyAnky.ankyState.GRAZING;
-        _owner.ankyFace.enabled = false;
+        //_owner.ankyFace.enabled = false;
         for (int i = 0; i < _owner.ankyView.visibleTargets.Count; i++)
         {
             Transform target = _owner.ankyView.visibleTargets[i];
@@ -78,10 +78,13 @@ public class WanderingState : State<MyAnky>
             _owner.anim.SetBool("isDead", false);
         }
         _owner.anky = 0;
-
-        if (_owner.transform.position.y < 35.5 && _owner.anim.GetBool("isGrazing") == true)
+        if (_owner.health > 0)
         {
-            _owner.stateMachine.ChangeState(DrinkingState.Instance); 
+            if (_owner.water < 50 && _owner.anim.GetBool("isGrazing") == true || _owner.health < 30 && _owner.anim.GetBool("isGrazing") == true )
+            {
+                _owner.anky = 1;
+                _owner.stateMachine.ChangeState(DrinkingState.Instance);
+            }
         }
         _owner.anky = 0;
 

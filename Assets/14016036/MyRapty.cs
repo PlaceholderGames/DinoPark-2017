@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class MyRapty : Agent
 {
+    public int Health = 100;
     public enum raptyState
     {
         IDLE,       // The default state on creation.

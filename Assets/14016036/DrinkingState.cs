@@ -49,7 +49,7 @@ public class DrinkingState : State<MyAnky>
             _owner.anky = 1;
         }
         _owner.anim.SetBool("isDrinking", true);
-        if (_owner.anim.GetBool("isDrinking") == true && _owner.transform.position.y < 35.5)
+        if (_owner.anim.GetBool("isDrinking") == true && _owner.transform.position.y > 38.5)
         {
             _owner.anim.SetBool("isIdle", false);
             _owner.anim.SetBool("isEating", false);
@@ -58,12 +58,25 @@ public class DrinkingState : State<MyAnky>
             _owner.anim.SetBool("isAttacking", false);
             _owner.anim.SetBool("isFleeing", false);
             _owner.anim.SetBool("isDead", false);
-            //Debug.Log("its getting in this Drink");
-            //StartCoroutine(myCoroutine());
-            _owner.health = 100;
+
+            _owner.AStarTarget.transform.position = _owner.waterLocation();
+            _owner.AStarSearch.target = _owner.AStarTarget;
+
+            if(_owner.PathFollowerO.path == null || _owner.PathFollowerO.path.nodes.Count > 1)
+            {
+                _owner.PathFollowerO.path = _owner.AStarSearch.path;
+            }
+
+            _owner.move(_owner.PathFollowerO.getDirectionVector());
         }
-        else
+        else if (_owner.transform.position.y <= 38.5)
         {
+
+            //IN HERE INCREMENT WATER VALUE AS YOU ARE IN WATER
+            // THEN HAVE EXIT CONDITION BASED ON WATER LEVEL
+            _owner.water = _owner.water + 20;
+            _owner.health = _owner.health + 20;
+            _owner.animClip.Play("Ank_eat");
             if (_owner.anky == 1)
             {
                 _owner.anim.SetBool("isGrazing", true);

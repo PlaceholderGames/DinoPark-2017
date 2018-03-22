@@ -60,16 +60,17 @@ public class AlertState : State<MyAnky>
         _owner.anim.SetBool("isDead", false);
         int checker = 0;
         _owner.ankyFlee.enabled = false;
-        _owner.ankyFace.enabled = false;
+        //_owner.ankyFace.enabled = false;
         _owner.ankySeek.enabled = false;
         _owner.ankyWander.enabled = true;
         _owner.ankyEnemies.Clear();
 
-        if (_owner.transform.position.y < 35.5 && _owner.anim.GetBool("isAlerted") == true)
+        if (_owner.health > 0)
         {
-            _owner.stateMachine.ChangeState(DrinkingState.Instance);
-            //_owner.currentState = MyAnky.ankyState.DRINKING;
-            
+            if (_owner.water < 50 && _owner.anim.GetBool("isGrazing") == true || _owner.health < 30 && _owner.anim.GetBool("isGrazing") == true)
+            {
+                _owner.stateMachine.ChangeState(DrinkingState.Instance);
+            }
         }
         for (int i = 0; i < _owner.ankyView.visibleTargets.Count; i++)
         {
@@ -161,17 +162,45 @@ public class AlertState : State<MyAnky>
             }
         }
 
-        //details = _owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, _owner.ankyTerrain.terrainData.detailWidth, _owner.ankyTerrain.terrainData.detailHeight, 0);
-        //
-        //details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] = changeLayer;
-        //changeLayer = changeLayer + 1;
-        //if(changeLayer == 60)
-        //{
-        //    changeLayer = 0;
-        //}
-        //Debug.Log(changeLayer);
-        //_owner.ankyTerrain.terrainData.SetDetailLayer(0, 0, 0, details);
-       // _owner.stateMachine.ChangeState(EatingState.Instance);
+        for(int i = 0; i < _owner.ankyView.visibleTargets.Count; i++)
+        {
+            if(_owner.ankyView.visibleTargets[i].tag == "Raptor")
+            {
+                _owner.ankyEnemies.Add(_owner.ankyView.visibleTargets[i]);
+            }
+        }
+        for (int i = 0; i < _owner.ankyView.stereoVisibleTargets.Count; i++)
+        {
+            if (_owner.ankyView.stereoVisibleTargets[i].tag == "Raptor")
+            {
+                _owner.ankyEnemies.Add(_owner.ankyView.stereoVisibleTargets[i]);
+            }
+        }
+        for(int i = 0; i < _owner.ankyEnemies.Count; i++)
+        {
+            target = _owner.ankyView.stereoVisibleTargets[i];
+            if (_owner.ankyEnemies[i].tag == "Raptor" && Vector3.Distance(target.position, _owner.transform.position) < 40 && _owner.health > 80)
+            {
+                _owner.attackableEnemy.Add(target);
+                _owner.stateMachine.ChangeState(AttackingState.Instance);
+            }
+        }
     }
 
 }
+
+
+
+
+
+//details = _owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, _owner.ankyTerrain.terrainData.detailWidth, _owner.ankyTerrain.terrainData.detailHeight, 0);
+//
+//details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] = changeLayer;
+//changeLayer = changeLayer + 1;
+//if(changeLayer == 60)
+//{
+//    changeLayer = 0;
+//}
+//Debug.Log(changeLayer);
+//_owner.ankyTerrain.terrainData.SetDetailLayer(0, 0, 0, details);
+// _owner.stateMachine.ChangeState(EatingState.Instance);

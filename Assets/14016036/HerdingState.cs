@@ -73,9 +73,9 @@ public class HerdingState : State<MyAnky>
             }
             Debug.Log(targetIndexValue);
             _owner.ankySeek.target = _owner.ankyFriendliesClose[targetIndexValue].gameObject;
-            _owner.ankyFace.target = _owner.ankyFriendliesClose[targetIndexValue].gameObject;
+            //_owner.ankyFace.target = _owner.ankyFriendliesClose[targetIndexValue].gameObject;
             _owner.ankySeek.enabled = true;
-            _owner.ankyFace.enabled = true;
+            //_owner.ankyFace.enabled = true;
             _owner.ankyWander.enabled = false;
         }
         else if (_owner.ankyFriendliesFar.Count != 0)
@@ -92,9 +92,9 @@ public class HerdingState : State<MyAnky>
                 }
             }
             _owner.ankySeek.target = _owner.ankyFriendliesFar[targetIndexValue].gameObject;
-            _owner.ankyFace.target = _owner.ankyFriendliesClose[targetIndexValue].gameObject;
+            //_owner.ankyFace.target = _owner.ankyFriendliesClose[targetIndexValue].gameObject;
             _owner.ankySeek.enabled = true;
-            _owner.ankyFace.enabled = true;
+            //_owner.ankyFace.enabled = true;
             _owner.ankyWander.enabled = false;
         }
         if (Vector3.Distance(_owner.ankySeek.target.transform.position, _owner.transform.position) < 16)

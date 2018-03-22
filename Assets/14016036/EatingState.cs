@@ -34,12 +34,12 @@ public class EatingState : State<MyAnky>
 
     public override void EnterState(MyAnky _owner)
     {
-        Debug.Log("Entering Fleeing State");
+        Debug.Log("Entering Eating State");
     }
 
     public override void ExitState(MyAnky _owner)
     {
-        Debug.Log("Exiting Fleeing State");
+        Debug.Log("Exiting Eating State");
     }
 
     public override void UpdateState(MyAnky _owner)
@@ -60,11 +60,12 @@ public class EatingState : State<MyAnky>
             _owner.health = 100;
             _owner.time = 5;
             _owner.hunger = _owner.hunger + 20;
+            _owner.animClip.Play("Ank_eat");
             details = _owner.Terrain.Terrain.terrainData.GetDetailLayer(0, 0, _owner.Terrain.Terrain.terrainData.detailWidth, _owner.Terrain.Terrain.terrainData.detailHeight, 0);
             
             details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] = 6;
             
-            _owner.ankyTerrain.terrainData.SetDetailLayer(0, 0, 0, details);
+            _owner.Terrain.Terrain.terrainData.SetDetailLayer(0, 0, 0, details);
             if (_owner.anky == 1)
             {
                 _owner.stateMachine.ChangeState(WanderingState.Instance);
