@@ -34,7 +34,10 @@ public class MyIdleState : MyState<MyAnky> {
     }
     public override void UpdateState(MyAnky _owner)
     {
+        Debug.Log("idle");
+        _owner.turnback.enabled = false;
         _owner.flee.enabled = false;
+        _owner.seek.enabled = false;
         _owner.wander.enabled = true;
         //Alerted
         foreach (Transform animal in _owner.alerted.visibleTargets)
@@ -46,24 +49,30 @@ public class MyIdleState : MyState<MyAnky> {
             }
         }
         //Drinking
-        if (_owner.transform.position.y < 35 && _owner.health < 80)
+        if (_owner.health < 80)
         {
             _owner.mySM.ChangeState(MyDrinkingState.Instance);
             return;
         }
         //Herding
-        if (_owner.alerted.visibleTargets.Count == 1)
+        if (_owner.view.visibleTargets.Count == 1)
         {
-            if (_owner.herding.visibleTargets.Count > 1)
+            if (_owner.alerted.visibleTargets.Count > 1)
             {
-                foreach (Transform item in _owner.herding.visibleTargets)
+                foreach (Transform item in _owner.alerted.visibleTargets)
                 {
                     if (item.gameObject.tag == "Rapty")
                         return;
                 }
-                _owner.aS.target = _owner.herding.visibleTargets[0].gameObject;
-                _owner.mySM.ChangeState(MyHerdingState.Instance);
-                return;
+                foreach (var dino in _owner.alerted.visibleTargets)
+                {
+                    if (dino.position != _owner.transform.position)
+                    {
+                        Debug.Log("Test");
+                        _owner.mySM.ChangeState(MyHerdingState.Instance);
+                        return;
+                    }
+                }
             }
         }
     }

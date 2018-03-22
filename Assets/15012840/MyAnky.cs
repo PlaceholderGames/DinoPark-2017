@@ -21,6 +21,8 @@ public class MyAnky : Agent
     public Animator anim;
     private ankyState state;
 
+    public GameObject[] waterArray;
+
     [Range(0, 100)]
     public int health = 30;
 
@@ -30,6 +32,8 @@ public class MyAnky : Agent
     public MyFlee flee;
     [HideInInspector]
     public MyDrinking drinking;
+    [HideInInspector]
+    public Flee turnback;
 
     [HideInInspector]
     public FieldOfView view;
@@ -37,6 +41,9 @@ public class MyAnky : Agent
     public FieldOfAlert alerted;
     [HideInInspector]
     public FieldOfGroup herding;
+    [HideInInspector]
+    public Seek seek;
+
     bool herdingBool = false;
 
     List<Transform> follow;
@@ -53,12 +60,13 @@ public class MyAnky : Agent
         mySM = new StateMachine<MyAnky>(this);
         view = GetComponent<FieldOfView>();
         alerted = GetComponent<FieldOfAlert>();
-        herding = GetComponent<FieldOfGroup>();
-        alerted.viewRadius = 100;
+        aS = GetComponent<AStarSearch>();
+
         wander = GetComponent<Wander>();
         drinking = GetComponent<MyDrinking>();
         flee = GetComponent<MyFlee>();
-        aS = GetComponent<AStarSearch>();
+        turnback = GetComponent<Flee>();
+        seek = GetComponent<Seek>();
     }
     protected override void Start()
     {
@@ -87,54 +95,7 @@ public class MyAnky : Agent
     {
         mySM.Update();
     }
-/*
-    protected override void Update()
-    {
-        TransformToState();
 
-        // Idle - should only be used at startup
-        if (state.ToString() == "IDLE")
-        {
-            ResetTheScripts();
-        }
-        // Eating - requires a box collision with a dead dino
-
-        // Drinking - requires y value to be below 32 (?)
-        else if (state.ToString() == "DRINKING")
-        {
-            Debug.Log("drink");
-            drinking.enabled = true;
-            drinking.Drink();
-        }
-        // Hunting - up to the student what you do here
-        // Fleeing - up to the student what you do here
-        else if (state.ToString() == "FLEEING")
-        {
-            flee.enabled = true;
-            Debug.Log("flee");
-            wander.enabled = false;
-        }
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-        else if (state.ToString() == "HERDING")
-        {
-            flee.enabled = true;
-            wander.enabled = false;
-            Debug.Log(view.visibleTargets.Count);
-            if (view.visibleTargets.Count > 1)
-            {
-                Debug.Log("here");
-                state = ankyState.IDLE;
-                flee.enabled = false;
-                wander.enabled = false;
-                return;
-            }
-        }
-        if (state.ToString() == "ALERTED")
-        {
-        }
-        base.Update();
-    }
-*/
     private void TransformToState()
     { 
     }

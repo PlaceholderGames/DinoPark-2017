@@ -34,12 +34,23 @@ public class MyHerdingState : MyState<MyAnky> {
     }
     public override void UpdateState(MyAnky _owner)
     {
+        /////////////////////////////////////
+        //herding targeting.
+        foreach (var dino in _owner.alerted.visibleTargets)
+        {
+            if (dino.position != _owner.transform.position)
+            {
+                _owner.seek.target = dino.gameObject;
+            }
+        }
         _owner.wander.enabled = false;
-        _owner.flee.enabled = true;
+        _owner.seek.enabled = true;
+        /////////////////////////////////////
 
+        //IDLE
         if (_owner.view.visibleTargets.Count > 1)
         {
-            foreach(Transform animal in _owner.view.visibleTargets)
+            foreach (Transform animal in _owner.view.visibleTargets)
             {
                 if (animal.tag == "Anky")
                 {
