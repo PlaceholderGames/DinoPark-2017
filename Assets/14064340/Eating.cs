@@ -37,7 +37,7 @@ public class EatingState : State<MyAnky>
 
     public override void ExitState(MyAnky _owner)
     {
-        _owner.anim.SetBool("isGrazing", false);
+        _owner.anim.SetBool("isEating", false);
         Debug.Log("exiting EatingState");
 
 
