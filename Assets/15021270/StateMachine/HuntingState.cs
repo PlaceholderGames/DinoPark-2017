@@ -78,7 +78,7 @@ public class HuntingState : State<AI>
             }
         }
 
-        if (_owner.health <= 70 && _owner.enemy == true)
+        if (_owner.health <= 80 && _owner.enemy == true)
         {
                 _owner.stateMachine.ChangeState(FleeingState.Instance);
         }

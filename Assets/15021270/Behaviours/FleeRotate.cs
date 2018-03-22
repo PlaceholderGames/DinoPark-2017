@@ -9,7 +9,7 @@ public class FleeRotate : AgentBehaviour {
             float targetOrientation = Mathf.Atan2(direction.x, direction.z);
             targetOrientation *= Mathf.Rad2Deg;
             
-            //Rotates the model and not field of view currently
+            //Rotates model and field of view correctly
             agent.orientation = targetOrientation - 180;
         }
 

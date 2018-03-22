@@ -45,9 +45,6 @@ public class AttackingState : State<AI>
 
     public override void UpdateState(AI _owner)
     {
-        //_owner.agent.SetSteering(_owner.pursue.GetSteering());
-        //_owner.agent.SetSteering(_owner.face.GetSteering());
-        
         if (_owner.hunger <= 0 || _owner.health <= 0)
         {
             _owner.stateMachine.ChangeState(DeadState.Instance);

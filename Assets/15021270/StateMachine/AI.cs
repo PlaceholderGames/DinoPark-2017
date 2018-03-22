@@ -7,13 +7,20 @@ public class AI : MonoBehaviour
 {
 
     public Animator anim;
-    public FieldOfView view;
+    
     public Face face;
     public Wander wander;
     public PursueRotate pursue;
     public Agent agent;
+
+    public FieldOfView view;
+
     public GameObject prey;
+    public GameObject friendly;
+
     public FleeRotate flee;
+    public AStarSearch Astar;
+    public ASPathFollower follower;
 
     //Can be changed depending on state
     //Hunting for example takes more energy
@@ -30,6 +37,8 @@ public class AI : MonoBehaviour
     public int thirst = 100;
     public int health = 100;
 
+    public bool alpha = false;
+    public bool returnToAlpha = false;
 
     public StateMachine<AI> stateMachine { get; set; }
 
@@ -42,6 +51,8 @@ public class AI : MonoBehaviour
         wander = GetComponent<Wander>();
         pursue = GetComponent<PursueRotate>();
         flee = GetComponent<FleeRotate>();
+        Astar = GetComponent<AStarSearch>();
+        follower = GetComponent<ASPathFollower>();
     }
 
     private void Start()
@@ -52,15 +63,29 @@ public class AI : MonoBehaviour
 
     private void Update()
     {
+        //if (follower.path.nodes.Count < 0 || follower.path == null)
+            //follower.path = Astar.path;
+
+        //move(follower.getDirectionVector());
+
         //un-specific changes to the raptor such as hunger slowly draining
         hungerTimer += Time.deltaTime;
         if(hungerTimer >= removeHunger)
         {
             hunger -= 1;
             hungerTimer = 0;
-            health -= 10;
-            Debug.Log(health);
+            //health -= 10;
+            //Debug.Log(health);
         }
         stateMachine.Update();
     }
+
+    public void move(Vector3 directionVector)
+    {
+        directionVector *= 10 * Time.deltaTime;
+
+        transform.Translate(directionVector, Space.World);
+        transform.Rotate(transform.position + directionVector);
+    }
+
 }

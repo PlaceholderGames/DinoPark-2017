@@ -43,6 +43,7 @@ public class FleeingState : State<AI>
 
     public override void ExitState(AI _owner)
     {
+        _owner.flee.enabled = false;
         _owner.enemy = false;
         _owner.fleeingTime = 0;
         _owner.pursue.orientation = 0;

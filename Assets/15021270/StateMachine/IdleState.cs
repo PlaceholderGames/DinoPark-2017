@@ -81,10 +81,32 @@ public class IdleState : State<AI>
             if (i.tag == "Anky")
             {
                 _owner.prey = i.gameObject;
-                Debug.Log(_owner.prey);
+                //Debug.Log(_owner.prey);
                 _owner.stateMachine.ChangeState(HuntingState.Instance);
             }
         }
-        
+
+        if(Vector3.Distance(_owner.transform.position, _owner.friendly.transform.position) > 80)
+        {
+            _owner.returnToAlpha = true;
+        }
+        else if(Vector3.Distance(_owner.transform.position, _owner.friendly.transform.position) < 50)
+        {
+            _owner.returnToAlpha = false;
+        }
+
+        if(_owner.returnToAlpha)
+        {
+            _owner.agent.maxSpeed = 10;
+            _owner.Astar.target = _owner.friendly;
+            _owner.move(_owner.follower.getDirectionVector());
+            _owner.wander.enabled = false;
+        }
+        else
+        {
+            _owner.agent.maxSpeed = 3;
+            _owner.wander.enabled = true;
+        }
+            
     }
 }
