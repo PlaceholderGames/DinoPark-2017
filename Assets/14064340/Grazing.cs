@@ -4,7 +4,7 @@ using Statestuff;
 public class GrazeState : State<MyAnky>
 {
     private static GrazeState _instance;
-
+    int[,] grass;
     private GrazeState()
     {
         if (_instance != null)
@@ -50,10 +50,17 @@ public class GrazeState : State<MyAnky>
         {
             _owner.stateMachine.ChangeState(AlertState.Instance);
         }
-        if (_owner.hydration < 95)
+        if (_owner.hydration < 50)
         {
 
             _owner.stateMachine.ChangeState(DrinkingState.Instance);
+        }
+      
+        grass = _owner.GrassScript.terrain.terrainData.GetDetailLayer(0, 0, _owner.GrassScript.terrain.terrainData.detailWidth, _owner.GrassScript.terrain.terrainData.detailHeight, 0);
+        if (_owner.saturation < 99 && grass[(int)_owner.transform.position.z, (int)_owner.transform.position.x] != 0)
+        {
+
+            _owner.stateMachine.ChangeState(EatingState.Instance);
         }
 
         foreach (Transform x in _owner.friends)

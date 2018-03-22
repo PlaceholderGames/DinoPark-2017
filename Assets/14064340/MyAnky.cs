@@ -21,6 +21,9 @@ public class MyAnky : Agent
     public Flee ankyFlee;
     public Wander ankyWander;
     public Seek ankySeek;
+    public GrassScript GrassScript;
+    //public AStarSearch ankyAS;
+    //public ASPathFollower ankyPath;
     public bool switchState = false;
     public double saturation = 100;
     public double hydration = 100;
@@ -56,7 +59,8 @@ public class MyAnky : Agent
         //ankyWander = GetComponent<Wander>();
         //ankySeek = GetComponent<Seek>();
         //fov = GetComponent<FieldOfView>();
-
+        //ankyAS = GetComponent<AStarSearch>();
+        //ankyPath = GetComponent<ASPathFollower>();
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
         anim.SetBool("isEating", false);
@@ -68,6 +72,7 @@ public class MyAnky : Agent
         anim.SetBool("isDead", false);
         anim.SetFloat("speedMod", 1.0f);
 
+        
 
         ankySeek.target = Water;
         // This with GetBool and GetFloat allows 

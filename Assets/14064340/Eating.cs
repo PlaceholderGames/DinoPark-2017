@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using Statestuff;
 
-public class EatingingState : State<MyAnky>
+public class EatingState : State<MyAnky>
 {
-    private static EatingingState _instance;
+    private static EatingState _instance;
 
-    private EatingingState()
+    private EatingState()
     {
         if (_instance != null)
         {
@@ -15,13 +15,13 @@ public class EatingingState : State<MyAnky>
 
     }
 
-    public static EatingingState Instance
+    public static EatingState Instance
     {
         get
         {
             if (_instance == null)
             {
-                new EatingingState();
+                new EatingState();
             }
             return _instance;
         }
@@ -31,19 +31,24 @@ public class EatingingState : State<MyAnky>
     {
         _owner.anim.SetBool("isEating", true);
         Debug.Log("entering Eating state");
+        _owner.ankyWander.enabled = false;
+
     }
 
     public override void ExitState(MyAnky _owner)
     {
         _owner.anim.SetBool("isGrazing", false);
         Debug.Log("exiting EatingState");
+
+
     }
 
     public override void UpdateState(MyAnky _owner)
     {
-        if (_owner.switchState)
+        _owner.saturation += (Time.deltaTime * 2.0) * 1;
+        if (_owner.saturation >= 100)
         {
-            _owner.stateMachine.ChangeState(AlertState.Instance);
+            _owner.stateMachine.ChangeState(GrazeState.Instance);
         }
     }
 }
