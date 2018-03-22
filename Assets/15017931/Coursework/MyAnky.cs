@@ -6,11 +6,12 @@ using StateMachine;
 [System.Serializable]
 public struct dinoStats
 {
-    public int health;
-    public int hunger;
-    public int thirst;
-    public int energy;
-    public int deathEnergy;
+    public int speed;
+    public float health;
+    public float hunger;
+    public float thirst;
+    public float energy;
+    public float deathEnergy;
 }
 
 public class MyAnky : Agent
@@ -34,6 +35,7 @@ public class MyAnky : Agent
     public dinoStats myStats;
     public Animator anim;
     public GameObject myTarget;
+    public GameObject waterTarget;
     [Space(10)]
 
     // list of objects we want to stay away from
@@ -62,6 +64,8 @@ public class MyAnky : Agent
     public Flee fleeBehaviourScript;
 	public Wander wanderBehaviourScript;
     public Face faceBehaviourScript;
+    public AStarSearch aStarScript;
+    public ASPathFollower pathFollowerScript;
     [Space(10)]
 
     //If we are attacked 
@@ -70,7 +74,10 @@ public class MyAnky : Agent
     public int drink = 5;
     public int eat = 5;
     [Header("What We Lose")]
-    public int energyOverTime = 5;
+    public float energyLossPerSecond = 0.5f;
+    public float healthLossPerSecond = 0.5f;
+    public float hungerLossPerSecond = 0.5f;
+    public float thirstLossPerSecond = 0.5f;
     [Space(10)]
 
 
@@ -92,6 +99,8 @@ public class MyAnky : Agent
     [Header("Death")]
     public int decayAmmount = 5;
 
+
+
     public StateMachine<MyAnky> stateMachine { get; set; }
 
 
@@ -102,6 +111,8 @@ public class MyAnky : Agent
 		fleeBehaviourScript = GetComponent<Flee> ();
 		wanderBehaviourScript = GetComponent<Wander> ();
         faceBehaviourScript = GetComponent<Face>();
+        aStarScript = GetComponent<AStarSearch>();
+        pathFollowerScript = GetComponent<ASPathFollower>();
 
 		currentState = ankyState.IDLE;
 
@@ -114,9 +125,10 @@ public class MyAnky : Agent
         myTarget = new GameObject("MyTarget");
         myTarget.transform.SetParent(this.transform);
         //myTarget = Instantiate(myTarget, this.transform);
-      
+
 
         //set dino stats
+        myStats.speed = 10;
         myStats.health = 100;
         myStats.hunger = 100;
         myStats.thirst = 100;
@@ -155,6 +167,8 @@ public class MyAnky : Agent
         stateMachine.Update();
         Debug.DrawLine(this.transform.position, averageTargetPos);
 
+        updateStats();
+
         base.Update();
     }
 
@@ -164,10 +178,62 @@ public class MyAnky : Agent
     protected override void LateUpdate()
     {
         blink();
-        //checkStatus ();
         base.LateUpdate();
     }
 
+
+    /// <summary>
+    /// Method that updates the dinos stats every second
+    /// this is used to drain hunger, thrist, health
+    /// </summary>
+    void updateStats()
+    {
+        //convert thrist to energy
+        if(myStats.thirst > 0 && myStats.energy <= 80)
+        {
+            myStats.thirst -= thirstLossPerSecond * Time.deltaTime;
+            myStats.energy += thirstLossPerSecond * Time.deltaTime;
+        }
+
+        //convert hunger to energy 
+        if (myStats.hunger > 0 && myStats.energy <= 80)
+        {
+            myStats.hunger -= healthLossPerSecond * Time.deltaTime;
+            myStats.energy += hungerLossPerSecond * Time.deltaTime;
+        }
+
+        //if we have energy, convert this to health
+        if(myStats.energy > 30 && myStats.health < 100)
+        {
+            myStats.energy -= energyLossPerSecond * Time.deltaTime;
+            myStats.health += energyLossPerSecond * Time.deltaTime;
+        }
+
+        //if we have no energy, depleat life
+        if (myStats.energy <= 0)
+        {
+            myStats.energy = 0;
+
+            //Lose health over time
+            myStats.health -= healthLossPerSecond * Time.deltaTime;
+        }
+        //lose energy over time
+        else
+        {
+            myStats.energy -= energyLossPerSecond * Time.deltaTime;
+        }
+    
+        //ensure we cant go over 100 
+        if(myStats.energy >=100)    
+            myStats.energy = 100;
+        if(myStats.health >= 100)
+            myStats.health = 100;
+        if (myStats.thirst >= 100)
+            myStats.thirst = 100;
+        if (myStats.hunger >= 100)
+            myStats.hunger = 100;
+        
+    }
 	/// <summary>
 	/// Causes the dino to 'blink' at the end of every frame,
 	/// this allows us to refresh our predators in range list
@@ -247,14 +313,24 @@ public class MyAnky : Agent
     }
 
 
+   public void move(Vector3 directionVector)
+    {
+        directionVector *= myStats.speed * Time.deltaTime;
+
+        transform.Translate(directionVector, Space.World);
+        transform.LookAt(transform.position + directionVector);
+
+    }
+
+
     /// <summary>
     /// Method that allows dino to decay based on a value passed in
     /// this is to be used and determined by the dead state in or FSM
     /// </summary>
     /// <param name="decay"></param>
-    public int decay(int decay)
+    public float decay(float decay)
     {
-        int energyReturn = 0;
+        float energyReturn = 0;
 
         //if we have no energy left
         if (myStats.deathEnergy <= 0)

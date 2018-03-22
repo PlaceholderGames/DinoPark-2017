@@ -69,6 +69,8 @@ public class FleeState : State<MyAnky>
         //Check if we are dead
         if (_owner.myStats.health <= 0)
         {
+            _owner.anim.SetBool("isAlerted", false);
+            _owner.anim.SetBool("isDead", true);
             _owner.stateMachine.ChangeState(DeadState.Instance);
         }
         //If we can no longer see a predator
@@ -93,12 +95,8 @@ public class FleeState : State<MyAnky>
                     _owner.stateMachine.ChangeState(AttackingState.Instance);
                 }
             }
-
-
-
             //Remain in our currnet state
             waitForSeconds = 2;
-
         }
     }
 }

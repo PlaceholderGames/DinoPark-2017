@@ -65,13 +65,22 @@ public class AlertState : State<MyAnky>
         }
 
 
-        //Attack
-        //_owner.stateMachine.ChangeState(AttackingState.Instance);
-         
         //Fleeing
-        if (_owner.closestHazardDist <= _owner.fleeDistance)
+        if (_owner.closestHazardDist <= _owner.fleeDistance  || _owner.myStats.health < 10)
         {
             _owner.stateMachine.ChangeState(FleeState.Instance);
+        }
+        //Attacking
+        else if (_owner.predatorsInRange.Count > 0)
+        {
+            //If we are being attacked and can see our target
+            if (_owner.closestHazardDist < _owner.attackRange)
+            {
+                if (_owner.myStats.health <= 100 && _owner.myStats.health >= 30)
+                {
+                    _owner.stateMachine.ChangeState(AttackingState.Instance);
+                }
+            }
         }
         //Grazing
         else if (_owner.predatorsInRange.Count <= 0)
@@ -88,6 +97,5 @@ public class AlertState : State<MyAnky>
         {
             _owner.stateMachine.ChangeState(DrinkingState.Instance);
         }
-       
     }
 }

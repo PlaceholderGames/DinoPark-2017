@@ -50,8 +50,6 @@ public class DrinkingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-
-
         //We can only gain our thirst back after n... seconds
         if (timeToDrink <= 0)
         {
@@ -65,7 +63,7 @@ public class DrinkingState : State<MyAnky>
         //If we should still drink
         if (_owner.myStats.thirst <= 100)
         {
-
+          
             //Alert
             if (_owner.predatorsInRange.Count > 0)
             {

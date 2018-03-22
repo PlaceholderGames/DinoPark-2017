@@ -10,6 +10,10 @@ public class MapGrid : MonoBehaviour {
     public float heightThreshold = 1.0f; // The maximum height distance between each corner of a tile to determine if walkable
     public float seaLevel = 0.0f; // Minimum walkable height
 
+    //List of water tiles for A*
+    public List<MapTile> waterTile = new List<MapTile>();
+    public List<MapTile> foodTile = new List<MapTile>();
+
     [HideInInspector]
     public MapTile[,] tiles;
 
@@ -116,6 +120,20 @@ public class MapGrid : MonoBehaviour {
                 }
 
                 tiles[x, y].walkable = walkable;
+
+                //Water Tiles
+                if (tiles[x,y].walkable == false)
+                {
+                    waterTile.Add(tiles[x, y]);
+                }
+                //Food Tiles
+                if (tiles[x, y].walkable == true)
+                {
+                    if (tiles[x, y].position.y > 50 && tiles[x, y].position.y < 90)
+                    {
+                        foodTile.Add(tiles[x, y]);
+                    }
+                }
             }
         }
     }
@@ -153,5 +171,52 @@ public class MapGrid : MonoBehaviour {
         // Array [0] [1] [2] [3] [4] [5]
 
         return new Vector2(xTile, yTile);
+    }
+
+
+    public MapTile getWaterEdge(GameObject dino)
+    {
+        int chosenTile = 0;
+        float shortest = 0;
+
+        for(int i = 0; i < waterTile.Count;i++)
+        {
+            float distance = Vector3.Distance(dino.transform.position, waterTile[i].position);
+
+            if (shortest == 0)
+            {
+                shortest = distance;
+                chosenTile = i;
+            }
+            else if (shortest > distance)
+            {
+                shortest = distance;
+                chosenTile = i;
+            }
+        }
+        return waterTile[chosenTile];
+    }
+
+    public MapTile getFoodSource(GameObject dino)
+    {
+        int chosenTile = 0;
+        float shortest = 0;
+
+        for (int i = 0; i < foodTile.Count; i++)
+        {
+            float distance = Vector3.Distance(dino.transform.position, foodTile[i].position);
+
+            if (shortest == 0)
+            {
+                shortest = distance;
+                chosenTile = i;
+            }
+            else if (shortest > distance)
+            {
+                shortest = distance;
+                chosenTile = i;
+            }
+        }
+        return foodTile[chosenTile];
     }
 }
