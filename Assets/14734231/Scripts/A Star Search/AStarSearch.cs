@@ -9,9 +9,9 @@ public class AStarSearch : MonoBehaviour
 {
     public MapGrid mapGrid; // The MapGrid object applied over the map
     public GameObject target; // The agent to search for
-
+    
     private Vector3 targetPos; // Position of the target to be updated each frame
-
+    
     public ASPathNode nodeType;
 
     [HideInInspector]
@@ -43,29 +43,35 @@ public class AStarSearch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Exit early if agent and target hasn't moved, and the map hasn't changed
-        if (start == mapGrid.getTileFromPosition(transform.position) && target.transform.position == targetPos)
-            return;
-
-        start = mapGrid.getTileFromPosition(transform.position); // Set new start location
-
-        if (targetPos != target.transform.position) // If target has moved
+        if (target != null)
         {
-            targetPos = target.transform.position; // Set new target location
-            resetTiles();                          // Reset tile values
-            end = calculateHeuristics();           // Set end to the closest tile to target     
+            // Exit early if agent and target hasn't moved, and the map hasn't changed
+            if (start == mapGrid.getTileFromPosition(transform.position) && target.transform.position == targetPos)
+                return;
 
-            if (!end.walkable) // If the end isn't a walkable tile
-                end = findWalkableNeighbour(end); // Find the closest walkable tile
+            start = mapGrid.getTileFromPosition(transform.position); // Set new start location
 
-            if (start != end) // If the agent hasn't reached end
-                search(); // only search if the target has moved
+            if (targetPos != target.transform.position) // If target has moved
+            {
+                targetPos = target.transform.position; // Set new target location
+                resetTiles();                          // Reset tile values
+                end = calculateHeuristics();           // Set end to the closest tile to target     
+
+                if (!end.walkable) // If the end isn't a walkable tile
+                    end = findWalkableNeighbour(end); // Find the closest walkable tile
+
+                if (start != end) // If the agent hasn't reached end
+                    search(); // only search if the target has moved
+            }
+
+            if (start == end) // If the agent is already at the target's position, end
+                return;
+
+            createPath();
         }
 
-        if (start == end) // If the agent is already at the target's position, end
-            return;
+        
 
-        createPath();
     }
 
     /// <summary>
@@ -93,6 +99,7 @@ public class AStarSearch : MonoBehaviour
                 }
             }
         }
+        
 
         return mapGrid.tiles[(int)closestTile.x, (int)closestTile.y]; // Return the mapGrid tile with the lowest heuristic
     }
