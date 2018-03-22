@@ -115,7 +115,7 @@ public class WanderingState : State<MyAnky>
             }
         }
         details = _owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, _owner.ankyTerrain.terrainData.detailWidth, _owner.ankyTerrain.terrainData.detailHeight, 0);
-        if (details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] != 0)
+        if (details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] < 15)
         {
             if (_owner.health < 60)
             {

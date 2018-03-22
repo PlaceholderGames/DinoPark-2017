@@ -56,6 +56,8 @@ public class EatingState : State<MyAnky>
         _owner.time -= Time.deltaTime;
         if(_owner.time < 0)
         {
+            _owner.health = 100;
+            _owner.time = 5;
             if (_owner.anky == 1)
             {
                 _owner.stateMachine.ChangeState(WanderingState.Instance);
