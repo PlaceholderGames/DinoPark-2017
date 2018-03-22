@@ -24,37 +24,49 @@ public class MyAnky : Agent
     [Range(0, 100)]
     public int health = 30;
 
-    Wander wander;
-    MyFlee flee;
-    Drinking drinking;
-    
-    FieldOfView view;
-    FieldOfAlert alerted;
-    FieldOfGroup herding;
+    [HideInInspector]
+    public Wander wander;
+    [HideInInspector]
+    public MyFlee flee;
+    [HideInInspector]
+    public MyDrinking drinking;
+
+    [HideInInspector]
+    public FieldOfView view;
+    [HideInInspector]
+    public FieldOfAlert alerted;
+    [HideInInspector]
+    public FieldOfGroup herding;
     bool herdingBool = false;
 
     List<Transform> follow;
     List<Transform> ankies;
     public GameObject goal;
-    
+
+    public StateMachine<MyAnky> mySM;
     //public GameObject target;
+    [HideInInspector]
     public AStarSearch aS;
     // Use this for initialization
     void Awake()
     {
+        mySM = new StateMachine<MyAnky>(this);
         view = GetComponent<FieldOfView>();
         alerted = GetComponent<FieldOfAlert>();
         herding = GetComponent<FieldOfGroup>();
         alerted.viewRadius = 100;
         wander = GetComponent<Wander>();
-        drinking = GetComponent<Drinking>();
+        drinking = GetComponent<MyDrinking>();
         flee = GetComponent<MyFlee>();
+        aS = GetComponent<AStarSearch>();
     }
     protected override void Start()
     {
         state = ankyState.IDLE;
         ankies = new List<Transform>();
         anim = GetComponent<Animator>();
+
+        mySM.ChangeState(MyIdleState.Instance);
 
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -71,7 +83,11 @@ public class MyAnky : Agent
         base.Start();
        
     }
-
+    protected override void Update()
+    {
+        mySM.Update();
+    }
+/*
     protected override void Update()
     {
         TransformToState();
@@ -118,13 +134,9 @@ public class MyAnky : Agent
         }
         base.Update();
     }
-
+*/
     private void TransformToState()
-    {
-        //TransformToAlert();
-        TransformToFleeing();
-        //TransformToDrinking();
-        TransformToHerding();
+    { 
     }
 
     private void TransformToAlert()
@@ -173,42 +185,7 @@ public class MyAnky : Agent
             }
         }
     }
-    private void TransformToWonder()
-    {
-        ResetTheScripts();
-    }
-    private void TransformToHerding()
-    {
-        if (state.ToString() != "HERDING") {
 
-            //one because unity count the main anky aswell
-            if (alerted.visibleTargets.Count == 1)
-            {
-                if (herding.visibleTargets.Count > 1)
-                {
-                    foreach (Transform item in herding.visibleTargets)
-                    {
-                        if (item.gameObject.tag == "Rapty")
-                            return;
-                    }
-                    Debug.Log("HERDING");
-                    state = ankyState.HERDING;
-                    if (aS == null)
-                    {
-                        aS = GetComponent<AStarSearch>();
-                    }
-                    aS.target = herding.visibleTargets[0].gameObject;
-                }
-            }
-        }
-    }
-
-    private void ResetTheScripts()
-    {
-        wander.enabled = true;
-        flee.enabled = false;
-        drinking.enabled = false;
-    }
     protected override void LateUpdate()
     {
         base.LateUpdate();

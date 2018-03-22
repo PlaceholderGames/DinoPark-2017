@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Drinking : MonoBehaviour {
+public class MyDrinking : MonoBehaviour {
     MyAnky myAnky;
     void Awake()
     {
