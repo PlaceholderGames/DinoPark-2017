@@ -6,9 +6,10 @@ using StateStuff;
 
 public class MyAnky : Agent
 {
-    int grassDensity = 2000;
-    int patchDetail = 200;
-    
+    int grassDensity = 20;
+    int patchDetail = 20;
+    public float energy = 100;
+    public float hunger = 100;
     public Agent ankyAgent;
     public FieldOfView ankyView;
     public Flee ankyFlee;
@@ -22,6 +23,7 @@ public class MyAnky : Agent
     public Transform target;
     public int fleeingIndex = 0;
     public Terrain ankyTerrain;
+    public tScript Terrain;
     public float time = 5;
     public int health = 52;
     public int anky;
@@ -45,6 +47,7 @@ public class MyAnky : Agent
     // Use this for initialization
     protected override void Start()
     {
+        //Terrain = GetComponent<Terrain>
         stateMachine = new StateMachine<MyAnky>(this);
         currentState = ankyState.IDLE;
         stateMachine.ChangeState(WanderingState.Instance);
@@ -68,19 +71,20 @@ public class MyAnky : Agent
 
     protected override void Update()
     {
+        hunger -= Time.deltaTime * 0.7f;
         // Idle - should only be used at startup
         stateMachine.Update();
         // Eating - requires a box collision with a dead dino
 
-        // Alerted - up to the student what you do here
+        //// Alerted - up to the student what you do here
         //ankyTerrain.terrainData.SetDetailResolution(grassDensity, patchDetail);
-        //int[,] details; //= new int[grassDensity, patchDetail];
+        //int[,] details = new int[grassDensity, patchDetail];
         //for (int i = 0; i < grassDensity; i++)
         //{
         //    for (int j = 0; j < grassDensity; j++)
         //    {
         //        // Sample the height at this location (note GetHeight expects int coordinates corresponding to locations in the heightmap array)
-        //        float height = ankyTerrain.terrainData.GetHeight(i, j);
+        //        float height = ankyTerrain.terrainData.GetHeight(j, i);
         //        if (height < 10.0f)
         //        {
         //            details[i, j] = 6;
@@ -105,37 +109,6 @@ public class MyAnky : Agent
 
 
         //// aligning ToDo: figure out how to get it to to find the nearest anky in its circle and then move to a distance close by. 
-        //for (int i = 0; i < ankyView.visibleTargets.Count; i++)
-        //{
-        //    Transform target = ankyView.visibleTargets[i];
-        //    if (target.tag == "Anky")
-        //    {
-        //        ankyFriendlies.Add(target);
-        //    }
-        //}
-        //for (int i = 0; i < ankyFriendlies.Count; i++)
-        //{
-        //    Transform target = ankyFriendlies[i];
-        //    float dist = Vector3.Distance(target.position, this.transform.position);
-
-        //    if (closestDist > dist)
-        //    {
-        //        closestDist = dist;
-        //    }
-        //    //currentState = ankyState.ALIGNING;
-        //    //anim.SetBool("isAlerted", false);
-        //    //anim.SetBool("isDrinking", false);
-        //    //anim.SetBool("isGrazing", false);
-        //    //anim.SetBool("isIdle", false);
-        //    //anim.SetBool("isEating", false);
-        //    //anim.SetBool("isAttacking", false);
-        //    //anim.SetBool("isFleeing", false);
-        //    //anim.SetBool("isDead", false);
-        //    //anim.SetBool("isAligning", true);
-        //    ////ankyAlign.enabled = true;
-        //    //ankyWander.enabled = false;
-        //    //ankyAlign.target = ankyFriendlies[i].gameObject;
-        //}
 
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
         //ankyFriendliesFar.Clear();

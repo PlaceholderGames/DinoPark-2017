@@ -9,6 +9,7 @@ public class AlertState : State<MyAnky>
     private static AlertState _instance;
     Transform target;
     int[,] details;
+    int changeLayer = 0;
     private AlertState()
     {
         if (_instance != null)
@@ -150,10 +151,10 @@ public class AlertState : State<MyAnky>
                 }
             }
         }
-        details = _owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, _owner.ankyTerrain.terrainData.detailWidth, _owner.ankyTerrain.terrainData.detailHeight, 0);
-        if (details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] > 0)
+        details = _owner.Terrain.Terrain.terrainData.GetDetailLayer(0, 0, _owner.Terrain.Terrain.terrainData.detailWidth, _owner.Terrain.Terrain.terrainData.detailHeight, 0);
+        if (details[(int)_owner.transform.position.z, (int)_owner.transform.position.x] != 0)
         {
-            if (_owner.health < 60)
+            if (_owner.health < 60 || _owner.hunger < 50)
             {
                 _owner.anky = 1;
                 _owner.stateMachine.ChangeState(EatingState.Instance);
@@ -161,11 +162,16 @@ public class AlertState : State<MyAnky>
         }
 
         //details = _owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, _owner.ankyTerrain.terrainData.detailWidth, _owner.ankyTerrain.terrainData.detailHeight, 0);
-        
-        //details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] = 16;
-        
+        //
+        //details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] = changeLayer;
+        //changeLayer = changeLayer + 1;
+        //if(changeLayer == 60)
+        //{
+        //    changeLayer = 0;
+        //}
+        //Debug.Log(changeLayer);
         //_owner.ankyTerrain.terrainData.SetDetailLayer(0, 0, 0, details);
-        //_owner.stateMachine.ChangeState(EatingState.Instance);
+       // _owner.stateMachine.ChangeState(EatingState.Instance);
     }
 
 }

@@ -7,7 +7,7 @@ using System;
 public class EatingState : State<MyAnky>
 {
     private static EatingState _instance;
-
+    int[,] details;
     private EatingState()
     {
         if (_instance != null)
@@ -44,6 +44,7 @@ public class EatingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
+        _owner.ankyWander.enabled = false;
         _owner.anim.SetBool("isAlerted", false);
         _owner.anim.SetBool("isDrinking", false);
         _owner.anim.SetBool("isGrazing", false);
@@ -58,6 +59,12 @@ public class EatingState : State<MyAnky>
         {
             _owner.health = 100;
             _owner.time = 5;
+            _owner.hunger = _owner.hunger + 20;
+            details = _owner.Terrain.Terrain.terrainData.GetDetailLayer(0, 0, _owner.Terrain.Terrain.terrainData.detailWidth, _owner.Terrain.Terrain.terrainData.detailHeight, 0);
+            
+            details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] = 6;
+            
+            _owner.ankyTerrain.terrainData.SetDetailLayer(0, 0, 0, details);
             if (_owner.anky == 1)
             {
                 _owner.stateMachine.ChangeState(WanderingState.Instance);
