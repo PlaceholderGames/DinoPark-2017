@@ -28,7 +28,7 @@ public class FirstState : State<AI>
         }
     }
 
-    public override void EnterSTate(AI _owner)
+    public override void EnterState(AI _owner)
     {
         Debug.Log("Entering First STate");
     }

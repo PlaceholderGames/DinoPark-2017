@@ -22,7 +22,7 @@ namespace StateStuff
                 currentState.ExitState(Owner);
             }
             currentState = _newState;
-            currentState.EnterSTate(Owner);
+            currentState.EnterState(Owner);
         }
 
         public void Update()
@@ -36,7 +36,7 @@ namespace StateStuff
 
     public abstract class State<T>
     {
-        public abstract void EnterSTate(T _owner);
+        public abstract void EnterState(T _owner);
 
         public abstract void ExitState(T _owner);
 

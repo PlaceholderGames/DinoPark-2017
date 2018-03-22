@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class FieldOfView : MonoBehaviour {
 
@@ -14,10 +15,10 @@ public class FieldOfView : MonoBehaviour {
     public LayerMask targetMask;
     //public LayerMask obstacleMask; // Not using raytracing to determine visibility right now
 
-    [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
+    //[HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
     public List<Transform> visibleTargets = new List<Transform>(); // this is the list of visible dinosaurs
 
-    [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
+    //[HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
     public List<Transform> stereoVisibleTargets = new List<Transform>(); // this is the list of visible dinosaurs in stereo
 
 	private void Start()
@@ -34,7 +35,8 @@ public class FieldOfView : MonoBehaviour {
     }
     void FindVisibleTargets()
     {
-        visibleTargets.Clear ();
+        visibleTargets.Clear();
+        stereoVisibleTargets.Clear();
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
         for (int i = 0; i < targetsInViewRadius.Length; i++)
@@ -55,8 +57,17 @@ public class FieldOfView : MonoBehaviour {
             }
             else if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle/2)
             {
+                if (target.gameObject != this.gameObject)
+                {
+                    visibleTargets.Add(target);
+
+                }
+                visibleTargets = visibleTargets.Distinct().ToList();
+                stereoVisibleTargets = stereoVisibleTargets.Distinct().ToList();
+                       
+
                 //float directionToTarget = Vector3.Angle(transform.forward, dirToTarget); // We need the direction of the object only for checking with raytracing
-                visibleTargets.Add(target); // For now, if it is in range and angle of eyesight we can see it
+                 // For now, if it is in range and angle of eyesight we can see it
             }
          
         }
