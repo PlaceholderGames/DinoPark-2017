@@ -53,8 +53,12 @@ public class grazingState : State<MyAnky>
         if (_owner.hydration < 75) {
             _owner.stateMachine.ChangeState(drinkingState.Instance);
         }
+        if (_owner.energy < 75)
+        {
+            _owner.stateMachine.ChangeState(eatingState.Instance);
+        }
 
-        
+
         foreach (Transform friend in _owner.friendlies)
         {
             float distance = Vector3.Distance(friend.position, _owner.transform.position);
@@ -64,7 +68,7 @@ public class grazingState : State<MyAnky>
                 _owner.ankyWander.enabled = false;
                 _owner.ankySeek.enabled = true;
             }
-            if (distance < 10)
+            if (distance < 20)
             {
                 _owner.ankySeek.enabled = false;
                 _owner.ankyWander.enabled = true;

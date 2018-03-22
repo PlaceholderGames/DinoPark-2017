@@ -7,6 +7,12 @@ using Statestuff;
 public class MyAnky : Agent
 {
 
+    public float speed = 10.0f;
+
+    public AStarSearch aStarScript;
+    public ASPathFollower asPathFollowerScript;
+
+
     public bool switchState = false;
     public StateMachine<MyAnky> stateMachine { get; set; }
 
@@ -18,6 +24,7 @@ public class MyAnky : Agent
     public Seek ankySeek;
 
     public GameObject water;
+    public GameObject Food;
 
     public double hydration = 100;
     public double energy = 100;
@@ -59,6 +66,9 @@ public class MyAnky : Agent
 
         stateMachine = new StateMachine<MyAnky>(this);
         stateMachine.ChangeState(grazingState.Instance);
+
+        aStarScript = GetComponent<AStarSearch>();
+        asPathFollowerScript = GetComponent<ASPathFollower>();
 
         currentAnkyState = ankyState.GRAZING;
 
@@ -130,5 +140,14 @@ public class MyAnky : Agent
     protected override void LateUpdate()
     {
         base.LateUpdate();
+    }
+
+
+    public void move(Vector3 directionVector)
+    {
+        directionVector *= speed * Time.deltaTime;
+
+        transform.Translate(directionVector, Space.World);
+        transform.LookAt(transform.position + directionVector);
     }
 }

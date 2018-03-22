@@ -40,19 +40,36 @@ public class alertState : State<MyAnky>
         Debug.Log("exiting alert state");
         _owner.anim.SetBool("isAlerted", false);
         _owner.ankyWander.enabled = false;
+        _owner.ankySeek.enabled = false;
     }
 
     public override void UpdateState(MyAnky _owner)
     {
         foreach (Transform enemy in _owner.enemies)
         {
-            float distance = Vector3.Distance(enemy.position, _owner.transform.position);
-            if (distance < 30 && distance  > 5)
+            float enemyDist = Vector3.Distance(enemy.position, _owner.transform.position);
+            if (enemyDist < 30 && enemyDist > 5)
             {
                 _owner.stateMachine.ChangeState(fleeState.Instance);
                 _owner.ankyFlee.target = enemy.gameObject;
             }
         }
+        foreach (Transform friend in _owner.friendlies)
+        {
+            float friendDist = Vector3.Distance(friend.position, _owner.transform.position);
+            if (friendDist > 50)
+            {
+                _owner.ankySeek.target = friend.gameObject;
+                _owner.ankyWander.enabled = false;
+                _owner.ankySeek.enabled = true;
+            }
+            if (friendDist < 20)
+            {
+                _owner.ankySeek.enabled = false;
+                _owner.ankyWander.enabled = true;
+            }
+        }
+
 
         if (_owner.enemies.Count <= 0)
         {
@@ -67,22 +84,6 @@ public class alertState : State<MyAnky>
         else if (_owner.energy < 35)
         {
             _owner.stateMachine.ChangeState(eatingState.Instance);
-        }
-
-        foreach (Transform friend in _owner.friendlies)
-        {
-            float distance = Vector3.Distance(friend.position, _owner.transform.position);
-            if (distance > 50)
-            {
-                _owner.ankySeek.target = friend.gameObject;
-                _owner.ankyWander.enabled = false;
-                _owner.ankySeek.enabled = true;
-            }
-            if (distance < 10)
-            {
-                _owner.ankySeek.enabled = false;
-                _owner.ankyWander.enabled = true;
-            }
         }
     }
 }
