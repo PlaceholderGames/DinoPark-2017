@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using Statestuff;
 
-public class fleeState : State<MyAnky>
+public class ankyFleeState : State<MyAnky>
 {
-    private static fleeState _instance;
+    private static ankyFleeState _instance;
 
-    private fleeState()
+    private ankyFleeState()
     {
         if (_instance != null)
         {
@@ -15,13 +15,13 @@ public class fleeState : State<MyAnky>
 
     }
 
-    public static fleeState Instance
+    public static ankyFleeState Instance
     {
         get
         {
             if (_instance == null)
             {
-                new fleeState();
+                new ankyFleeState();
             }
             return _instance;
         }
@@ -59,11 +59,15 @@ public class fleeState : State<MyAnky>
             {
                 Raptor = enemy.gameObject;
             }
-            float distance = Vector3.Distance(Raptor.transform.position, _owner.transform.position);
-            if (distance > 50)
+            float enemyDist = Vector3.Distance(Raptor.transform.position, _owner.transform.position);
+            if (enemyDist > 50)
             {
                 _owner.enemies.Clear();
-                _owner.stateMachine.ChangeState(alertState.Instance);
+                _owner.stateMachine.ChangeState(ankyAlertState.Instance);
+            }
+            if (enemyDist < 5)
+            {
+                _owner.stateMachine.ChangeState(ankyAttackingState.Instance);
             }
         }
 
@@ -74,7 +78,7 @@ public class fleeState : State<MyAnky>
 
         if (_owner.health <= 0)
         {
-            _owner.stateMachine.ChangeState(deadState.Instance);
+            _owner.stateMachine.ChangeState(ankyDeadState.Instance);
         }
 
     }

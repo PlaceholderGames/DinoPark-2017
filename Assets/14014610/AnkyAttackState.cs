@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using Statestuff;
 
-public class attackingState : State<MyAnky>
+public class ankyAttackingState : State<MyAnky>
 {
-    private static attackingState _instance;
+    private static ankyAttackingState _instance;
 
-    private attackingState()
+    private ankyAttackingState()
     {
         if (_instance != null)
         {
@@ -15,13 +15,13 @@ public class attackingState : State<MyAnky>
 
     }
 
-    public static attackingState Instance
+    public static ankyAttackingState Instance
     {
         get
         {
             if (_instance == null)
             {
-                new attackingState();
+                new ankyAttackingState();
             }
             return _instance;
         }
@@ -43,11 +43,10 @@ public class attackingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-
-
+        
         if (_owner.health <= 0)
         {
-            _owner.stateMachine.ChangeState(deadState.Instance);
+            _owner.stateMachine.ChangeState(ankyDeadState.Instance);
         }
     }
 }

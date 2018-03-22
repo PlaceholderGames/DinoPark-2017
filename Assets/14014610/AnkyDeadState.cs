@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using Statestuff;
 
-public class deadState : State<MyAnky>
+public class ankyDeadState : State<MyAnky>
 {
-    private static deadState _instance;
+    private static ankyDeadState _instance;
 
-    private deadState()
+    private ankyDeadState()
     {
         if (_instance != null)
         {
@@ -15,13 +15,13 @@ public class deadState : State<MyAnky>
 
     }
 
-    public static deadState Instance
+    public static ankyDeadState Instance
     {
         get
         {
             if (_instance == null)
             {
-                new deadState();
+                new ankyDeadState();
             }
             return _instance;
         }
@@ -31,13 +31,10 @@ public class deadState : State<MyAnky>
     {
         Debug.Log("entering dead state");
         _owner.currentAnkyState = MyAnky.ankyState.DEAD;
-        _owner.anim.SetBool("isAlerted", true);
-        _owner.anim.SetBool("isAlerted", false);
-        _owner.anim.SetBool("isAttacking", true);
-        _owner.anim.SetBool("isAttacking", false);
         _owner.anim.SetBool("isDead", true);
         _owner.ankyWander.enabled = false;
         _owner.ankySeek.enabled = false;
+        _owner.ankyFlee.enabled = false;
 
     }
 

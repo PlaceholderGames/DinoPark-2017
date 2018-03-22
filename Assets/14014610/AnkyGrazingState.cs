@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using Statestuff;
 
-public class grazingState : State<MyAnky>
+public class ankyGrazingState : State<MyAnky>
 {
-    private static grazingState _instance;
+    private static ankyGrazingState _instance;
     int[,] details;
-    private grazingState()
+    private ankyGrazingState()
     {
         if (_instance != null)
         {
@@ -15,13 +15,13 @@ public class grazingState : State<MyAnky>
 
     }
 
-    public static grazingState Instance
+    public static ankyGrazingState Instance
     {
         get
         {
             if (_instance == null)
             {
-                new grazingState();
+                new ankyGrazingState();
             }
             return _instance;
         }
@@ -47,11 +47,11 @@ public class grazingState : State<MyAnky>
     {
         if (_owner.enemies.Count > 0)
          {
-             _owner.stateMachine.ChangeState(alertState.Instance);
+             _owner.stateMachine.ChangeState(ankyAlertState.Instance);
          }
 
         if (_owner.hydration < 75) {
-            _owner.stateMachine.ChangeState(drinkingState.Instance);
+            _owner.stateMachine.ChangeState(ankyDrinkingState.Instance);
         }
 
         details = _owner.Terrain.Terrain.terrainData.GetDetailLayer(0, 0, _owner.Terrain.Terrain.terrainData.detailWidth, _owner.Terrain.Terrain.terrainData.detailHeight, 0);
@@ -59,7 +59,7 @@ public class grazingState : State<MyAnky>
         {
             if (_owner.energy < 75)
             {
-                _owner.stateMachine.ChangeState(eatingState.Instance);
+                _owner.stateMachine.ChangeState(ankyEatingState.Instance);
             }
         }
 
@@ -82,7 +82,7 @@ public class grazingState : State<MyAnky>
 
         if (_owner.health <= 0)
         {
-            _owner.stateMachine.ChangeState(deadState.Instance);
+            _owner.stateMachine.ChangeState(ankyDeadState.Instance);
         }
     }
 }

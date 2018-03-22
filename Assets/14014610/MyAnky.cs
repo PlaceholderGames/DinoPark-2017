@@ -60,7 +60,7 @@ public class MyAnky : Agent
         // you to see how to change the flag parameters in the animation controller
 
         stateMachine = new StateMachine<MyAnky>(this);
-        stateMachine.ChangeState(grazingState.Instance);
+        stateMachine.ChangeState(ankyGrazingState.Instance);
         
 
         currentAnkyState = ankyState.GRAZING;
@@ -134,9 +134,6 @@ public class MyAnky : Agent
             health -= (Time.deltaTime * 0.2) * 1;
 
         
-
-
-
 
         stateMachine.Update();
         base.Update();

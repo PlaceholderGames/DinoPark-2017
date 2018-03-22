@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using Statestuff;
 
-public class alertState : State<MyAnky>
+public class ankyAlertState : State<MyAnky>
 {
-    private static alertState _instance;
+    private static ankyAlertState _instance;
     int[,] details;
-    private alertState()
+    private ankyAlertState()
     {
         if (_instance != null)
         {
@@ -15,13 +15,13 @@ public class alertState : State<MyAnky>
 
     }
 
-    public static alertState Instance
+    public static ankyAlertState Instance
     {
         get
         {
             if (_instance == null)
             {
-                new alertState();
+                new ankyAlertState();
             }
             return _instance;
         }
@@ -50,8 +50,12 @@ public class alertState : State<MyAnky>
             float enemyDist = Vector3.Distance(enemy.position, _owner.transform.position);
             if (enemyDist < 30 && enemyDist > 5)
             {
-                _owner.stateMachine.ChangeState(fleeState.Instance);
+                _owner.stateMachine.ChangeState(ankyFleeState.Instance);
                 _owner.ankyFlee.target = enemy.gameObject;
+            }
+            if (enemyDist < 5)
+            {
+                _owner.stateMachine.ChangeState(ankyAttackingState.Instance);
             }
         }
         foreach (Transform friend in _owner.friendlies)
@@ -73,12 +77,12 @@ public class alertState : State<MyAnky>
 
         if (_owner.enemies.Count <= 0)
         {
-            _owner.stateMachine.ChangeState(grazingState.Instance);
+            _owner.stateMachine.ChangeState(ankyGrazingState.Instance);
         }
 
         if (_owner.hydration < 35)
         {
-            _owner.stateMachine.ChangeState(drinkingState.Instance);
+            _owner.stateMachine.ChangeState(ankyDrinkingState.Instance);
         }
 
 
@@ -89,7 +93,7 @@ public class alertState : State<MyAnky>
             
             if (_owner.energy < 35)
             {
-                _owner.stateMachine.ChangeState(eatingState.Instance);
+                _owner.stateMachine.ChangeState(ankyEatingState.Instance);
             }
         }
 
@@ -98,7 +102,7 @@ public class alertState : State<MyAnky>
 
         if (_owner.health <= 0)
         {
-            _owner.stateMachine.ChangeState(deadState.Instance);
+            _owner.stateMachine.ChangeState(ankyDeadState.Instance);
         }
     }
 }

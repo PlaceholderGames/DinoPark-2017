@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using Statestuff;
 
-public class eatingState : State<MyAnky>
+public class ankyEatingState : State<MyAnky>
 {
-    private static eatingState _instance;
+    private static ankyEatingState _instance;
 
-    private eatingState()
+    private ankyEatingState()
     {
         if (_instance != null)
         {
@@ -15,13 +15,13 @@ public class eatingState : State<MyAnky>
 
     }
 
-    public static eatingState Instance
+    public static ankyEatingState Instance
     {
         get
         {
             if (_instance == null)
             {
-                new eatingState();
+                new ankyEatingState();
             }
             return _instance;
         }
@@ -55,12 +55,12 @@ public class eatingState : State<MyAnky>
 
         if (_owner.energy >= 100)
         {
-            _owner.stateMachine.ChangeState(grazingState.Instance);
+            _owner.stateMachine.ChangeState(ankyGrazingState.Instance);
         }
 
         if (_owner.health <= 0)
         {
-            _owner.stateMachine.ChangeState(deadState.Instance);
+            _owner.stateMachine.ChangeState(ankyDeadState.Instance);
         }
 
     }
