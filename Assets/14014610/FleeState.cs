@@ -71,5 +71,11 @@ public class fleeState : State<MyAnky>
         {
             _owner.ankyFlee.target = Raptor;
         }
+
+        if (_owner.health <= 0)
+        {
+            _owner.stateMachine.ChangeState(deadState.Instance);
+        }
+
     }
 }

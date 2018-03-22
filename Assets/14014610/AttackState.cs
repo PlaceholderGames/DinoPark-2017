@@ -44,5 +44,10 @@ public class attackingState : State<MyAnky>
     public override void UpdateState(MyAnky _owner)
     {
 
+
+        if (_owner.health <= 0)
+        {
+            _owner.stateMachine.ChangeState(deadState.Instance);
+        }
     }
 }

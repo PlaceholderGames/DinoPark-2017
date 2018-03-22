@@ -32,8 +32,6 @@ public class eatingState : State<MyAnky>
         Debug.Log("entering eating state");
         _owner.currentAnkyState = MyAnky.ankyState.EATING;
         _owner.anim.SetBool("isEating", true);
-        _owner.aStarScript.target = _owner.Food;
-        _owner.aStarScript.enabled = true;
 
     }
 
@@ -41,15 +39,29 @@ public class eatingState : State<MyAnky>
     {
         Debug.Log("exiting eating state");
         _owner.anim.SetBool("isEating", false);
-        _owner.aStarScript.enabled = false;
     }
 
     public override void UpdateState(MyAnky _owner)
     {
-        
-        if (_owner.asPathFollowerScript.path.nodes.Count < 0 || _owner.asPathFollowerScript.path == null)
-            _owner.asPathFollowerScript.path = _owner.aStarScript.path;
 
-        _owner.move(_owner.asPathFollowerScript.getDirectionVector());
+        //if (_owner.asPathFollowerScript.path.nodes.Count < 0 || _owner.asPathFollowerScript.path == null)
+        //    _owner.asPathFollowerScript.path = _owner.aStarScript.path;
+        //
+        //_owner.move(_owner.asPathFollowerScript.getDirectionVector());
+
+
+        _owner.energy += (Time.deltaTime * 1) * 1;
+        
+
+        if (_owner.energy >= 100)
+        {
+            _owner.stateMachine.ChangeState(grazingState.Instance);
+        }
+
+        if (_owner.health <= 0)
+        {
+            _owner.stateMachine.ChangeState(deadState.Instance);
+        }
+
     }
 }

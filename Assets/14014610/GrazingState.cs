@@ -4,7 +4,7 @@ using Statestuff;
 public class grazingState : State<MyAnky>
 {
     private static grazingState _instance;
-
+    int[,] details;
     private grazingState()
     {
         if (_instance != null)
@@ -53,9 +53,14 @@ public class grazingState : State<MyAnky>
         if (_owner.hydration < 75) {
             _owner.stateMachine.ChangeState(drinkingState.Instance);
         }
-        if (_owner.energy < 75)
+
+        details = _owner.Terrain.Terrain.terrainData.GetDetailLayer(0, 0, _owner.Terrain.Terrain.terrainData.detailWidth, _owner.Terrain.Terrain.terrainData.detailHeight, 0);
+        if (details[(int)_owner.transform.position.z, (int)_owner.transform.position.x] != 0)
         {
-            _owner.stateMachine.ChangeState(eatingState.Instance);
+            if (_owner.energy < 75)
+            {
+                _owner.stateMachine.ChangeState(eatingState.Instance);
+            }
         }
 
 
@@ -73,6 +78,11 @@ public class grazingState : State<MyAnky>
                 _owner.ankySeek.enabled = false;
                 _owner.ankyWander.enabled = true;
             }
+        }
+
+        if (_owner.health <= 0)
+        {
+            _owner.stateMachine.ChangeState(deadState.Instance);
         }
     }
 }

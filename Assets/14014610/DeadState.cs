@@ -31,7 +31,13 @@ public class deadState : State<MyAnky>
     {
         Debug.Log("entering dead state");
         _owner.currentAnkyState = MyAnky.ankyState.DEAD;
+        _owner.anim.SetBool("isAlerted", true);
+        _owner.anim.SetBool("isAlerted", false);
+        _owner.anim.SetBool("isAttacking", true);
+        _owner.anim.SetBool("isAttacking", false);
         _owner.anim.SetBool("isDead", true);
+        _owner.ankyWander.enabled = false;
+        _owner.ankySeek.enabled = false;
 
     }
 
@@ -43,6 +49,6 @@ public class deadState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-
+        _owner.health = 0;
     }
 }

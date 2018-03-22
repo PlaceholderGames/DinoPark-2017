@@ -6,11 +6,7 @@ using Statestuff;
 
 public class MyAnky : Agent
 {
-
-    public float speed = 10.0f;
-
-    public AStarSearch aStarScript;
-    public ASPathFollower asPathFollowerScript;
+    public TScript Terrain;
 
 
     public bool switchState = false;
@@ -24,7 +20,6 @@ public class MyAnky : Agent
     public Seek ankySeek;
 
     public GameObject water;
-    public GameObject Food;
 
     public double hydration = 100;
     public double energy = 100;
@@ -66,9 +61,7 @@ public class MyAnky : Agent
 
         stateMachine = new StateMachine<MyAnky>(this);
         stateMachine.ChangeState(grazingState.Instance);
-
-        aStarScript = GetComponent<AStarSearch>();
-        asPathFollowerScript = GetComponent<ASPathFollower>();
+        
 
         currentAnkyState = ankyState.GRAZING;
 
@@ -96,7 +89,7 @@ public class MyAnky : Agent
         // Fleeing - up to the student what you do here
 
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
+        
         enemies.Clear();
         foreach (Transform target in fov.visibleTargets)
         {
@@ -130,8 +123,21 @@ public class MyAnky : Agent
             }
         }
 
-        hydration -= (Time.deltaTime * 0.2) * 1;
-        energy -= (Time.deltaTime * 0.1) * 1;
+        if (hydration > 0)
+            hydration -= (Time.deltaTime * 0.2) * 1;
+        else
+            health -= (Time.deltaTime * 0.2) * 1;
+
+        if (energy > 0)
+            energy -= (Time.deltaTime * 0.15) * 1;
+        else
+            health -= (Time.deltaTime * 0.2) * 1;
+
+        
+
+
+
+
         stateMachine.Update();
         base.Update();
     }
@@ -140,14 +146,5 @@ public class MyAnky : Agent
     protected override void LateUpdate()
     {
         base.LateUpdate();
-    }
-
-
-    public void move(Vector3 directionVector)
-    {
-        directionVector *= speed * Time.deltaTime;
-
-        transform.Translate(directionVector, Space.World);
-        transform.LookAt(transform.position + directionVector);
     }
 }

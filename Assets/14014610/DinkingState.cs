@@ -55,5 +55,10 @@ public class drinkingState : State<MyAnky>
         {
             _owner.stateMachine.ChangeState(grazingState.Instance);
         }
+
+        if (_owner.health <= 0)
+        {
+            _owner.stateMachine.ChangeState(deadState.Instance);
+        }
     }
 }
