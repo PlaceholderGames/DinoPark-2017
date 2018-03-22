@@ -12,12 +12,6 @@ public class DrinkSC : MonoBehaviour
     // Update is called once per frame
     public void drink()
     {
-        if(myAnky.health < 100)
-        {
-            myAnky.health++;
-        }
+        myAnky.health++;
     }
 }
-
-
-
