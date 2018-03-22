@@ -45,11 +45,13 @@ public class AttackingState : State<AI>
 
     public override void UpdateState(AI _owner)
     {
+        //If there is no hunger or no health then the raptor is dead
         if (_owner.hunger <= 0 || _owner.health <= 0)
         {
             _owner.stateMachine.ChangeState(DeadState.Instance);
         }
 
+        //If the raptor has moved too far away from the anky it will switch to hunting state, allowing for it to flee
         foreach (Transform i in _owner.view.visibleTargets)
         {
             if (i.tag == "Anky" && Vector3.Distance(_owner.transform.position, i.transform.position) > 35)

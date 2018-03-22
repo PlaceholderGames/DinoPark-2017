@@ -52,12 +52,11 @@ public class FleeingState : State<AI>
 
     public override void UpdateState(AI _owner)
     {
+        //Forces the raptor to flee and disables pursuing
         _owner.pursue.enabled = false;
         _owner.flee.enabled = true;
 
-        //_owner.agent.SetSteering(_owner.flee.GetSteering());
-        //_owner.agent.SetSteering(_owner.pursue.GetSteering());
-
+        //Flee for 10 seconds and then go back to hunting
         _owner.fleeingTime += Time.deltaTime;
         if(_owner.fleeingTime >= 10)
         {
@@ -65,7 +64,8 @@ public class FleeingState : State<AI>
                     
         }
 
-        if(_owner.health <= 0)
+        //If health is less than 0 or hunger is then kill the raptor
+        if(_owner.hunger <= 0 || _owner.health <= 0)
         {
             _owner.stateMachine.ChangeState(DeadState.Instance);
         }

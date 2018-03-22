@@ -3,6 +3,8 @@ using StateStuff;
 
 public class DrinkingState : State<AI>
 {
+    private float addThirstTimer;
+
     private static DrinkingState _instance;
 
     private DrinkingState()
@@ -42,7 +44,18 @@ public class DrinkingState : State<AI>
 
     public override void UpdateState(AI _owner)
     {
-
-        //_owner.stateMachine.ChangeState(HuntingState.Instance);
+        //Drink until the raptor has 100 thrist and then switch to idle
+        addThirstTimer += Time.deltaTime;
+        if (addThirstTimer >= 1)
+        {
+            _owner.thirst += 10;
+            addThirstTimer = 0;
+        }
+        
+        if(_owner.thirst >= 100)
+        {
+            _owner.stateMachine.ChangeState(IdleState.Instance);
+        }
+        
     }
 }

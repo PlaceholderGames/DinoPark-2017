@@ -17,6 +17,7 @@ public class AI : MonoBehaviour
 
     public GameObject prey;
     public GameObject friendly;
+    public GameObject waterLocation;
 
     public FleeRotate flee;
     public AStarSearch Astar;
@@ -63,23 +64,19 @@ public class AI : MonoBehaviour
 
     private void Update()
     {
-        //if (follower.path.nodes.Count < 0 || follower.path == null)
-            //follower.path = Astar.path;
 
-        //move(follower.getDirectionVector());
-
-        //un-specific changes to the raptor such as hunger slowly draining
+        //un-specific changes to the raptor such as hunger and thirst draining
         hungerTimer += Time.deltaTime;
         if(hungerTimer >= removeHunger)
         {
             hunger -= 1;
+            thirst -= 1;
             hungerTimer = 0;
-            //health -= 10;
-            //Debug.Log(health);
         }
         stateMachine.Update();
     }
 
+    //This function will be called to move the raptor to a location using A*
     public void move(Vector3 directionVector)
     {
         directionVector *= 10 * Time.deltaTime;

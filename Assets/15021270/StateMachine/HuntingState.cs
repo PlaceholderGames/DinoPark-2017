@@ -32,7 +32,6 @@ public class HuntingState : State<AI>
     public override void EnterState(AI _owner)
     {
         _owner.wander.enabled = false;
-        //_owner.pursue.enabled = true;
         _owner.removeHunger = 5;
         _owner.agent.maxSpeed = 15;
 
@@ -52,9 +51,9 @@ public class HuntingState : State<AI>
 
     public override void UpdateState(AI _owner)
     {
-        //Updates while state is hunting
-        _owner.pursue.enabled = true;
+        //Sets the raptor to pursue and not flee
         _owner.flee.enabled = false;
+        _owner.pursue.enabled = true;
 
         //Check if there is an anky in range
         //Better logic is needed for attacking the closest
@@ -63,26 +62,30 @@ public class HuntingState : State<AI>
             if(i.tag == "Anky")
             {
                 _owner.enemy = true;
-                _owner.prey = i.gameObject;
+                _owner.prey = i.gameObject; //Stores seen object for A* to use
             }
             else
             {
                 _owner.enemy = false;
             }
 
-            //Debug.Log(Vector3.Distance(_owner.transform.position, i.transform.position));
+            //If close enough to the anky it will switch to attack
+            //In this state it can no longer flee and is faster
+            //This will stop it running away because it is too desprate for food
             if (i.tag == "Anky" && Vector3.Distance(_owner.transform.position, i.transform.position) < 25)
             {
-                _owner.prey = i.gameObject;
+                _owner.prey = i.gameObject; //Stores seen object for A* to use
                 _owner.stateMachine.ChangeState(AttackingState.Instance);
             }
         }
 
-        if (_owner.health <= 80 && _owner.enemy == true)
+        //If health is 40 or less and there is an enemy in the area then run away
+        if (_owner.health <= 40 && _owner.enemy == true)
         {
                 _owner.stateMachine.ChangeState(FleeingState.Instance);
         }
 
+        //If the raptor is no longer hungry and there is no enemies it will change to idle
         if(_owner.hunger > 70 && _owner.enemy == false)
         {
              _owner.stateMachine.ChangeState(IdleState.Instance);
@@ -90,6 +93,6 @@ public class HuntingState : State<AI>
 
         //_owner.stateMachine.ChangeState(EatingState.Instance);
 
-        //_owner.stateMachine.ChangeState(DrinkingState.Instance);
+        //
     }
 }
