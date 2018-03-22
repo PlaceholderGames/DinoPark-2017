@@ -18,27 +18,27 @@ public class MyAnky : Agent
 
     public Animator anim;
     private ankyState state;
-    
-    public int health = 40;
+    public int health = 100;
+    public int stamina = 40;
+    public GameObject target;
 
-    
-    Flee flee;
-    Wander wander;
-    Drink drink;
 
-  
-    private void ChangeState()
+
+    DrinkSC drink;
+
+    void Awake()
     {
-       // ChangeToFlee();
-        ChangeToDrinking();
-
+        drink = GetComponent<DrinkSC>();
     }
 
-
+    private void ChangeState()
+    {
+        ChangeToDrinking();
+    }
 
     private void ChangeToDrinking()
     {
-        if (transform.position.y < 32 && this.health < 50)
+        if (transform.position.y < 32 && this.stamina < 50)
         {
             state = ankyState.DRINKING;
         }
@@ -46,7 +46,7 @@ public class MyAnky : Agent
 
     private void ChangeToEating()
     {
-        if (health < 50)
+        if (this.health < 50 && this.stamina < 50)
         {
             // go find grass
 
@@ -54,18 +54,7 @@ public class MyAnky : Agent
         }
 
     }
-    //private void ChangeToFlee()
-    //{
-    //    foreach (Transform animal in view.VisibleTargets)
-    //    {
-    //        if (animal.tag == "Rapty")
-    //        {
-    //            state = ankyState.FLEEING;
-    //            target = animal.gameObject;
-    //        }
-    //    }
 
-    //}
 
     // Use this for initialization
     protected override void Start()
@@ -87,20 +76,32 @@ public class MyAnky : Agent
 
     }
 
+   
     protected override void Update()
     {
+        ChangeState();
+
         // Idle - should only be used at startup
 
+        if (state.ToString() == "IDLE")
+        {
+            Debug.Log("idle");
+        }
         // Eating - requires a box collision with a dead dino
 
-        // Drinking - requires y value to be below 32 (?)
-
+        // Drinking - requires y value to be below 32
+        else if (state.ToString() == "DRINKING")
+        {
+            Debug.Log("drink");
+            drink.enabled = true;
+            
+        }
         // Alerted - up to the student what you do here
 
         // Hunting - up to the student what you do here
 
         // Fleeing - up to the student what you do here
-
+       
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
         base.Update();

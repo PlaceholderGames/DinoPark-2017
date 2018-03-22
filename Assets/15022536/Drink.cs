@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DrinkSC : MonoBehaviour
+public class Drinking : MonoBehaviour
 {
     MyAnky myAnky;
     void Awake()
@@ -10,14 +10,11 @@ public class DrinkSC : MonoBehaviour
         myAnky = GetComponent<MyAnky>();
     }
     // Update is called once per frame
-    public void drink()
+    public void Drink()
     {
-        if(myAnky.health < 100)
+        if (myAnky.health < 100)
         {
             myAnky.health++;
         }
     }
 }
-
-
-
