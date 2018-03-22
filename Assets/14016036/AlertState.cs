@@ -8,6 +8,7 @@ public class AlertState : State<MyAnky>
 {
     private static AlertState _instance;
     Transform target;
+    int[,] details;
     private AlertState()
     {
         if (_instance != null)
@@ -53,6 +54,7 @@ public class AlertState : State<MyAnky>
         _owner.anim.SetBool("isIdle", false);
         _owner.anim.SetBool("isEating", false);
         _owner.anim.SetBool("isAttacking", false);
+        _owner.anim.SetBool("isHerding", false);
         _owner.anim.SetBool("isFleeing", false);
         _owner.anim.SetBool("isDead", false);
         int checker = 0;
@@ -148,8 +150,22 @@ public class AlertState : State<MyAnky>
                 }
             }
         }
+        details = _owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, _owner.ankyTerrain.terrainData.detailWidth, _owner.ankyTerrain.terrainData.detailHeight, 0);
+        if (details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] != 0)
+        {
+            if (_owner.health < 60)
+            {
+                _owner.anky = 1;
+                _owner.stateMachine.ChangeState(EatingState.Instance);
+            }
+        }
 
-        //if(_owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, 0, 0, 1) && _owner.health < 70)
+        //details = _owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, _owner.ankyTerrain.terrainData.detailWidth, _owner.ankyTerrain.terrainData.detailHeight, 0);
+        //
+        //details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] = 16;
+        //
+        //_owner.ankyTerrain.terrainData.SetDetailLayer(0, 0, 0, details);
+        //_owner.stateMachine.ChangeState(EatingState.Instance);
     }
 
 }

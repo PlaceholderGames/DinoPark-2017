@@ -8,6 +8,7 @@ public class WanderingState : State<MyAnky>
 {
     private static WanderingState _instance;
     Transform target;
+    int[,] details;
     private WanderingState()
     {
         if (_instance != null)
@@ -113,5 +114,21 @@ public class WanderingState : State<MyAnky>
                 }
             }
         }
+        details = _owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, _owner.ankyTerrain.terrainData.detailWidth, _owner.ankyTerrain.terrainData.detailHeight, 0);
+        if (details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] != 0)
+        {
+            if (_owner.health < 60)
+            {
+                _owner.anky = 1;
+                _owner.stateMachine.ChangeState(EatingState.Instance);
+            }
+        }
+        _owner.anky = 0;
+
+        //details = _owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, _owner.ankyTerrain.terrainData.detailWidth, _owner.ankyTerrain.terrainData.detailHeight, 0);
+        //
+        //details[(int)_owner.transform.position.z / 2000 * 1024, (int)_owner.transform.position.x / 2000 * 1024] = 16;
+        //
+        //_owner.ankyTerrain.terrainData.SetDetailLayer(0, 0, 0, details);
     }
 }

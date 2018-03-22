@@ -44,6 +44,26 @@ public class EatingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        //_owner.ankyTerrain.terrainData.GetDetailLayer(0, 0, 0, 0, 1);
+        _owner.anim.SetBool("isAlerted", false);
+        _owner.anim.SetBool("isDrinking", false);
+        _owner.anim.SetBool("isGrazing", false);
+        _owner.anim.SetBool("isIdle", false);
+        _owner.anim.SetBool("isEating", true);
+        _owner.anim.SetBool("isAttacking", false);
+        _owner.anim.SetBool("isHerding", false);
+        _owner.anim.SetBool("isFleeing", false);
+        _owner.anim.SetBool("isDead", false);
+        _owner.time -= Time.deltaTime;
+        if(_owner.time < 0)
+        {
+            if (_owner.anky == 1)
+            {
+                _owner.stateMachine.ChangeState(WanderingState.Instance);
+            }
+            else
+            {
+                _owner.stateMachine.ChangeState(AlertState.Instance);
+            }
+        }
     }
 }

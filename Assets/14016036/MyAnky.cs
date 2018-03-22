@@ -6,6 +6,8 @@ using StateStuff;
 
 public class MyAnky : Agent
 {
+    int grassDensity = 2000;
+    int patchDetail = 200;
     
     public Agent ankyAgent;
     public FieldOfView ankyView;
@@ -20,7 +22,7 @@ public class MyAnky : Agent
     public Transform target;
     public int fleeingIndex = 0;
     public Terrain ankyTerrain;
-    
+    public float time = 5;
     public int health = 52;
     public int anky;
     public float closestDist = 9999;
@@ -61,7 +63,7 @@ public class MyAnky : Agent
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
         base.Start();
-
+        
     }
 
     protected override void Update()
@@ -71,7 +73,30 @@ public class MyAnky : Agent
         // Eating - requires a box collision with a dead dino
 
         // Alerted - up to the student what you do here
-
+        //ankyTerrain.terrainData.SetDetailResolution(grassDensity, patchDetail);
+        //int[,] details; //= new int[grassDensity, patchDetail];
+        //for (int i = 0; i < grassDensity; i++)
+        //{
+        //    for (int j = 0; j < grassDensity; j++)
+        //    {
+        //        // Sample the height at this location (note GetHeight expects int coordinates corresponding to locations in the heightmap array)
+        //        float height = ankyTerrain.terrainData.GetHeight(i, j);
+        //        if (height < 10.0f)
+        //        {
+        //            details[i, j] = 6;
+        //        }
+        //        else
+        //        {
+        //            details[i, j] = 0;
+        //        }
+        //    }
+        //}
+        //ankyTerrain.terrainData.SetDetailLayer(0, 0, 0, details);
+        //details = ankyTerrain.terrainData.GetDetailLayer(0, 0, ankyTerrain.terrainData.detailWidth, ankyTerrain.terrainData.detailHeight, 0);
+        //
+        //details[(int)transform.position.z / 2000 * 1024, (int)transform.position.x / 2000 * 1024] = 6;
+        //
+        //ankyTerrain.terrainData.SetDetailLayer(0, 0, 0, details);
         // Drinking - requires y value to be below 32 (?)
 
         // Hunting - up to the student what you do here
