@@ -10,8 +10,9 @@ public class DrinkSC : MonoBehaviour
         myAnky = GetComponent<MyAnky>();
     }
     // Update is called once per frame
-    public void drink()
+    public void Drink()
     {
-        myAnky.health++;
+        // add a condtion to stop when staming reach certian lvl
+        myAnky.stamina++;
     }
 }
