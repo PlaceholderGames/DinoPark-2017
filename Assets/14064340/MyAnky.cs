@@ -29,6 +29,8 @@ public class MyAnky : Agent
     public int seconds = 0;
     public GameObject Water;
     public List<Transform> Enemies = new List<Transform>();
+    public List<Transform> friends = new List<Transform>();
+    
 
     public StateMachine<MyAnky> stateMachine { get; set; }
 
@@ -79,31 +81,54 @@ public class MyAnky : Agent
     {
        
 
-        stateMachine.Update();
-        // Eating - Drinking (32?)
-        hydration -= (Time.deltaTime * 0.2) * 1.0;
-        saturation -= (Time.deltaTime * 0.1) * 1.0;
+       
+        // Eating - Drinking 
+        if (hydration > 0)
+        {
+            hydration -= (Time.deltaTime * 0.2) * 1.0;
+        }
+        if (saturation > 0)
+        {
+            saturation -= (Time.deltaTime * 0.1) * 1.0;
+        }
 
         // Alerted - up to the student what you do here
         Enemies.Clear();
         foreach (Transform i in fov.visibleTargets)
         {
-            
-       
             if (i.tag == "Rapty")
             {
                 Enemies.Add(i);
            
             }
         }
-
-
         foreach (Transform i in fov.stereoVisibleTargets)
         {
-      
             if (i.tag == "Rapty")
             {
              Enemies.Add(i);
+            }
+        }
+
+        friends.Clear();
+        foreach (Transform u in fov.visibleTargets)
+        {
+            if (u.tag == "Anky")
+            {
+                if (u.transform.position != transform.position)
+                {
+                    friends.Add(u);
+                }
+            }
+        }
+        foreach (Transform u in fov.stereoVisibleTargets)
+        {
+            if (u.tag == "Anky")
+            {
+                if (u.transform.position != transform.position)
+                {
+                    friends.Add(u);
+                }
             }
         }
 
@@ -112,7 +137,7 @@ public class MyAnky : Agent
         // Fleeing - up to the student what you do here
 
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
+        stateMachine.Update();
         base.Update();
     }
 

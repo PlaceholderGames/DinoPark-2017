@@ -40,6 +40,7 @@ public class GrazeState : State<MyAnky>
         _owner.anim.SetBool("isGrazing", false);
         Debug.Log("exiting GrazeState");
         _owner.ankyWander.enabled = false;
+        _owner.ankySeek.enabled = false;
     }
 
     public override void UpdateState(MyAnky _owner)
@@ -54,6 +55,27 @@ public class GrazeState : State<MyAnky>
 
             _owner.stateMachine.ChangeState(DrinkingState.Instance);
         }
+
+        foreach (Transform x in _owner.friends)
+        {
+
+            float FriendDistance = Vector3.Distance(x.position, _owner.transform.position);
+            if (FriendDistance > 50 )
+            {
+                _owner.ankySeek.target = x.gameObject;
+                _owner.ankyWander.enabled = false;
+                _owner.ankySeek.enabled = true;         
+
+            }
+            else if (FriendDistance < 20)
+            {
+                _owner.ankySeek.enabled = false;
+                _owner.ankyWander.enabled = true;
+            }
+
+        }
+
+
         //for (int i = 0; i < _owner.fov.visibleTargets.Count; i++)
         //{
         //    Debug.Log("1");

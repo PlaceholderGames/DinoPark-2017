@@ -29,6 +29,7 @@ public class DrinkingState : State<MyAnky>
 
     public override void EnterState(MyAnky _owner)
     {
+        _owner.ankySeek.target = _owner.Water;
         _owner.anim.SetBool("isDrinking", true);
         Debug.Log("entering DrinkingState");
         _owner.ankySeek.enabled = true;
@@ -43,6 +44,7 @@ public class DrinkingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
+       
         if (_owner.transform.position.y < 36)
         {
             _owner.ankySeek.enabled = false;

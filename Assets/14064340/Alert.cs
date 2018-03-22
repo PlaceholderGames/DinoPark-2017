@@ -39,6 +39,7 @@ public class AlertState : State<MyAnky>
         _owner.anim.SetBool("isAlerted", false);
         Debug.Log("exiting alertState");
         _owner.ankyWander.enabled = false;
+        _owner.ankySeek.enabled = false;
     }
 
     public override void UpdateState(MyAnky _owner)
@@ -46,25 +47,49 @@ public class AlertState : State<MyAnky>
 
         foreach (Transform x in _owner.Enemies)
         {
-      
+
             float Distance = Vector3.Distance(x.position, _owner.transform.position);
-            if (Distance > 5 && Distance <30)
+            if (Distance > 5 && Distance < 30)
             {
-                
                 _owner.stateMachine.ChangeState(FleeingState.Instance);
                 _owner.ankyFlee.target = x.gameObject;
 
             }
             else if (Distance < 5)
             {
-                _owner.stateMachine.ChangeState(AttackState.Instance);
+                //_owner.stateMachine.ChangeState(AttackState.Instance);
+                _owner.stateMachine.ChangeState(FleeingState.Instance);
+                _owner.ankyFlee.target = x.gameObject;
             }
-   
+
         }
-        if(_owner.Enemies.Count < 1)
+
+        foreach (Transform u in _owner.friends)
+        {
+
+            float FriendDistance = Vector3.Distance(u.position, _owner.transform.position);
+            if (FriendDistance > 50)
             {
-                Debug.Log("back to graze");
-                _owner.stateMachine.ChangeState(GrazeState.Instance);
-            } 
+                _owner.ankySeek.target = u.gameObject;
+                _owner.ankyWander.enabled = false;
+  
+                _owner.ankySeek.enabled = true;
+
+            }
+            else if (FriendDistance < 20)
+            {
+                _owner.ankySeek.enabled = false;
+                _owner.ankyWander.enabled = true;
+            }
+
+        }
+
+
+
+        if (_owner.Enemies.Count < 1)
+        {
+            Debug.Log("back to graze");
+            _owner.stateMachine.ChangeState(GrazeState.Instance);
+        }
     }
 }
