@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Face : Align {
+public class FaceEnemy : Align {
 
     public static Transform enemyTarget;
 
@@ -17,7 +18,7 @@ public class Face : Align {
 
     public override Steering GetSteering()
     {
-        Vector3 direction = targetAux.transform.position - transform.position; //targetAux.transform.position enemyTarget.position
+        Vector3 direction = targetAux.transform.position - transform.position; // enemyTarget.position targetAux.transform.position
         if (direction.magnitude > 0.0f)
         {
             float targetOrientation = Mathf.Atan2(direction.x, direction.z);
@@ -27,7 +28,7 @@ public class Face : Align {
         return base.GetSteering();
     }
 
-    void OnDestroy ()
+    void OnDestroy()
     {
         Destroy(target);
     }
