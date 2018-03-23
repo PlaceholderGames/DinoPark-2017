@@ -21,16 +21,19 @@ public class MyAnky : Agent
     public Animator anim;
     private ankyState state;
     // healt level to be repleinsh while eating grass
-    public int health = 40;
+    public double health = 100;
     // stamina level to be replenish while drinking water
-    public int stamina = 40;
+    public double water = 100;
+
+    public double food = 100;
+
     // target element for fleeing
 
     public GameObject target;
     public GameObject goal;
 
-    List<Transform> ankylosaurus;
-    List<Transform> targetToFollow;
+    List<Transform> ankylosaurus; // to store list of Ankies
+    List<Transform> targetToFollow; // needed for A*
 
 
     //state machine
@@ -39,64 +42,29 @@ public class MyAnky : Agent
     public Drinking drinking;
     public Wander wander;
     public Flee flee;
-    public FieldOfView AnkyView;
+    public FieldOfView view;
     public FieldOfAlert AnkyAlerted;
+    public AStarSearch aStar;
+    public Herding herding;
+    public Grazing grazing;
+
     void Awake()
     {
         SM = new StateMachine<MyAnky>(this);
         wander = GetComponent<Wander>();
-        AnkyView = GetComponent<FieldOfView>();
+        view = GetComponent<FieldOfView>();
         AnkyAlerted = GetComponent<FieldOfAlert>();
-        AnkyAlerted.viewRadius = 100; // keep as def value
+        //AnkyAlerted.viewRadius = 100; // keep as def value
         drinking = GetComponent<Drinking>();
         flee = GetComponent<Flee>();
-
-       // flee = GetComponent<Flee>();
+        aStar = GetComponent<AStarSearch>();
+        herding = GetComponent<Herding>();
+        grazing = GetComponent<Grazing>();
     }
 
  
+    
 
-    private void ChangeToDrinking()
-    {
-        if (transform.position.y < 32 && this.stamina < 50)
-        {
-            state = ankyState.DRINKING;
-        }
-    }
-
-    private void ChangeToEating()
-    {
-        if (this.health < 50 && this.stamina < 50)
-        {
-            // go find grass
-
-            // state = ankyState.EATING;
-        }
-
-    }
-
-
-    private void ChangeToWander()
-    {
-        wander.enabled = true;
-    }
-
-    private void ChangeToFlee()
-    {
-        foreach(Transform animal in AnkyView.visibleTargets)
-        {
-            if(animal.tag == "Rapty")
-            {
-                state = ankyState.FLEEING;
-                target = animal.gameObject;
-            }
-        }
-        if (AnkyView.visibleTargets.Count == 0)
-        {
-            // change it to grazing later so the anky would seek grass rather than stand around
-            state = ankyState.IDLE;
-        }
-    }
     // Use this for initialization
 
     protected override void Start()
@@ -104,8 +72,8 @@ public class MyAnky : Agent
         state = ankyState.IDLE;
         ankylosaurus = new List<Transform>();
         anim = GetComponent<Animator>();
-        
 
+        SM.ChangeState(IdleState.Instance);
 
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -120,10 +88,33 @@ public class MyAnky : Agent
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
         base.Start();
-
     }
     protected override void Update()
     {
+
+        // reduce water lvl over time to mimic the thirst for water
+        if (water >= 0)
+        {
+
+            water -= (Time.deltaTime * 0.3) * 1;
+
+        }
+        // reduce food lvl over time to mimic the hunger
+        if (food >= 0)
+        {
+
+            food -= (Time.deltaTime * 0.3) * 1;
+
+        }
+
+
+        // reduce health lvl if Anky don't dring or eat enought
+        if (water <= 0 || food <= 0)
+        {
+
+            health -= (Time.deltaTime * 0.3) * 1;
+        }
+
         SM.Update();
     }
 

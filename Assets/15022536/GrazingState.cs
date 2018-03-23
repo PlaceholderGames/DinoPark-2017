@@ -1,51 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using StateMachine;
 
-public class SecondState : State<MyAnky>
+public class GrazingState : State<MyAnky>
 {
-    private static SecondState _instance;
 
-    private SecondState()
+
+    private static GrazingState _instance;
+    public GrazingState()
     {
         if (_instance != null)
         {
             return;
         }
-
         _instance = this;
     }
-
-    public static SecondState Instance
+    public static GrazingState Instance
     {
         get
         {
-            // check if the state exist
             if (_instance == null)
             {
-                new SecondState();
+                return new GrazingState();
             }
-
             return _instance;
         }
     }
-
     public override void EnterState(MyAnky _owner)
     {
-        Debug.Log("Entering second State");
+        Debug.Log(_owner + " enter GRAZING");
     }
-
     public override void ExitState(MyAnky _owner)
     {
-        Debug.Log("Exiting second State");
+        Debug.Log(_owner + " exit GRAZING");
     }
-
     public override void UpdateState(MyAnky _owner)
     {
-        if (!_owner.switchState == true)
-        {
-            _owner.stateMachine.ChangeState(SecondState.Instance);
-        }
+
+        _owner.wander.enabled = false;
+        _owner.grazing.enabled = true;
+        _owner.grazing.Eat();
+
     }
 }
