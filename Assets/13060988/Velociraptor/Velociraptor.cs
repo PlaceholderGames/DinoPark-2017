@@ -13,6 +13,7 @@ public class Velociraptor : Agent
     [HideInInspector] public AStarSearch Search;
     [HideInInspector] public ASPathFollower Path;
     [HideInInspector] public ASAgent SearchAgent;
+    [HideInInspector] public GameObject Terrain;
     [HideInInspector] public Seek Seek;
     [HideInInspector] public Flee Flee;
     [HideInInspector] public Arrive Arrive;
@@ -47,6 +48,7 @@ public class Velociraptor : Agent
         Seek = GetComponent<Seek>();
         Flee = GetComponent<Flee>();
         Arrive = GetComponent<Arrive>();
+        Terrain = GameObject.Find("Terrain");
 
         Animator = GetComponent<Animator>();
         SearchAgent = GetComponent<ASAgent>();
