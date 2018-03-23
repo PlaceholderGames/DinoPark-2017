@@ -116,6 +116,7 @@ public class MyRapty : Agent
         myFoodTarget = new GameObject("foodTarget");        
         myWaterTarget = new GameObject("waterTarget");
 
+        //aStarScript.target = this.gameObject;
         aStarScript.enabled = false;
 
         //set dino stats
@@ -408,7 +409,7 @@ public class MyRapty : Agent
         //if we have no energy left
         if (myStats.deathEnergy <= 0)
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
         }
         //if we have energy left
         else
