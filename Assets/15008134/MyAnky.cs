@@ -90,15 +90,14 @@ public class MyAnky : Agent
         {
             thirst -= 2 * Time.deltaTime;
         }
+        if (Vector3.Distance(this.transform.position, grassSphere.transform.position) > 10)
+        {
+            hunger -= 1 * Time.deltaTime;
+        }
 
         if (thirst <= 0)
         {
             thirst = 0;
-        }
-        
-        if (Vector3.Distance(this.transform.position, grassSphere.transform.position) > 10)
-        {
-            hunger -= 1 * Time.deltaTime;
         }
 
         if (hunger <= 0)
@@ -221,16 +220,14 @@ public class MyAnky : Agent
             {
                 foreach (Transform j in fov.visibleTargets)
                 {
-                    dist = Vector3.Distance(this.transform.position, i.position);
-                    Debug.Log("Dist to Rapty");
-                    Debug.Log(dist);
-                    dist2 = Vector3.Distance(this.transform.position, j.position);
-                    Debug.Log("Dist to Anky");
-                    Debug.Log(dist2);
+                    Debug.Log("Dist to Rapty"); Debug.Log(dist);
+                    Debug.Log("Dist to Anky"); Debug.Log(dist2);
 
+                    dist = Vector3.Distance(this.transform.position, i.position);
+                    dist2 = Vector3.Distance(this.transform.position, j.position);
                     if (i.tag == "Rapty" && dist <= 40)
                     {
-                        Debug.Log("I am spooped");
+                        Debug.Log("I see a Rapty");
                         alertednow = true;
                         //to alerted
                         currentState = ankyState.ALERTED;
@@ -238,9 +235,10 @@ public class MyAnky : Agent
                     }
                     else if (i.tag != "Rapty" && j.tag == "Anky")
                     {
-                        if ((Vector3.Distance(this.transform.position, friendo.transform.position)> 20) && (Vector3.Distance(this.transform.position, friendo.transform.position) < 60))
+                        if ((Vector3.Distance(this.transform.position, friendo.transform.position)> 20)
+                            && (Vector3.Distance(this.transform.position, friendo.transform.position) < 60))
                         {
-                            Debug.Log("Oooh Friend");
+                            Debug.Log("I see an Anky Friend");
                             aStarScript.target = this.friendo.gameObject;
                             if (pathFolloweScript.path.nodes.Count < 1 || pathFolloweScript.path == null)
                             {
@@ -255,7 +253,7 @@ public class MyAnky : Agent
             }
             if (hunger <= 30 && hunger <= thirst)
             {
-                Debug.Log("Need Noms");
+                Debug.Log("Need Food");
                 //to eating
                 currentState = ankyState.EATING;
                 previousState = ankyState.GRAZING;
@@ -301,16 +299,14 @@ public class MyAnky : Agent
                 foreach (Transform j in fov.visibleTargets)
                 {
                     dist = Vector3.Distance(this.transform.position, i.position);
-                    Debug.Log("Dist to Rapty");
-                    Debug.Log(dist);
+                    Debug.Log("Dist to Rapty"); Debug.Log(dist);
                     dist2 = Vector3.Distance(this.transform.position, j.position);
-                    Debug.Log("Dist to Anky");
-                    Debug.Log(dist2);
+                    Debug.Log("Dist to Anky"); Debug.Log(dist2);
 
                     if (i.tag == "Rapty" && dist <= 10 && health > 50)
                     {
                         //to attacking
-                        Debug.Log("For Friendo");
+                        Debug.Log("Attacking A Rapty");
                         currentState = ankyState.ATTACKING;
                         previousState = ankyState.ALERTED;
 
@@ -328,7 +324,7 @@ public class MyAnky : Agent
                         if (hunger <= 30 && hunger <= thirst)
                         {
                             //to eating
-                            Debug.Log("Need Noms");
+                            Debug.Log("Need Food");
                             currentState = ankyState.EATING;
                             previousState = ankyState.ALERTED;
                         }
@@ -376,11 +372,9 @@ public class MyAnky : Agent
                 {
 
                     dist = Vector3.Distance(this.transform.position, i.position);
-                    Debug.Log("Dist to Rapty");
-                    Debug.Log(dist);
+                    Debug.Log("Dist to Rapty"); Debug.Log(dist);
                     dist2 = Vector3.Distance(this.transform.position, j.position);
-                    Debug.Log("Dist to Anky");
-                    Debug.Log(dist2);
+                    Debug.Log("Dist to Anky"); Debug.Log(dist2);
                     if (dist >= 1 && dist <= 60 || health <= 50)
                     {
                         currentState = ankyState.FLEEING;
@@ -389,7 +383,7 @@ public class MyAnky : Agent
                     else if (i.tag != "Rapty")
                     {
                         //to alerted
-                        Debug.Log("Lol He Ded");
+                        Debug.Log("He Gone?!");
                         currentState = ankyState.ALERTED;
                         previousState = ankyState.ATTACKING;
                     }
@@ -410,13 +404,7 @@ public class MyAnky : Agent
         anim.SetFloat("speedMod", 1.0f);
         //Dead is dead
         Debug.Log("Insert Coin to respawn...");
-        DestroyObject(gameObject);
-        //When Anky Dead
-        //Delete Anky
-        //Spawn Meat Ball
-        //When collide with Rapty
-        //Destroy Meat Ball
-        
+        DestroyObject(gameObject);  
     }
 
 
@@ -442,8 +430,6 @@ public class MyAnky : Agent
             if (pathFolloweScript.path.nodes.Count < 1 || pathFolloweScript.path == null)
             {
                 pathFolloweScript.path = aStarScript.path;
-
-
             }
             move(pathFolloweScript.getDirectionVector());
             if (Vector3.Distance(this.transform.position, grassSphere.transform.position) < 10 && hunger < 100)
@@ -451,9 +437,6 @@ public class MyAnky : Agent
                 //for loop to add hunger up to 100
                 Debug.Log("Om Nom Nom");
                 hunger += 5 * Time.deltaTime;
-
-
-
             }
             else if (hunger >= 100)
             {
@@ -469,16 +452,14 @@ public class MyAnky : Agent
                 foreach (Transform j in fov.visibleTargets)
                 {
                     dist = Vector3.Distance(this.transform.position, i.position);
-                    Debug.Log("Dist to Rapty");
-                    Debug.Log(dist);
+                    Debug.Log("Dist to Rapty"); Debug.Log(dist);
                     dist2 = Vector3.Distance(this.transform.position, j.position);
-                    Debug.Log("Dist to Anky");
-                    Debug.Log(dist2);
+                    Debug.Log("Dist to Anky");  Debug.Log(dist2);
 
                     if (i.tag == "Rapty" && dist < 60)
                     {
                         //to alert
-                        Debug.Log("I am spooped");
+                        Debug.Log("I see a Rapty");
                         currentState = ankyState.ALERTED;
                         previousState = ankyState.EATING;
                     }
@@ -538,16 +519,14 @@ public class MyAnky : Agent
             {
 
                 dist = Vector3.Distance(this.transform.position, i.position);
-                Debug.Log("Dist to Rapty");
-                Debug.Log(dist);
+                Debug.Log("Dist to Rapty"); Debug.Log(dist);
                 dist2 = Vector3.Distance(this.transform.position, j.position);
-                Debug.Log("Dist to Anky");
-                Debug.Log(dist2);
+                Debug.Log("Dist to Anky"); Debug.Log(dist2);
 
                 if (i.tag == "Rapty" && dist < 60)
                 {
 
-                    Debug.Log("I am spooped");
+                    Debug.Log("I see a Rapty");
                     //to alert
                     currentState = ankyState.ALERTED;
                     previousState = ankyState.DRINKING;
@@ -578,23 +557,21 @@ public class MyAnky : Agent
             {
 
                 dist = Vector3.Distance(this.transform.position, i.position);
-                Debug.Log("Dist to Rapty");
-                Debug.Log(dist);
+                Debug.Log("Dist to Rapty"); Debug.Log(dist);
                 dist2 = Vector3.Distance(this.transform.position, j.position);
-                Debug.Log("Dist to Anky");
-                Debug.Log(dist2);
+                Debug.Log("Dist to Anky"); Debug.Log(dist2);
 
                 if (i.tag == "Rapty")
                 {
                     if (dist < 10 && health >= 51)
                     {
-                        Debug.Log("Charge!!");
+                        Debug.Log("Attack The Rapty");
                         currentState = ankyState.ATTACKING;
                         previousState = ankyState.FLEEING;
                     }
                     else if (dist <= 30)
                     {
-                        Debug.Log("Aah Don't eat me!");
+                        Debug.Log("Aaah Don't eat me!");
                         currentState = ankyState.FLEEING;
                         fleeScript.target = i.gameObject;
                         fleeScript.enabled = true;
@@ -625,6 +602,7 @@ public class MyAnky : Agent
     }
     void move(Vector3 directionVector)
     {
+        //Mode to the position of the node
         directionVector *= speed * Time.deltaTime;
 
         transform.Translate(directionVector, Space.World);
@@ -633,9 +611,14 @@ public class MyAnky : Agent
 
     public bool takeDamage(int damage)
     {
+        //For the game object
+        //Take the int of damage
+        //Away from its health
         health -= damage;
         if (health <= 0)
         {
+            //When its health is 0
+            //Destroy it
             DestroyObject(gameObject);
             return true;
         }

@@ -22,7 +22,6 @@ public class MyRapty : Agent
     public GameObject friendo;
 
     public bool isDead = false;
-
     public float health = 100;
     public float hunger = 100;
     public float thirst = 100;
@@ -174,6 +173,7 @@ public class MyRapty : Agent
         base.Update();
     }
 
+    //Floats used to calculate distance
     float dist = 0;
     float dist2 = 0;
 
@@ -227,7 +227,7 @@ public class MyRapty : Agent
                     if (i.gameObject.tag == "Anky" && ((dist >= 1 && dist < 40) && health > 50))
                     {
                         //to attacking
-                        Debug.Log("let me eat you");
+                        Debug.Log("Attacking Anky");
                         currentState = raptyState.ATTACKING;
                         previousState = raptyState.ALERTED;
 
@@ -235,16 +235,18 @@ public class MyRapty : Agent
                     else if (i.tag == "Anky" && (dist >= 1 && dist < 40) && health <= 50)
                     {
                         //to attacking
-                        Debug.Log("lmao naaaa");
+                        Debug.Log("I give up");
                         currentState = raptyState.FLEEING;
                         previousState = raptyState.ALERTED;
 
                     }
                     else if (i.tag != "Anky" && j.tag == "Rapty")
                     {
-                        if ((Vector3.Distance(this.transform.position, friendo.transform.position) > 20) && (Vector3.Distance(this.transform.position, friendo.transform.position) < 60))
+                        if ((Vector3.Distance(this.transform.position, friendo.transform.position) > 20)
+                            && (Vector3.Distance(this.transform.position, friendo.transform.position) < 60))
                         {
-                            Debug.Log("Oooh Friend");
+                            //Move to the raptor
+                            Debug.Log("Rapty Friend");
                             aStarScript.target = this.friendo.gameObject;
                             if (pathFolloweScript.path.nodes.Count < 1 || pathFolloweScript.path == null)
                             {
@@ -287,7 +289,7 @@ public class MyRapty : Agent
         anim.SetBool("isFleeing", false);
         anim.SetBool("isDead", false);
         anim.SetFloat("speedMod", 1.0f);
-        Debug.Log("yes");
+        
         if (health <= 0)
         {
             currentState = raptyState.DEAD;
@@ -300,16 +302,14 @@ public class MyRapty : Agent
                 foreach (Transform j in fov.visibleTargets)
                 {
                     dist = Vector3.Distance(this.transform.position, i.position);
-                    Debug.Log("Dist to Anky");
-                    Debug.Log(dist);
+                    Debug.Log("Dist to Anky"); Debug.Log(dist);
                     dist2 = Vector3.Distance(this.transform.position, j.position);
-                    Debug.Log("Dist to Rapty");
-                    Debug.Log(dist2);
+                    Debug.Log("Dist to Rapty"); Debug.Log(dist2);
 
                     if (i.tag == "Anky" && (dist >= 1 && dist <= 60) && health > 50)
                     {
                         //to attacking
-                        Debug.Log("let me eat you");
+                        Debug.Log("On the hunt");
                         currentState = raptyState.HUNTING;
                         previousState = raptyState.ALERTED;
 
@@ -342,50 +342,38 @@ public class MyRapty : Agent
         {
             foreach (Transform j in fov.visibleTargets)
             {
-
                 dist = Vector3.Distance(this.transform.position, i.position);
-                Debug.Log("Dist to Anky");
-                Debug.Log(dist);
+                Debug.Log("Dist to Anky"); Debug.Log(dist);
                 dist2 = Vector3.Distance(this.transform.position, j.position);
-                Debug.Log("Dist to Rapty");
-                Debug.Log(dist2);
+                Debug.Log("Dist to Rapty"); Debug.Log(dist2);
                 if (health > 20)
                 {
+                    //Mode to location of the Anky
                     aStarScript.target = this.lunch.gameObject;
                     if (pathFolloweScript.path.nodes.Count < 1 || pathFolloweScript.path == null)
                     {
                         pathFolloweScript.path = aStarScript.path;
-
-
                     }
                     move(pathFolloweScript.getDirectionVector());
-
                     if (Vector3.Distance(lunch.transform.position, this.transform.position) < 20)
                     {
+                        //Deal 1 damage
                         isDead = lunch.GetComponent<MyAnky>().takeDamage(1);
-
+                        //If bool is true
                         if (isDead)
                         {
+                            //go to eating
                             currentState = raptyState.EATING;
                             previousState = raptyState.ATTACKING;
                         }
                     }
-                    
                 }
-
                 else if (health <= 20)
                 {
                     //to fleeing
                     Debug.Log("I need healing");
                     currentState = raptyState.FLEEING;
                     previousState = raptyState.ATTACKING;
-
-                }
-                if (health <= 0)
-                {
-                    //to dead
-                    currentState = raptyState.DEAD;
-                    previousState = raptyState.ALERTED;
                 }
             }
         }
@@ -400,8 +388,6 @@ public class MyRapty : Agent
                 Debug.Log("He gone");
                 currentState = raptyState.HUNTING;
                 previousState = raptyState.ATTACKING;
-
-            
         }
     }
     void deadState()
@@ -435,33 +421,36 @@ public class MyRapty : Agent
             currentState = raptyState.DEAD;
             previousState = raptyState.EATING;
         }
-        else if (health > 1)
+        else if (health > 1 && health < 100)
         {
             for (int i = 0; i < 1; i++)
             {
-                if (health <= 100)
+                if (hunger <= 100)
                 {
+                    //add hunger
+                    //Add health till hunger
+                    //drops below 40
+                    hunger = hunger + 50;
+                    if (hunger > 40 )
+                    {
 
-                    health = health + 50;
+                        health += 5 * Time.deltaTime;
+                    }
                     if (health >= 100)
                     {
                         health = 100;
                     }
                 }
-                //for loop to add hunger up to 100
                 Debug.Log("Om Nom Nom");
-
-
-                //When collides with Meat Ball
-                //Destroy meat Ball
-                //Food upped
-
             }
             if (hunger >= 100)
             {
+                //Make sure hungers max is 100
                 if (hunger >= 100)
+                {
                     hunger = 100;
-                //to HUNTING
+                }
+                    //to HUNTING
                 Debug.Log("All full");
                 currentState = raptyState.ATTACKING;
                 previousState = raptyState.EATING;
@@ -490,11 +479,8 @@ public class MyRapty : Agent
             currentState = raptyState.DEAD;
             previousState = raptyState.DRINKING;
         }
-        //to alerted
-        //to HUNTING
-
-        //to drink
-
+       
+        //Mode to the location of the game object
         aStarScript.target = this.waterSphere.gameObject;
         if (pathFolloweScript.path.nodes.Count < 1 || pathFolloweScript.path == null)
         {
@@ -524,18 +510,16 @@ public class MyRapty : Agent
         {
             foreach (Transform j in fov.visibleTargets)
             {
-
+                //Take distanbce
                 dist = Vector3.Distance(this.transform.position, i.position);
-                Debug.Log("Dist to Anky");
-                Debug.Log(dist);
+                Debug.Log("Dist to Anky"); Debug.Log(dist);
                 dist2 = Vector3.Distance(this.transform.position, j.position);
-                Debug.Log("Dist to Rapty");
-                Debug.Log(dist2);
+                Debug.Log("Dist to Rapty"); Debug.Log(dist2);
 
                 if (i.tag == "Anky" && dist < 60)
                 {
 
-                    Debug.Log("mmm i see lunch");
+                    Debug.Log("I see lunch");
                     //to alert
                     currentState = raptyState.ALERTED;
                     previousState = raptyState.DRINKING;
@@ -554,9 +538,9 @@ public class MyRapty : Agent
         anim.SetBool("isFleeing", true);
         anim.SetBool("isDead", false);
         anim.SetFloat("speedMod", 1.0f);
-
         if (health <= 0)
         {
+            //Change to dead state
             currentState = raptyState.DEAD;
             previousState = raptyState.FLEEING;
         }
@@ -564,25 +548,24 @@ public class MyRapty : Agent
         {
             foreach (Transform j in fov.visibleTargets)
             {
-
+                //Take the distance for the game objects
                 dist = Vector3.Distance(this.transform.position, i.position);
-                Debug.Log("Dist to Anky");
-                Debug.Log(dist);
+                Debug.Log("Dist to Anky"); Debug.Log(dist);
                 dist2 = Vector3.Distance(this.transform.position, j.position);
-                Debug.Log("Dist to Rapty");
-                Debug.Log(dist2);
+                Debug.Log("Dist to Rapty"); Debug.Log(dist2);
 
                 if (i.tag == "Anky")
                 {
-
                     if (dist < 40 && health >= 51)
                     {
-                        Debug.Log("Charge!!");
+                        //Change to attacking
+                        Debug.Log("Attacking an Anky");
                         currentState = raptyState.ATTACKING;
                         previousState = raptyState.FLEEING;
                     }
                     else if (dist < 40 && health <= 50)
                     {
+                        //flee
                         Debug.Log("i give up!");
                         previousState = raptyState.FLEEING;
                         fleeScript.target = i.gameObject;
@@ -591,15 +574,13 @@ public class MyRapty : Agent
                     }
                     else if (dist >= 40)
                     {
+                        //Change to hunting
                         Debug.Log("Stay Away");
                         currentState = raptyState.HUNTING;
                         previousState = raptyState.FLEEING;
-
                         fleeScript.enabled = false;
                         wanderScript.enabled = true;
-
-                    }
-                    
+                    } 
                 }
             }
         }
@@ -611,6 +592,7 @@ public class MyRapty : Agent
     }
     void move(Vector3 directionVector)
     {
+        //Mode to the position of the node
         directionVector *= speed * Time.deltaTime;
 
         transform.Translate(directionVector, Space.World);
@@ -619,9 +601,14 @@ public class MyRapty : Agent
 
     public bool takeDamage(int damage)
     {
+        //For the game object
+        //Take the int of damage
+        //Away from its health
         health -= damage;
         if (health <= 0)
         {
+            //When its health is 0
+            //Destroy it
             DestroyObject(gameObject);
             return true;
         }
