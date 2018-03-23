@@ -36,7 +36,12 @@ public class Grass : MonoBehaviour
         int z = Random.Range(0, 2000);
         int x = Random.Range(0, 2000);
 
-        if (Details[z, x] < 16)
+        if (Terrain.GetComponent<Terrain>().SampleHeight(new Vector3(x, 0, z)) > 35.0f && Details[z, x] < 16)
             Details[z, x] += 1;
+        else
+            Growth();
+
+
+        
     }
 }
