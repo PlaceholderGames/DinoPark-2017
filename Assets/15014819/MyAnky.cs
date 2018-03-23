@@ -231,20 +231,7 @@ public class MyAnky : Agent
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
         base.Update();
-        //if (Time.time > gametimer + 1)
-        //{
-        ////    gametimer = Time.time;
-        ////    seconds++;
-        //    energy--;
-        ////    //Debug.Log(seconds);
-        ////    Debug.Log(energy);
-        //}
-
-        //if (energy < 20)
-        //{
-            
-        //    switchState = !switchState;
-        //}
+        
 
         
     }
