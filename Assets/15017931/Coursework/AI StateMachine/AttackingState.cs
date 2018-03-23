@@ -76,15 +76,8 @@ public class AttackingState : State<MyAnky>
 
                 if (_owner.distance <= _owner.attackRange)
                 {
-                    if (pred.GetComponent<MyRapty>().currentState != MyRapty.raptorState.DEAD)
-                    {
-                        Debug.Log("Predator in attack Range");
-                        targetInRange.Add(pred);
-                    }
-                    else
-                    {
-                        Debug.Log("Raptor Is Dead");
-                    }
+                    Debug.Log("Predator in attack Range");
+                    targetInRange.Add(pred);
                 }
             }
 
@@ -99,8 +92,7 @@ public class AttackingState : State<MyAnky>
         {
             _owner.stateMachine.ChangeState(AlertState.Instance);
         }
-        
-        if(targetInRange.Count >0)
+        else
         {
             //What to do if we are still attacking
             //Turn to face our main target
@@ -124,21 +116,10 @@ public class AttackingState : State<MyAnky>
             if (counter <= 0)
             {
                 Debug.Log("Swing");
-                foreach (Transform i in targetInRange)
-                {
-                    if (i.gameObject.GetComponent<MyRapty>())
-                    {
-                        i.gameObject.GetComponent<MyRapty>().hitTarget(_owner.tailImpact);
-                    }
-
-                    //reset our cooldown
-                    counter = attackCooldown;
-                }
+                //reset our cooldown
+                counter = attackCooldown;
             }
-            else
-            {
-                counter -= Time.deltaTime;
-            }
+            counter -= Time.deltaTime;
         }
     }
 }
