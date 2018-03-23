@@ -33,15 +33,12 @@ public class Grass : MonoBehaviour
 
     void Growth()
     {
-        int z = Random.Range(0, 2000);
-        int x = Random.Range(0, 2000);
+        var z = Random.Range(0, 2000);
+        var x = Random.Range(0, 2000);
 
         if (Terrain.GetComponent<Terrain>().SampleHeight(new Vector3(x, 0, z)) > 35.0f && Details[z, x] < 16)
             Details[z, x] += 1;
         else
             Growth();
-
-
-        
     }
 }

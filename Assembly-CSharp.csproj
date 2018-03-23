@@ -58,6 +58,7 @@
      <Compile Include="Assets\13060988\FieldOfView.cs" />
      <Compile Include="Assets\13060988\FiniteStateMachine.cs" />
      <Compile Include="Assets\13060988\Grass.cs" />
+     <Compile Include="Assets\13060988\HerdCentre.cs" />
      <Compile Include="Assets\13060988\Velociraptor\States\V_Alerted.cs" />
      <Compile Include="Assets\13060988\Velociraptor\States\V_Attacking.cs" />
      <Compile Include="Assets\13060988\Velociraptor\States\V_Dead.cs" />
@@ -86,7 +87,6 @@
      <Compile Include="Assets\15017931\CameraAssets\Scripts\HUD_DinoStats.cs" />
      <Compile Include="Assets\15017931\Scripts\Heron.cs" />
      <Compile Include="Assets\15017931\Scripts\HeronCollider.cs" />
-     <Compile Include="Assets\HerdCentre.cs" />
      <Compile Include="Assets\Scripts\FPSFreeCam.cs" />
      <Compile Include="Assets\Scripts\FPSMouseLook.cs" />
      <Compile Include="Assets\Scripts\MeshCombineUtility.cs" />

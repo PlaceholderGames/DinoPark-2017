@@ -40,7 +40,7 @@ public class Alerted : State<Ankylosaurus> // This is for heightened awareness, 
         if (parent.Predators.Count == 0)
             parent.State.Change(Grazing.Instance);
 
-        if (parent.Predators.Count == 1)
+        if (parent.Predators.Count == 0)
         {
             parent.GetClosestPredator();
             parent.State.Change(Attacking.Instance);

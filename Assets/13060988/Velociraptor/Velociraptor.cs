@@ -20,10 +20,13 @@ public class Velociraptor : Agent
 
     [HideInInspector] public FiniteStateMachine<Velociraptor> State { get; private set; }
 
+    public bool death = false;
+
     public float Health = 100.0f;
     public float Hunger = 100.0f;
     public float Thirst = 100.0f;
     public float Attack = 12.5f;
+    public float Meat = 100.0f;
 
     [HideInInspector] private float collision_time;
     [HideInInspector] private float health_time;

@@ -37,6 +37,9 @@ public class V_Dead : State<Velociraptor>
 
     public override void Update(Velociraptor parent)
     {
-        parent.Death();
+        parent.Wander.enabled = false;
+
+        if (parent.death)
+            parent.Death();
     }
 }

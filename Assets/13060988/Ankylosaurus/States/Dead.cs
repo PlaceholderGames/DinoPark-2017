@@ -29,7 +29,6 @@ public class Dead : State<Ankylosaurus>
     public override void Enter(Ankylosaurus parent)
     {
         parent.Animator.SetBool("isDead", true);
-        parent.gameObject.GetComponent<BoxCollider>().size = new Vector3(0.01f, 0.01f, 0.01f);
     }
 
     public override void Exit(Ankylosaurus parent)
