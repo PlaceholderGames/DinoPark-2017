@@ -10,15 +10,37 @@ public class Pursue : Seek
     public override void Awake()
     {
         base.Awake();
+        //target.AddComponent<Agent>();
         targetAgent = target.GetComponent<Agent>();
         targetAux = target;
         target = new GameObject();
+
+
+
+        //new
     }
 
+    public void newTarget ()
+    {
+        base.Awake();
+        //target.AddComponent<Agent>();
+        
+        targetAgent = target.GetComponent<Agent>();
+        targetAux = target;
+        target = new GameObject();
+
+
+
+        //new
+    }
     public override Steering GetSteering()
     {
-        Vector3 direction = targetAux.transform.position - transform.position;
+        
+        Vector3 test = targetAux.transform.position;
+        Vector3 test2 = transform.position;
+        Vector3 direction = test - test2;
         float distance = direction.magnitude;
+       
         float speed = agent.velocity.magnitude;
         float prediction;
         if (speed <= distance / maxPrediction)
@@ -26,12 +48,17 @@ public class Pursue : Seek
         else
             prediction = distance / speed;
         target.transform.position = targetAux.transform.position;
-        target.transform.position += targetAgent.velocity * prediction;
+
+        Vector3 anotherTest = targetAgent.velocity;
+        float evenMoreTests = prediction;
+
+        target.transform.position += (anotherTest * evenMoreTests);
         return base.GetSteering();
     }
 
     void OnDestroy ()
     {
         Destroy(targetAux);
+        Destroy(target);
     }
 }

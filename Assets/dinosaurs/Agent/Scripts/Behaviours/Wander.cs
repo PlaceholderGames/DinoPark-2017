@@ -14,6 +14,13 @@ public class Wander : Face {
         base.Awake();
     }
 
+    public void newWander()
+    {
+        //target = new GameObject();
+        target.transform.position = transform.position;
+        //base.Awake();
+    }
+
     public override Steering GetSteering()
     {
         Steering steering = new Steering();

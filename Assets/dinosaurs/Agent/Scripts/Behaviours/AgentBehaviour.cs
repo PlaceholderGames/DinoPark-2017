@@ -7,6 +7,7 @@ public class AgentBehaviour : MonoBehaviour
     public GameObject target;
     protected Agent agent;
 
+    
     public virtual void Awake ()
     {
         agent = gameObject.GetComponent<Agent>();
@@ -34,6 +35,7 @@ public class AgentBehaviour : MonoBehaviour
             else
                 rotation -= 360.0f;
         }
+        
         return rotation;
     }
     public Vector3 OriToVec (float orientation) {
