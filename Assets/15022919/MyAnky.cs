@@ -14,8 +14,8 @@ public class MyAnky : Agent
     private bool only_need_friend = false;// same as  above but only for friends.
     private float speed = 10.0f;
     private float walking_time = 5.0f;
-    Vector3 waterPos = new Vector3(0,32,0) ;
-    Vector3  ankyY = new Vector3(0,0,0);
+    Vector3 waterPos = new Vector3(0, 32, 0);
+    Vector3 ankyY = new Vector3(0, 0, 0);
     public enum ankyState
     {
         IDLE,       // The default state on creation.
@@ -53,7 +53,7 @@ public class MyAnky : Agent
         AStar = GetComponent<AStarSearch>(); // loads in a star search
         facetime = GetComponent<Face>(); //loads in face script
         seekout = GetComponent<Seek>(); //  loads in seek
-       
+
 
         //Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -85,18 +85,18 @@ public class MyAnky : Agent
         if (thirst > 0 && currentState != ankyState.DRINKING)
         {//makes him thristy every update
             thirst -= Time.deltaTime;
-           // Debug.Log("thirst at: " + thirst);
+            // Debug.Log("thirst at: " + thirst);
         }
         //makes him more hungry each update
-            if (hunger > 0)
-            {
-                hunger -= Time.deltaTime;
-            }
+        if (hunger > 0)
+        {
+            hunger -= Time.deltaTime;
+        }
         //will start to hurt him if too thirsty or hungry
-            if (thirst == 0)
-            {
-                health -= Time.deltaTime;
-            }
+        if (thirst == 0)
+        {
+            health -= Time.deltaTime;
+        }
 
         lookAround();//looking for raptors
 
@@ -116,7 +116,7 @@ public class MyAnky : Agent
         {
             if (this.transform.position.y < 50)
             {
-                
+
             }
             if (!wandering.enabled)
             {
@@ -131,14 +131,14 @@ public class MyAnky : Agent
             }
         }
 
-            //ALERTED STATE
+        //ALERTED STATE
         else if (currentState == ankyState.ALERTED)
         {
-           
+
             if (!can_see_hunter)
             {
                 Debug.Log("going into " + currentState);
-                currentState = ankyState.WANDERING; 
+                currentState = ankyState.WANDERING;
             }
             else
             {
@@ -181,43 +181,44 @@ public class MyAnky : Agent
         else if (currentState == ankyState.DRINKING)
         {
             wandering.enabled = false;
-            AStar.enabled = true;
+            int NumOfPath = (this.AStar.path.nodes.Count);//sets the number of nodes in the current a*
+            Debug.Log(NumOfPath);
             if (thirst >= 100)//if we have a full thirst then we stop drinking and wander
             {
                 currentState = ankyState.WANDERING;
                 Debug.Log("going into " + currentState);
-               // seekout.enabled = false;
-               AStar.enabled = false;
+                seekout.enabled = false;
+                AStar.enabled = false;
             }
-             else if (can_see_hunter)//if we can see a hunter we stop drinking and go into alert 
+            else if (can_see_hunter)//if we can see a hunter we stop drinking and go into alert 
             {
                 currentState = ankyState.ALERTED;
                 Debug.Log("going into " + currentState);
-                //seekout.enabled = false;
+                seekout.enabled = false;
                 AStar.enabled = false;
             }
-            if (AStar.path.nodes.Count <= 0)
-            {
-                AStar.enabled = false;
-                if (this.transform.position.y <= 35)// we knows he is at water and so he drinks 
-                {
-                    Debug.Log("im drinking");
-                    seekout.enabled = false;
-                    thirst += Time.deltaTime;
-
-                }
-                else if (this.transform.position.y > 35 && thirst < 30)//he is using a* to find the water
-                {
-                    seekout.enabled = true;
-                    Debug.Log("looking for the water");
-                }
-            }
-            else
+            else if (this.transform.position.y > 35 && thirst < 30)//he is using a* to find the water
             {
                 AStar.enabled = true;
+                if (NumOfPath <= 1)
+                {
+                    Debug.Log("using seek intstead of AStar");
+                    AStar.enabled = false;
+                    seekout.enabled = true;
+                }
+                Debug.Log("looking for the water");
             }
-         
+            else if (this.transform.position.y <= 35)// we knows he is at water and so he drinks 
+            {
+                Debug.Log("im drinking");
+                seekout.enabled = false;
+                AStar.enabled = false;
+                thirst += Time.deltaTime;
+
+            }
+           
         }
+         
         //dead state
         else if (currentState == ankyState.DEAD)
         {
@@ -310,7 +311,7 @@ public class MyAnky : Agent
 
     void aStar_to_land()
     {
-       // AStar.target = 
+       
     }
 
 
