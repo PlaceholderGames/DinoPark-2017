@@ -9,7 +9,6 @@ public class AStarSearch : MonoBehaviour
 {
     public MapGrid mapGrid; // The MapGrid object applied over the map
     public GameObject target; // The agent to search for
-
     private Vector3 targetPos; // Position of the target to be updated each frame
 
     public ASPathNode nodeType;
