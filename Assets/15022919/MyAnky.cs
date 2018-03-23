@@ -14,8 +14,7 @@ public class MyAnky : Agent
     private bool only_need_friend = false;// same as  above but only for friends.
     private float speed = 10.0f;
     private float walking_time = 5.0f;
-    Vector3 waterPos = new Vector3(0, 32, 0);
-    Vector3 ankyY = new Vector3(0, 0, 0);
+    GameObject current_targetAS;
     public enum ankyState
     {
         IDLE,       // The default state on creation.
@@ -40,6 +39,8 @@ public class MyAnky : Agent
     private Transform target;
     private Face facetime;
     private Seek seekout;
+    private Follow_to_water follow;
+    private ASPathFollower ASPF;
 
     // Use this for initialization
     protected override void Start()
@@ -53,6 +54,8 @@ public class MyAnky : Agent
         AStar = GetComponent<AStarSearch>(); // loads in a star search
         facetime = GetComponent<Face>(); //loads in face script
         seekout = GetComponent<Seek>(); //  loads in seek
+        follow = GetComponent<Follow_to_water>(); //loads in follow to water used for a*
+        ASPF = GetComponent<ASPathFollower>();// loads in aspathfollwer used for a*
 
 
         //Assert default animation booleans and floats
@@ -73,6 +76,7 @@ public class MyAnky : Agent
         seekout.enabled = false;
 
         currentState = ankyState.IDLE;// anky will always start the game idle;
+        current_targetAS = AStar.target; 
 
         base.Start();
 
@@ -180,42 +184,51 @@ public class MyAnky : Agent
         //drinking state
         else if (currentState == ankyState.DRINKING)
         {
+            
             wandering.enabled = false;
-            int NumOfPath = (this.AStar.path.nodes.Count);//sets the number of nodes in the current a*
-            Debug.Log(NumOfPath);
+            
             if (thirst >= 100)//if we have a full thirst then we stop drinking and wander
             {
-                currentState = ankyState.WANDERING;
+                
                 Debug.Log("going into " + currentState);
                 seekout.enabled = false;
-                AStar.enabled = false;
+                disableAStar();
+                AStar.target = current_targetAS;
+                currentState = ankyState.WANDERING;
             }
             else if (can_see_hunter)//if we can see a hunter we stop drinking and go into alert 
             {
-                currentState = ankyState.ALERTED;
+                
                 Debug.Log("going into " + currentState);
                 seekout.enabled = false;
-                AStar.enabled = false;
+                disableAStar();
+                AStar.target = current_targetAS;
+                currentState = ankyState.ALERTED;
             }
-            else if (this.transform.position.y > 35 && thirst < 30)//he is using a* to find the water
-            {
-                AStar.enabled = true;
-                if (NumOfPath <= 1)
-                {
-                    Debug.Log("using seek intstead of AStar");
-                    AStar.enabled = false;
-                    seekout.enabled = true;
-                }
-                Debug.Log("looking for the water");
-            }
+
+
             else if (this.transform.position.y <= 35)// we knows he is at water and so he drinks 
             {
                 Debug.Log("im drinking");
                 seekout.enabled = false;
-                AStar.enabled = false;
+                disableAStar();
                 thirst += Time.deltaTime;
 
             }
+            else if (this.transform.position.y > 35 && thirst < 30)//he is using a* to find the water
+            {
+                if (this.transform.position.y < 45)
+                    AStar.target = null;
+                if (AStar.target == null)
+                {
+                    disableAStar();
+                    seekout.enabled = true;
+                    Debug.Log("using seek intstead of AStar" + AStar.enabled);
+                }
+                AStar.enabled = true;
+                Debug.Log("looking for the water");
+            }
+           
            
         }
          
@@ -309,9 +322,14 @@ public class MyAnky : Agent
             return false;
     }
 
-    void aStar_to_land()
+    /// <summary>
+    /// turns off a* and all its components
+    /// </summary>
+    void disableAStar()
     {
-       
+        follow.enabled = false;
+        AStar.enabled = false;
+        ASPF.enabled = false;
     }
 
 

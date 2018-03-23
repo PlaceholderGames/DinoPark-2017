@@ -8,7 +8,6 @@ public class Follow_to_water : MonoBehaviour {
 
     private AStarSearch aStar;
     private ASPathFollower follower;
-    public int follower_count;
 
     
 	// Use this for initialization
@@ -24,10 +23,11 @@ public class Follow_to_water : MonoBehaviour {
             return;
         }
 		if((follower.path.nodes.Count < 1) || (follower.path == null))
-                follower.path = aStar.path;
+        {
+            follower.path = aStar.path;
+        }
 
         move(follower.getDirectionVector());
-        follower_count = follower.path.nodes.Count;
 	}
     void move(Vector3 directionvector)
     {
