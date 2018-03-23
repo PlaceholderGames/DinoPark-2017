@@ -41,6 +41,18 @@ public class raptyAtackState : State<MyRapty>
 
     public override void UpdateState(MyRapty _owner)
     {
+        foreach (Transform enemy in _owner.enemies)
+        {
+            float enemyDist = Vector3.Distance(enemy.position, _owner.transform.position);
+            if (enemyDist > 5)
+            {
+                _owner.stateMachine.ChangeState(raptyHuntingState.Instance);
+            }
+        }
 
+        if (_owner.health <= 0)
+        {
+            _owner.stateMachine.ChangeState(raptyDeadState.Instance);
+        }
     }
 }

@@ -31,14 +31,12 @@ public class raptyAlertState : State<MyRapty>
         Debug.Log("entering graze state");
         _owner.currentraptyState = MyRapty.raptyState.ALERTED;
         _owner.anim.SetBool("isAlerted", true);
-        _owner.raptyPursue.enabled = true;
     }
 
     public override void ExitState(MyRapty _owner)
     {
         Debug.Log("exiting graze state");
         _owner.anim.SetBool("isAlerted", false);
-        _owner.raptyPursue.enabled = false;
     }
 
     public GameObject Anky = new GameObject();

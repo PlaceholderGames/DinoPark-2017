@@ -70,7 +70,6 @@ public class ankyFleeState : State<MyAnky>
                 _owner.stateMachine.ChangeState(ankyAttackingState.Instance);
             }
         }
-
         if (Raptor)
         {
             _owner.ankyFlee.target = Raptor;

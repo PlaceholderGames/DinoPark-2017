@@ -133,12 +133,24 @@ public class MyAnky : Agent
         else
             health -= (Time.deltaTime * 0.2) * 1;
 
-        
+        foreach (Transform enemy in enemies)
+        {
+            float enemyDist = Vector3.Distance(enemy.position, transform.position);
+            if (enemyDist < 5)
+            {
+                health -= (Time.deltaTime * 0.6) * 1;
+            }
+        }
 
         stateMachine.Update();
         base.Update();
     }
 
+    private void OnCollisionEnter(Collision Col)
+    {
+        if (Col.gameObject.tag == "Rapty")
+            health -= 5;
+    }
 
     protected override void LateUpdate()
     {

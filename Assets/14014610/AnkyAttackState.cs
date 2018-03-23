@@ -41,8 +41,18 @@ public class ankyAttackingState : State<MyAnky>
         _owner.anim.SetBool("isAttacking", false);
     }
 
+    
+
     public override void UpdateState(MyAnky _owner)
     {
+        foreach (Transform enemy in _owner.enemies)
+        {
+            float enemyDist = Vector3.Distance(enemy.position, _owner.transform.position);
+            if (enemyDist > 5)
+            {
+                _owner.stateMachine.ChangeState(ankyGrazingState.Instance);
+            }
+        }
         
         if (_owner.health <= 0)
         {

@@ -15,8 +15,8 @@ public class MyRapty : Agent
     public List<Transform> friendlies = new List<Transform>();
     public FieldOfView fov;
     public Wander raptyWander;
-    public Pursue raptyPursue;
     public Seek raptySeek;
+    public Face raptyFace;
 
     public GameObject water;
 
@@ -121,10 +121,24 @@ public class MyRapty : Agent
         else
             health -= (Time.deltaTime * 0.2) * 1;
 
+        foreach (Transform enemy in enemies)
+        {
+            float enemyDist = Vector3.Distance(enemy.position, transform.position);
+            if (enemyDist < 5)
+            {
+                health -= (Time.deltaTime * 1) * 1;
+            }
+        }
 
         stateMachine.Update();
 
         base.Update();
+    }
+
+    private void OnCollisionEnter(Collision Col)
+    {
+        if (Col.gameObject.tag == "Anky")
+            health -= 5;
     }
 
     protected override void LateUpdate()

@@ -51,7 +51,6 @@ public class ankyEatingState : State<MyAnky>
 
 
         _owner.energy += (Time.deltaTime * 1) * 1;
-        
 
         if (_owner.energy >= 100)
         {

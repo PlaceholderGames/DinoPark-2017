@@ -40,6 +40,9 @@ public class raptyFleeState : State<MyRapty>
 
     public override void UpdateState(MyRapty _owner)
     {
-
+        if (_owner.health <= 0)
+        {
+            _owner.stateMachine.ChangeState(raptyDeadState.Instance);
+        }
     }
 }
