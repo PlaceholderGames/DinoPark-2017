@@ -113,56 +113,44 @@ public class MyRapty : Agent
 
 
     IEnumerator Dying()
-    {
-        
+    {        
         if (!Dead)
         {
             while (true)
             {
                 yield return new WaitForSeconds(1.0f);
-
                 Debug.Log("Thirst level:" + thirstLevel);
                 Debug.Log("Hunger :" + hunger);
                 Debug.Log("Health " + health);
                 Debug.Log("is alive?" + Dead);
-
                 thirstLevel = thirstLevel - 1.0f;
                 hunger = hunger - 0.33f;
-
                 if (hunger <= 0)
                 {
                     hunger = 0;
                 }
-
                 if (thirstLevel <= 0)
                 {
                     thirstLevel = 0;
                 }
-
                 if (thirstLevel == 0 && hunger == 0)
                 {
                     health = health - 3;
                 }
-
-
                 else if (thirstLevel == 0 || hunger == 0)
                 {
                     health = health - 1;
                 }
-
-
                 if (health <= 0)
                 {
                     Dead = true;
                     health = 0;
                 }
-
                 if (Dead)
                 {
                     myDownsideUp.DownsideUpMeBro(rappydoos);
                     break;
-                }
-                  
+                }                  
             }
         }
        

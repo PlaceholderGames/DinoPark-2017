@@ -49,22 +49,16 @@ public class HuntingState : State<MyRapty>
 
     public override void UpdateState(MyRapty _owner)
     {
-        
-   
-
         float tempDistance = Vector3.Distance(_owner.closestAnky.transform.position, _owner.transform.position);
         Debug.Log(tempDistance);
 
-
         if (tempDistance > 30)
         {
-            
             Debug.Log("a star if");
             if (pursueBool)
             {
                 aStarHunt(_owner);
-            }
-                
+            }       
         }
         else
         {
@@ -76,12 +70,10 @@ public class HuntingState : State<MyRapty>
             AttackCheck(_owner, tempDistance);
         }
 
-
         //if (_owner.transform.position == _owner.myA_star.target.transform.position)
         //{
         //    pursueHunt(_owner);
         //}
-
 
        
        DrinkCheck(_owner);

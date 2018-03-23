@@ -9,17 +9,12 @@ public class DeathScript : MonoBehaviour {
     public Wander myWander;
     public Transform myTransform;
     public bool isDead = false;
-    // Use this for initialization
     void Start () {
-
-        
-        //target = new GameObject();
         targetAgent = GetComponent<Agent>();
         myWander = GetComponent<Wander>();
         myTransform = GetComponent<Transform>();
         
 	}
-
     public void Die()
     {
         myWander.enabled = false;

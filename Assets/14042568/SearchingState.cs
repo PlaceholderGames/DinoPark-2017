@@ -64,10 +64,7 @@ public class SearchingState : State<MyRapty>
 
     void sightTest(MyRapty _owner)
     {
-       
-
-        tempList = new List<Transform>();
-
+            tempList = new List<Transform>();
             for (int i = 0; i < _owner.myFOV.visibleTargets.Count; i++)
             {
             if (_owner.myFOV.visibleTargets[i].gameObject.tag == "Anky" && (!_owner.myFOV.visibleTargets[i].gameObject.GetComponent<DeathScript>().isDead))
@@ -75,21 +72,15 @@ public class SearchingState : State<MyRapty>
                    tempList.Add(_owner.myFOV.visibleTargets[i]);
                     //Debug.Log(tempList[i].gameObject.tag);
                 }
-
         }
-
-        
-            for (int i = 0; i < _owner.myFOV.stereoVisibleTargets.Count; i++)
+           for (int i = 0; i < _owner.myFOV.stereoVisibleTargets.Count; i++)
             {
-                if (_owner.myFOV.stereoVisibleTargets[i].gameObject.tag == "Anky")
+                if (_owner.myFOV.stereoVisibleTargets[i].gameObject.tag == "Anky" && (!_owner.myFOV.stereoVisibleTargets[i].gameObject.GetComponent<DeathScript>().isDead))
                 {
                     tempList.Add(_owner.myFOV.stereoVisibleTargets[i]);
                     Debug.Log(tempList[i].gameObject.tag);
-                }
-             
-        }
-        
-           
+                }          
+        }          
         if (tempList.Count != 0)
         {
             Searching(_owner, tempList);
@@ -110,34 +101,22 @@ public class SearchingState : State<MyRapty>
     void Searching(MyRapty _owner, List<Transform> x)
     {
         float dfgh = 320000.0f;
-        // availableDinos = GameObject.FindGameObjectsWithTag("Anky");  
-
         Debug.Log("HEllo theeererere" + x.Count);
         for (int i = 0; i < x.Count; i++)
             {
                 Debug.Log("HEllo theeererere");
                 tempDistance = Vector3.Distance(x[i].transform.position, _owner.transform.position);
-            
             if (tempDistance < dfgh)
                 {
-                   
                     dfgh = tempDistance;
                     _owner.dinoCheck = i;
                     Dino = x[i].gameObject;
-
                 }
             }
         _owner.myWander.enabled = false;
         _owner.closestAnky = new GameObject();
-         _owner.closestAnky = Dino;
-        //_owner.closestAnky.transform.position = ankyList[_owner.dinoCheck].transform.position;
-        
-       
-        //_owner.SetSteering(_owner.myPursue.GetSteering());
+        _owner.closestAnky = Dino;
         _owner.raptyMachine.ChangeState(HuntingState.Instance);
-        
-
-
     }
 
     void thirstCheck(MyRapty _owner)

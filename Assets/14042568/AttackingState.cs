@@ -43,10 +43,10 @@ public class AttackingState : State<MyRapty>
             _owner.raptyMachine.ChangeState(DeadState.Instance);
         }
 
-        else if (_owner.health < _owner.fleeingHealth && _owner.hunger < 50)
-        {
-            _owner.raptyMachine.ChangeState(FleeingState.Instance);
-        }
+        //else if (_owner.health < _owner.fleeingHealth && _owner.hunger < 50)
+        //{
+        //    _owner.raptyMachine.ChangeState(FleeingState.Instance);
+        //}
         else
         {
             _owner.raptyMachine.ChangeState(EatingState.Instance);
