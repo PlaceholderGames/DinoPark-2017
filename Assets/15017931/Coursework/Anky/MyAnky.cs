@@ -310,7 +310,10 @@ public class MyAnky : Agent
             {
                 if (o.gameObject.CompareTag(fTag))
                 {
-                    friendsInRange.Add(o);
+                    if (o.GetComponent<MyAnky>().currentState != MyAnky.ankyState.DEAD)
+                    {
+                        friendsInRange.Add(o);
+                    }
                 }
             }
         }
