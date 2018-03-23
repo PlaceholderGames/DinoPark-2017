@@ -337,6 +337,58 @@ public class MyRapty : Agent
         anim.SetBool("isFleeing", false);
         anim.SetBool("isDead", false);
         anim.SetFloat("speedMod", 1.0f);
+        
+        foreach (Transform i in fov.visibleTargets)
+        {
+            foreach (Transform j in fov.visibleTargets)
+            {
+
+                dist = Vector3.Distance(this.transform.position, i.position);
+                Debug.Log("Dist to Anky");
+                Debug.Log(dist);
+                dist2 = Vector3.Distance(this.transform.position, j.position);
+                Debug.Log("Dist to Rapty");
+                Debug.Log(dist2);
+                if (health > 20)
+                {
+                    aStarScript.target = this.lunch.gameObject;
+                    if (pathFolloweScript.path.nodes.Count < 1 || pathFolloweScript.path == null)
+                    {
+                        pathFolloweScript.path = aStarScript.path;
+
+
+                    }
+                    move(pathFolloweScript.getDirectionVector());
+
+                    if (Vector3.Distance(lunch.transform.position, this.transform.position) < 20)
+                    {
+                        isDead = lunch.GetComponent<MyAnky>().takeDamage(1);
+
+                        if (isDead)
+                        {
+                            currentState = raptyState.EATING;
+                            previousState = raptyState.ATTACKING;
+                        }
+                    }
+                    
+                }
+
+                else if (health <= 20)
+                {
+                    //to fleeing
+                    Debug.Log("I need healing");
+                    currentState = raptyState.FLEEING;
+                    previousState = raptyState.ATTACKING;
+
+                }
+                if (health <= 0)
+                {
+                    //to dead
+                    currentState = raptyState.DEAD;
+                    previousState = raptyState.ALERTED;
+                }
+            }
+        }
         if (health <= 0)
         {
             currentState = raptyState.DEAD;
@@ -344,60 +396,12 @@ public class MyRapty : Agent
         }
         else
         {
-            foreach (Transform i in fov.visibleTargets)
-            {
-                foreach (Transform j in fov.visibleTargets)
-                {
+                //to alerted
+                Debug.Log("He gone");
+                currentState = raptyState.HUNTING;
+                previousState = raptyState.ATTACKING;
 
-                    dist = Vector3.Distance(this.transform.position, i.position);
-                    Debug.Log("Dist to Anky");
-                    Debug.Log(dist);
-                    dist2 = Vector3.Distance(this.transform.position, j.position);
-                    Debug.Log("Dist to Rapty");
-                    Debug.Log(dist2);
-                    if (health > 20)
-                    {
-                        if (Vector3.Distance(lunch.transform.position, this.transform.position) < 20)
-                        {
-                            
-                            isDead = lunch.GetComponent<MyAnky>().takeDamage(10);
-                            health = health + 50;
-                            if (health >= 100)
-                            {
-                                health = 100;
-                            }
-
-                            if (isDead)
-                            {
-                                currentState = raptyState.EATING;
-                                previousState = raptyState.ATTACKING;
-                            }
-                        }
-                    }
-
-                    else if (health <= 20)
-                    {
-                        //to fleeing
-                        Debug.Log("I need healing");
-                        currentState = raptyState.FLEEING;
-                        previousState = raptyState.ATTACKING;
-
-                    }
-                    else if (i.tag != "Anky")
-                    {
-                        //to alerted
-                        Debug.Log("Lol He Ded");
-                        currentState = raptyState.HUNTING;
-                        previousState = raptyState.ATTACKING;
-                    }
-                    else if (health <= 0)
-                    {
-                        //to dead
-                        currentState = raptyState.DEAD;
-                        previousState = raptyState.ALERTED;
-                    }
-                }
-            }
+            
         }
     }
     void deadState()
@@ -431,28 +435,29 @@ public class MyRapty : Agent
             currentState = raptyState.DEAD;
             previousState = raptyState.EATING;
         }
-        else
+        else if (health > 1)
         {
-            aStarScript.target = this.lunch.gameObject;
-            if (pathFolloweScript.path.nodes.Count < 1 || pathFolloweScript.path == null)
+            for (int i = 0; i < 1; i++)
             {
-                pathFolloweScript.path = aStarScript.path;
+                if (health <= 100)
+                {
 
-
-            }
-            move(pathFolloweScript.getDirectionVector());
-            if (Vector3.Distance(this.transform.position, lunch.transform.position) <= 20 && hunger < 100)
-            {
+                    health = health + 50;
+                    if (health >= 100)
+                    {
+                        health = 100;
+                    }
+                }
                 //for loop to add hunger up to 100
                 Debug.Log("Om Nom Nom");
-                hunger += 5 * Time.deltaTime;
 
-//When collides with Meat Ball
-//Destroy meat Ball
-//Food upped
+
+                //When collides with Meat Ball
+                //Destroy meat Ball
+                //Food upped
 
             }
-            else if (hunger >= 100)
+            if (hunger >= 100)
             {
                 if (hunger >= 100)
                     hunger = 100;
@@ -461,6 +466,12 @@ public class MyRapty : Agent
                 currentState = raptyState.ATTACKING;
                 previousState = raptyState.EATING;
             }
+        }
+        else 
+        {
+            Debug.Log("Not quite full");
+            currentState = raptyState.ATTACKING;
+            previousState = raptyState.EATING;
         }
     }
     void drinkingState()

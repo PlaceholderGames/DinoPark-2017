@@ -21,12 +21,12 @@ public class MyAnky : Agent
     public GameObject waterSphere;
     public GameObject grassSphere;
     public GameObject friendo;
-    public GameObject meatSphere;
+    
 
 
    
     public  float health = 100;
-    public  float hunger = 9;
+    public  float hunger = 100;
     public  float thirst = 100;
 
 
@@ -381,7 +381,7 @@ public class MyAnky : Agent
                     dist2 = Vector3.Distance(this.transform.position, j.position);
                     Debug.Log("Dist to Anky");
                     Debug.Log(dist2);
-                    if (dist > 15 || health <= 50)
+                    if (dist >= 1 && dist <= 60 || health <= 50)
                     {
                         currentState = ankyState.FLEEING;
                         previousState = ankyState.ATTACKING;
@@ -392,12 +392,6 @@ public class MyAnky : Agent
                         Debug.Log("Lol He Ded");
                         currentState = ankyState.ALERTED;
                         previousState = ankyState.ATTACKING;
-                    }
-                    else if (health == 0)
-                    {
-                        //to dead
-                        currentState = ankyState.DEAD;
-                        previousState = ankyState.ALERTED;
                     }
                 }
             }
