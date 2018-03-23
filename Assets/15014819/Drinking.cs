@@ -63,17 +63,6 @@ public class DrinkingState : State<MyAnky>
         {
             _owner.Statemachine.ChangeState(GrazingState.instance);
         }
-       
-        
-        
-        // if (_owner.ankyPosition.y = )
-        //if (_owner.switchState)
-        //{
-        //    _owner.Statemachine.ChangeState(GrazingState.instance);
-        //}
-        //if (_owner.switchState)
-        //{
-        //    _owner.Statemachine.ChangeState(AlertState.instance);
-        //}
+      
     }
 }

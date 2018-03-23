@@ -7,7 +7,7 @@ namespace Statedino
     public class Statemachine<T>
     {
         public State<T> currentState { get; private set; }
-        //public State<T> currentState { get; private set; }
+       
         public T owner;
         
         public Statemachine(T _o)
