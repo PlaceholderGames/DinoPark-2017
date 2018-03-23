@@ -1,5 +1,6 @@
 ﻿public class Seek : AgentBehaviour
 {
+
     public override Steering GetSteering()
     {
         Steering steering = new Steering();

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 public class FieldOfView : MonoBehaviour {
 
 	public float viewRadius; // Range of vision. Anky = 100, Rapty = 200
@@ -14,10 +14,10 @@ public class FieldOfView : MonoBehaviour {
     public LayerMask targetMask;
     //public LayerMask obstacleMask; // Not using raytracing to determine visibility right now
 
-    [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
+   // [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
     public List<Transform> visibleTargets = new List<Transform>(); // this is the list of visible dinosaurs
 
-    [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
+   // [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
     public List<Transform> stereoVisibleTargets = new List<Transform>(); // this is the list of visible dinosaurs in stereo
 
 	private void Start()
@@ -35,6 +35,7 @@ public class FieldOfView : MonoBehaviour {
     void FindVisibleTargets()
     {
         visibleTargets.Clear ();
+        stereoVisibleTargets.Clear();
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
         for (int i = 0; i < targetsInViewRadius.Length; i++)
@@ -60,6 +61,8 @@ public class FieldOfView : MonoBehaviour {
             }
          
         }
+        visibleTargets = visibleTargets.Distinct().ToList();
+        stereoVisibleTargets = stereoVisibleTargets.Distinct().ToList();
     }
 	
 	public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)

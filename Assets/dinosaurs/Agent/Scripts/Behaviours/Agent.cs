@@ -16,15 +16,20 @@ public class Agent : MonoBehaviour
     public Vector3 velocity;
     protected Steering steering;
     private Dictionary<int, List<Steering>> groups;
+    public bool alive;
+    public Wander oneWander;
 
-	protected virtual void Start () // Changed so we can inherit
+    protected virtual void Start () // Changed so we can inherit
     {
+        alive = true;
         velocity = Vector3.zero;
         steering = new Steering();
         groups = new Dictionary<int, List<Steering>>();
+        oneWander = GetComponent<Wander>();
 	}
-	protected virtual void Update () // Changed so we can inherit
+    protected virtual void Update() // Changed so we can inherit
     {
+
         Vector3 displacement = velocity * Time.deltaTime;
         orientation += rotation * Time.deltaTime;
         if (orientation < 0.0f)
@@ -34,8 +39,9 @@ public class Agent : MonoBehaviour
         transform.Translate(displacement, Space.World);
         transform.rotation = new Quaternion();
         transform.Rotate(Vector3.up, orientation);
-	}
-    protected virtual void LateUpdate () // Changed so we can inherit
+
+    }
+    protected virtual void LateUpdate() // Changed so we can inherit
     {
         if (blendPriority)
         {
@@ -63,6 +69,8 @@ public class Agent : MonoBehaviour
         }
         steering = new Steering();
     }
+      
+    
     public void SetSteering (Steering steering)
     {
         this.steering = steering;
@@ -110,5 +118,13 @@ public class Agent : MonoBehaviour
             }
         }
         return steering;
+    }
+
+    public void TimeToDie()
+    {
+        this.alive = false;
+        oneWander.enabled = false;
+        this.enabled = false;
+        //Destroy(gameObject);
     }
 }

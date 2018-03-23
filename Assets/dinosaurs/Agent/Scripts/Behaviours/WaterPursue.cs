@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Pursue : Seek
+public class WaterPursue : Seek
 {
     public float maxPrediction;
     private GameObject targetAux;
@@ -40,7 +40,7 @@ public class Pursue : Seek
         return base.GetSteering();
     }
 
-    void OnDestroy ()
+    void OnDestroy()
     {
         Destroy(targetAux);
     }
