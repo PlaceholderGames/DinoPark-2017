@@ -331,6 +331,15 @@ public class MyAnky : Agent
         AStar.enabled = false;
         ASPF.enabled = false;
     }
+    /// <summary>
+    /// turns a* and all its scripts
+    /// </summary>
+    void enableAStar()
+    {
+        follow.enabled = true;
+        AStar.enabled = true;
+        ASPF.enabled = true;
+    }
 
 
 }
