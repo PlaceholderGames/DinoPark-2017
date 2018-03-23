@@ -112,3 +112,51 @@ public class GrazingState : State<MyAnky>
         //_owner.stateMachine.ChangeState(IdleState.Instance);
     }
 }
+
+//Hunting State 
+public class RGrazingState : State<MyRapty>
+{
+    private static RGrazingState _instance;
+
+    private RGrazingState()
+    {
+        if (_instance != null)
+        {
+            return;
+        }
+
+        _instance = this;
+    }
+
+    public static RGrazingState Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                new RGrazingState();
+            }
+
+            return _instance;
+        }
+    }
+
+    public override void EnterState(MyRapty _owner)
+    {
+        Debug.Log("Entering Grazing State");
+        _owner.wanderBehaviourScript.enabled = true;
+
+    }
+
+    public override void ExitState(MyRapty _owner)
+    {
+        Debug.Log("Exiting Grazing State");
+        _owner.wanderBehaviourScript.enabled = false;
+    }
+
+    public override void UpdateState(MyRapty _owner)
+    {
+
+   
+    }
+}
