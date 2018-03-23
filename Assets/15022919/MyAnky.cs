@@ -14,7 +14,8 @@ public class MyAnky : Agent
     private bool only_need_friend = false;// same as  above but only for friends.
     private float speed = 10.0f;
     private float walking_time = 5.0f;
-    GameObject current_targetAS;
+    public GameObject current_targetAS;
+    public Transform target;
     public enum ankyState
     {
         IDLE,       // The default state on creation.
@@ -36,11 +37,11 @@ public class MyAnky : Agent
     private Flee fleeing;
     private Attack attacking;
     private AStarSearch AStar;
-    private Transform target;
     private Face facetime;
     private Seek seekout;
     private Follow_to_water follow;
     private ASPathFollower ASPF;
+    private Attack attack;
 
     // Use this for initialization
     protected override void Start()
@@ -56,6 +57,7 @@ public class MyAnky : Agent
         seekout = GetComponent<Seek>(); //  loads in seek
         follow = GetComponent<Follow_to_water>(); //loads in follow to water used for a*
         ASPF = GetComponent<ASPathFollower>();// loads in aspathfollwer used for a*
+        attack = GetComponent<Attack>(); //loads in attack
 
 
         //Assert default animation booleans and floats
@@ -76,7 +78,7 @@ public class MyAnky : Agent
         seekout.enabled = false;
 
         currentState = ankyState.IDLE;// anky will always start the game idle;
-        current_targetAS = AStar.target; 
+        current_targetAS = AStar.target;
 
         base.Start();
 
@@ -118,10 +120,6 @@ public class MyAnky : Agent
         //WANDERING STATE
         else if (currentState == ankyState.WANDERING)
         {
-            if (this.transform.position.y < 50)
-            {
-
-            }
             if (!wandering.enabled)
             {
                 wandering.enabled = true;
@@ -147,17 +145,46 @@ public class MyAnky : Agent
             else
             {
                 find_nearest();
-                if (flee_or_not())
+                if (flee_or_not() == 1)
                 {
-                    Debug.Log("going into " + currentState);
                     currentState = ankyState.FLEEING;
+                    Debug.Log("going into " + currentState);
                 }
-                else if (!wandering.enabled)
+                else if (flee_or_not() == 2)
+                {
+                    currentState = ankyState.ATTACKING;
+                    Debug.Log("going into " + currentState);
+                }
+                else if (flee_or_not() == 3)
                 {
                     wandering.enabled = true; fleeing.enabled = false;
                 }
             }
         }
+
+        //attacking STATE
+        else if (currentState == ankyState.ATTACKING)
+            {
+            find_nearest();
+            facetime.target = target.gameObject;
+            facetime.enabled = true;
+            if (!can_see_hunter)
+            {
+                currentState = ankyState.WANDERING;
+                Debug.Log("going into " + currentState);
+            }
+            else if (flee_or_not() == 1)
+            {
+                currentState = ankyState.FLEEING;
+            }
+            else
+            {
+                Debug.Log("attacking");
+                attack.enabled = true;
+            }
+            
+        }
+
         //FLEEING STATE     
         else if (currentState == ankyState.FLEEING)
         {
@@ -166,30 +193,33 @@ public class MyAnky : Agent
                 fleeing.enabled = true;
                 wandering.enabled = false;
             };
-
-            if (!flee_or_not())
+            if (!can_see_hunter)
             {
-                if (!can_see_hunter)
-                {
-                    currentState = ankyState.WANDERING;
-                    Debug.Log("going into " + currentState);
-                }
-                else
-                {
-                    currentState = ankyState.ALERTED;
-                    Debug.Log("going into " + currentState);
-                }
+                currentState = ankyState.WANDERING;
+                Debug.Log("going into " + currentState);
             }
+            else if (flee_or_not() == 2)
+            {
+                currentState = ankyState.ATTACKING;
+                Debug.Log("going into " + currentState);
+            }
+            else if (flee_or_not() == 3)
+            {
+                currentState = ankyState.ALERTED;
+                Debug.Log("going into " + currentState);
+            }
+           
         }
+
         //drinking state
         else if (currentState == ankyState.DRINKING)
         {
-            
+
             wandering.enabled = false;
-            
+
             if (thirst >= 100)//if we have a full thirst then we stop drinking and wander
             {
-                
+
                 Debug.Log("going into " + currentState);
                 seekout.enabled = false;
                 disableAStar();
@@ -198,7 +228,7 @@ public class MyAnky : Agent
             }
             else if (can_see_hunter)//if we can see a hunter we stop drinking and go into alert 
             {
-                
+
                 Debug.Log("going into " + currentState);
                 seekout.enabled = false;
                 disableAStar();
@@ -225,17 +255,20 @@ public class MyAnky : Agent
                     seekout.enabled = true;
                     Debug.Log("using seek intstead of AStar" + AStar.enabled);
                 }
-                AStar.enabled = true;
+                enableAStar();
                 Debug.Log("looking for the water");
             }
-           
-           
+
+
         }
-         
+
         //dead state
         else if (currentState == ankyState.DEAD)
         {
+            disableall();
             Debug.Log("anky is  dead");
+            this.transform.Rotate(this.transform.position, 180f);
+
         }
 
         base.Update();
@@ -251,7 +284,7 @@ public class MyAnky : Agent
     /// </summary>
     void lookAround()
     {
-       // Debug.Log("I am looking around");
+        // Debug.Log("I am looking around");
         can_see_hunter = false;
         can_see_friend = false;
 
@@ -288,14 +321,14 @@ public class MyAnky : Agent
         target = null;
         if (hunters.Count < 1)
         {
-        target = null;
+            target = null;
             Debug.Log("hunters is empty  size of hunters is:" + hunters.Count);
         }
-        else    
+        else
         {
-        Transform nearestHunter = hunters[0];
-        float nearestDistance = Vector3.Distance(hunters[0].transform.position, this.transform.position);
-            for(int i = 1; i < hunters.Count; i++)
+            Transform nearestHunter = hunters[0];
+            float nearestDistance = Vector3.Distance(hunters[0].transform.position, this.transform.position);
+            for (int i = 1; i < hunters.Count; i++)
             {
                 if (nearestDistance > Vector3.Distance(hunters[i].transform.position, this.transform.position))
                 {
@@ -307,19 +340,26 @@ public class MyAnky : Agent
         }
         fleeing.target = target.gameObject;
     }
-            
+
     /// <summary>
     /// checks how close a hunter is and if to run or not 
+    /// 1 = flee
+    /// 2 = fight
+    /// 3 = fine
     /// </summary>
     /// <returns></returns>
-    bool flee_or_not()
+    int flee_or_not()
     {
-        if ((Vector3.Distance(target.transform.position,this.transform.position)) <= 30)
+        if (((Vector3.Distance(target.transform.position, this.transform.position)) <= 30) && ((Vector3.Distance(target.transform.position, this.transform.position) > 5)))
         {
-            return true;
+            return 1;
+        }
+        else if ((Vector3.Distance(target.transform.position, this.transform.position) > 5))
+        {
+            return 2;
         }
         else
-            return false;
+            return 3;
     }
 
     /// <summary>
@@ -340,6 +380,19 @@ public class MyAnky : Agent
         AStar.enabled = true;
         ASPF.enabled = true;
     }
+    /// <summary>
+    /// turns off all scripts (only used for dead ankys)
+    /// </summary>
+    void disableall()
+    {
+        sight.enabled = false;
+        fleeing.enabled = false;
+        follow.enabled = false;
+        AStar.enabled = false;
+        ASPF.enabled = false;
+        seekout.enabled = false;
+    }
+
 
 
 }
