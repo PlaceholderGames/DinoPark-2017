@@ -17,6 +17,8 @@ public class Agent : MonoBehaviour
     protected Steering steering;
     private Dictionary<int, List<Steering>> groups;
 
+    public float health = 100;
+
 	protected virtual void Start () // Changed so we can inherit
     {
         velocity = Vector3.zero;
@@ -111,4 +113,6 @@ public class Agent : MonoBehaviour
         }
         return steering;
     }
+
+
 }

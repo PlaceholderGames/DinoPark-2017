@@ -13,7 +13,6 @@ public class MyAnky : Agent
     public float waterLevel = 100;
     public float hungryLevel = 100;
     public float speed = 5;
-    public float health = 100;
     public bool leader;
 
     public string currentState;
@@ -105,12 +104,7 @@ public class MyAnky : Agent
             distance = Vector3.Distance(this.transform.position, ankyLeader.transform.position);
             if (distance > 20)
             {
-                //GetComponent<Wander>().enabled = false;
-                //speed = speed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, ankyLeader.transform.position, speed);
-
-                Debug.Log("help");
-                //GetComponent<Flee>().enabled = true;
             }
 
         }
@@ -156,14 +150,14 @@ public class MyAnky : Agent
 
     void IdleState()
     {
-        float distance;
         gameObject.GetComponent<Agent>().enabled = true;
         gameObject.GetComponent<Wander>().enabled = true;
+        Debug.Log("thinking");
         if (waterLevel < 20)
         {
             currentState = "Drinking";
         }
-        if (hungryLevel < 20)
+        if (hungryLevel <20)
         {
             currentState = "Hungry";
         }
@@ -174,7 +168,7 @@ public class MyAnky : Agent
                 if (dinoView.visibleTargets[i].CompareTag("Rapty"))
                 {
                     currentState = "Fleeing";
-
+                   
                 }
             }
 
@@ -194,7 +188,6 @@ public class MyAnky : Agent
             pathFollowerScript.path = aStarScript.path;
         }
         move(pathFollowerScript.getDirectionVector(), this);
-        //_owner.transform.transform.localRotation = new Quaternion(0, 0, 0, 1);
 
         if (Vector3.Distance(waterDrinkLocation.transform.position, transform.position) < 25 && waterLevel < 100)
         {
@@ -220,7 +213,6 @@ public class MyAnky : Agent
             pathFollowerScript.path = aStarScript.path;
         }
         move(pathFollowerScript.getDirectionVector(), this);
-        //_owner.transform.transform.localRotation = new Quaternion(0, 0, 0, 1);
 
         if (Vector3.Distance(waterDrinkLocation.transform.position, transform.position) < 25 && hungryLevel < 100)
         {
@@ -256,7 +248,7 @@ public class MyAnky : Agent
         }
     }
 
-    private void move(Vector3 directionVector, MyAnky _owner)
+   private void move(Vector3 directionVector, MyAnky _owner)
     {
         directionVector *= speed * Time.deltaTime;
         _owner.transform.Translate(directionVector, Space.World);

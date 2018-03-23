@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class MapGrid : MonoBehaviour
-{
+public class MapGrid : MonoBehaviour {
 
     public Vector2 gridWorldSize; // Size of the map grid
     public float tileSize = 1.0f;  // Size of each tile
@@ -22,12 +21,11 @@ public class MapGrid : MonoBehaviour
     private float oldTileSize;
     private float oldHeightThreshold;
     private float oldSeaLevel;
-
+    
 
     // Use this for initialization
-    void Start()
-    {
-        terrain = Terrain.activeTerrain;
+    void Start () {
+         terrain = Terrain.activeTerrain;
 
         if (tileSize == 0) // Exit with error if node size is zero
         {
@@ -69,8 +67,7 @@ public class MapGrid : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update () {
 
         // Only check which tiles are walkable if a variable has changed
         if (oldTileSize != tileSize)
@@ -80,10 +77,10 @@ public class MapGrid : MonoBehaviour
         else if (oldSeaLevel != seaLevel)
             oldSeaLevel = seaLevel;
         else
-            return;
+            return; 
 
         checkWalkable();
-    }
+	}
 
 
     public void checkWalkable()
@@ -95,7 +92,7 @@ public class MapGrid : MonoBehaviour
             for (int y = 0; y < tiles.GetLength(1); y++)
             {
                 Vector3 tileLocation = tiles[x, y].position; // Get the position
-
+                
                 Vector3[] points = new Vector3[4]; // Array of positions at four corners of tile
                 points[0] = new Vector3(tileLocation.x - (tileSize / 2), tileLocation.y, tileLocation.z + (tileSize / 2)); // Top left
                 points[1] = new Vector3(tileLocation.x + (tileSize / 2), tileLocation.y, tileLocation.z + (tileSize / 2)); // Top right
@@ -127,7 +124,7 @@ public class MapGrid : MonoBehaviour
                     waterEdge.Add(tiles[x, y]);
                 }
 
-                if (tiles[x, y].position.y > 70 && tiles[x, y].position.y < 80)
+                if (tiles[x,y].position.y > 70 && tiles[x,y].position.y < 80)
                 {
                     foodEdge.Add(tiles[x, y]);
                 }
@@ -182,7 +179,7 @@ public class MapGrid : MonoBehaviour
                 shortest = Vector3.Distance(dino.transform.position, waterEdge[i].position);
                 chosenTile = i;
             }
-            else if (shortest > Vector3.Distance(dino.transform.position, waterEdge[i].position))
+            else if(shortest > Vector3.Distance(dino.transform.position, waterEdge[i].position))
             {
                 shortest = Vector3.Distance(dino.transform.position, waterEdge[i].position);
                 chosenTile = i;

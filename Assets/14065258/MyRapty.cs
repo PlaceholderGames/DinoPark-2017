@@ -53,6 +53,7 @@ public class MyRapty : MonoBehaviour
     public bool isSleeping = false;
     public float distance = 0;
     public bool breeding = false;
+    public float health = 100;
 
 
 
@@ -244,6 +245,18 @@ public class MyRapty : MonoBehaviour
         _owner.transform.LookAt(_owner.transform.position + directionVector);
 
     }
+
+    public bool takeDamage(int damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            DestroyObject(gameObject);
+            return true;
+        }
+        return false;
+    }
+
     /*
     protected void LateUpdate()
     {

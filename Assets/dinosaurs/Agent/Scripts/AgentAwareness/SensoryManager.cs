@@ -6,6 +6,7 @@ public class SensoryManager : MonoBehaviour
 
     public List<AgentAwared> agents;
     public List<InterestSource> sources;
+	int leader = -1;
 
     public void Awake()
     {
@@ -41,7 +42,7 @@ public class SensoryManager : MonoBehaviour
         }
     }
 
-    public List<AgentAwared> GetScouts(AgentAwared[] agents, int leader = -1)
+    public List<AgentAwared> GetScouts(AgentAwared[] agents, int leader)
     {
         if (agents.Length == 0)
             return new List<AgentAwared>();

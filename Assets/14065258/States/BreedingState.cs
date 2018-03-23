@@ -68,6 +68,7 @@ public class BreedingState : State<MyRapty>
                         //((Box.transform.position - Capsule.transform.position) * 0.5f) + Capsule.transform.position;
                         _owner.breed(((_owner.dinoView.visibleTargets[i].transform.position - _owner.transform.position) * 0.5f) + _owner.transform.position);
                         breed = false;
+                        _owner.stateMachine.ChangeState(IdleState.Instance);
                         //MyRapty.Instantiate<GameObject>(_owner.gameObject);
                     }
                     else

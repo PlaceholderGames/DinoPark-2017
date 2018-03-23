@@ -10,7 +10,7 @@ public class Pursue : Seek
     public override void Awake()
     {
         base.Awake();
-        //targetAgent = target.GetComponent<Agent>();
+        targetAgent = target.GetComponent<Agent>();
         targetAux = target;
         target = new GameObject();
     }
@@ -30,9 +30,8 @@ public class Pursue : Seek
         return base.GetSteering();
     }
 
-    void OnDestroy ()
+    void OnDestroy()
     {
         DestroyImmediate(targetAux, true);
-        //Destroy(targetAux);
     }
 }
