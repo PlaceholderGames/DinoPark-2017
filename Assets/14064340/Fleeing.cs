@@ -62,6 +62,11 @@ public class FleeingState : State<MyAnky>
                 _owner.Enemies.Clear();
                 _owner.stateMachine.ChangeState(AlertState.Instance);
             }
+            if (Distance < 10)
+            {
+                _owner.Enemies.Clear();
+                _owner.stateMachine.ChangeState(AlertState.Instance);
+            }
         }
 
         if(priorityTarget)

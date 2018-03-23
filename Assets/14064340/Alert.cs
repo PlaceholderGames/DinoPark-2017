@@ -49,7 +49,7 @@ public class AlertState : State<MyAnky>
         {
 
             float Distance = Vector3.Distance(x.position, _owner.transform.position);
-            if (Distance > 5 && Distance < 30)
+            if (Distance > 10 && Distance < 30)
             {
                 _owner.stateMachine.ChangeState(FleeingState.Instance);
                 _owner.ankyFlee.target = x.gameObject;

@@ -74,7 +74,7 @@ public class GrazeState : State<MyAnky>
                 _owner.ankySeek.enabled = true;         
 
             }
-            else if (FriendDistance < 20)
+            else if (FriendDistance < 25)
             {
                 _owner.ankySeek.enabled = false;
                 _owner.ankyWander.enabled = true;

@@ -4,6 +4,7 @@ using Statestuff;
 public class AttackState : State<MyAnky>
 {
     private static AttackState _instance;
+    private float timer;
 
     private AttackState()
     {
@@ -36,6 +37,9 @@ public class AttackState : State<MyAnky>
     {
         _owner.anim.SetBool("isAttacking", true);
         Debug.Log("entering Attack state");
+        _owner.ankyFlee.enabled = false;
+        _owner.ankyWander.enabled = false;
+        timer = 0;
     }
 
     public override void ExitState(MyAnky _owner)
@@ -48,7 +52,12 @@ public class AttackState : State<MyAnky>
     {
         if(_owner.Enemies.Count > 0)
         {
-           //_owner.
+            timer += Time.deltaTime;
+            if (timer > 0.2f)
+            {
+                _owner.stateMachine.ChangeState(AlertState.Instance);
+            }
+            
 
         }
         if(_owner.Enemies.Count == 0)

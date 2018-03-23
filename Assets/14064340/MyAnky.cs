@@ -84,11 +84,7 @@ public class MyAnky : Agent
     public bool takeDamage(int damage)
     {
         health -= damage;
-        if (health <= 0)
-        {
-            DestroyObject(gameObject);
-            return true;
-        }
+     
         return false;
     }
 
@@ -122,7 +118,6 @@ public class MyAnky : Agent
             if (i.tag == "Rapty")
             {
                 Enemies.Add(i);
-           
             }
         }
         foreach (Transform i in fov.stereoVisibleTargets)
@@ -162,6 +157,14 @@ public class MyAnky : Agent
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
         stateMachine.Update();
         base.Update();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.other.tag == "Rapty")
+        {
+            takeDamage(30);
+        }
     }
 
     protected override void LateUpdate()
