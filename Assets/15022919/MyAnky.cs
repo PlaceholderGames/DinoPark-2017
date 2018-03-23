@@ -12,8 +12,6 @@ public class MyAnky : Agent
     private bool can_see_friend = false; // tells us if there is at least one friendly dino
     private bool only_need_hunter = false;//if we only need to find one hunter then this skips the rest of a foreach loop when on is found 
     private bool only_need_friend = false;// same as  above but only for friends.
-    private float speed = 10.0f;
-    private float walking_time = 5.0f;
     public GameObject current_targetAS;
     public Transform target;
     public enum ankyState
@@ -152,8 +150,8 @@ public class MyAnky : Agent
                 }
                 else if (flee_or_not() == 2)
                 {
-                    currentState = ankyState.ATTACKING;
-                    Debug.Log("going into " + currentState);
+                   // currentState = ankyState.ATTACKING;
+                    //Debug.Log("going into " + currentState);
                 }
                 else if (flee_or_not() == 3)
                 {
@@ -198,11 +196,11 @@ public class MyAnky : Agent
                 currentState = ankyState.WANDERING;
                 Debug.Log("going into " + currentState);
             }
-            else if (flee_or_not() == 2)
-            {
-                currentState = ankyState.ATTACKING;
-                Debug.Log("going into " + currentState);
-            }
+            //else if (flee_or_not() == 2)
+            //{
+              //  currentState = ankyState.ATTACKING;
+                //Debug.Log("going into " + currentState);
+            //}
             else if (flee_or_not() == 3)
             {
                 currentState = ankyState.ALERTED;
@@ -350,14 +348,14 @@ public class MyAnky : Agent
     /// <returns></returns>
     int flee_or_not()
     {
-        if (((Vector3.Distance(target.transform.position, this.transform.position)) <= 30) && ((Vector3.Distance(target.transform.position, this.transform.position) > 5)))
+        if ((Vector3.Distance(target.transform.position, this.transform.position)) <= 30) /*&& ((Vector3.Distance(target.transform.position, this.transform.position) > 5)*/
         {
             return 1;
         }
-        else if ((Vector3.Distance(target.transform.position, this.transform.position) > 5))
-        {
-            return 2;
-        }
+       // else if ((Vector3.Distance(target.transform.position, this.transform.position) > 5))
+        //{
+          //  return 2;
+        //}
         else
             return 3;
     }
