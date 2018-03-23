@@ -289,30 +289,27 @@ public class MyAnky : Agent
 
 
         //Check the dinos FOV for predators and store them in a list 
-        foreach (Transform o in dinosInVision) 
-		{	
-			//add to our predator list
-			foreach (string pTag in predators) 
-			{
+        foreach (Transform o in dinosInVision)
+        {
+            //add to our predator list
+            foreach (string pTag in predators)
+            {
                 if (o.gameObject.CompareTag(pTag))
                 {
-                    if (o.gameObject.layer == SortingLayer.GetLayerValueFromName("Dinos"))
-                    {
-                        predatorsInRange.Add(o);
-                        averageTargetPos += (o.position);
-                    }
+                    predatorsInRange.Add(o);
+                    averageTargetPos += (o.position);
                 }
-			}
+            }
 
-			//Add to our friends list
-			foreach (string fTag in friends) 
-			{
-				if (o.gameObject.CompareTag (fTag)) 
-				{
-					friendsInRange.Add (o);
-				}
-			}
-		}
+            //Add to our friends list
+            foreach (string fTag in friends)
+            {
+                if (o.gameObject.CompareTag(fTag))
+                {
+                    friendsInRange.Add(o);
+                }
+            }
+        }
 
 
         if (predatorsInRange.Count > 0)
