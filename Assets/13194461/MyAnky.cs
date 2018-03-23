@@ -119,19 +119,6 @@ public class MyAnky : Agent
                     break;
             }
         }
-        // Idle - should only be used at startup
-
-        // Eating - requires a box collision with a dead dino
-
-        // Drinking - requires y value to be below 32 (?)
-
-        // Alerted - up to the student what you do here
-
-        // Hunting - up to the student what you do here
-
-        // Fleeing - up to the student what you do here
-
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
         base.Update();
     }
@@ -251,6 +238,9 @@ public class MyAnky : Agent
             eatTimer = 3.0f;
             SetState(ankyState.GRAZING); 
         }
+
+        if (energy > 100)
+            energy = 100;
     }
 
     void CheckSurroundings()
@@ -305,7 +295,8 @@ public class MyAnky : Agent
         }
         else
         {
-            SetState(ankyState.GRAZING);
+            if (currentState != ankyState.EATING || currentState != ankyState.DRINKING)
+                SetState(ankyState.GRAZING);
         }
         Debug.Log(raptorDistance);
         raptorDistance = 99999;
