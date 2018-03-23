@@ -134,10 +134,9 @@ public class MyAnky : Agent
         //myTarget = Instantiate(myTarget, this.transform);
         aStarTarget = new GameObject("AstarTarget");
         aStarScript.enabled = true;
+        
 
-     
         aStarScript.target = aStarTarget;
-        aStarScript.target = this.gameObject;
 
         //set dino stats
         myStats.speed = 2;
@@ -290,34 +289,27 @@ public class MyAnky : Agent
 
 
         //Check the dinos FOV for predators and store them in a list 
-        foreach (Transform o in dinosInVision) 
-		{	
-			//add to our predator list
-			foreach (string pTag in predators) 
-			{
+        foreach (Transform o in dinosInVision)
+        {
+            //add to our predator list
+            foreach (string pTag in predators)
+            {
                 if (o.gameObject.CompareTag(pTag))
                 {
-<<<<<<< HEAD:Assets/15017931/Coursework/Anky/MyAnky.cs
-                    if (o.GetComponent<MyRapty>().currentState != MyRapty.raptorState.DEAD)
-=======
-                    if (o.gameObject.layer == SortingLayer.GetLayerValueFromName("Dinos"))
->>>>>>> parent of 7ff6be3... removed current dead check:Assets/15017931/Coursework/MyAnky.cs
-                    {
-                        predatorsInRange.Add(o);
-                        averageTargetPos += (o.position);
-                    }
+                    predatorsInRange.Add(o);
+                    averageTargetPos += (o.position);
                 }
-			}
+            }
 
-			//Add to our friends list
-			foreach (string fTag in friends) 
-			{
-				if (o.gameObject.CompareTag (fTag)) 
-				{
-					friendsInRange.Add (o);
-				}
-			}
-		}
+            //Add to our friends list
+            foreach (string fTag in friends)
+            {
+                if (o.gameObject.CompareTag(fTag))
+                {
+                    friendsInRange.Add(o);
+                }
+            }
+        }
 
 
         if (predatorsInRange.Count > 0)
@@ -406,11 +398,6 @@ public class MyAnky : Agent
             Gizmos.DrawWireSphere(myTarget.transform.position, herdingRange);
        
 
-    }
-
-    public void hitTarget(float damage)
-    {
-        myStats.health -= damage;
     }
 
 
