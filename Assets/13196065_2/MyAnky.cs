@@ -21,17 +21,24 @@ public class MyAnky : Agent
     ankyState currentState;
     ankyState previousState;
 
-    private float hunger = 100;
-    private float GrazingTime = 5.0f;
+    public float hunger = 100;
+    private float GrazingTime = 5;
+    private float eatingTime = 3;
     public float health = 8.0f;
-    private float thirst = 100;
+    public float thirst = 100;
     private FieldOfView sight;
-   
     public float RaptyDist;
+    public float ankyDist;
+    private bool isAlive = true;
+
+
     private Transform RaptyInSight;
+    private Transform AnkyInSight;
 
     public GameObject water;
-    public GameObject closestRapty = new GameObject();
+    public GameObject closestRapty;
+
+    //  public GameObject closestRapty = new GameObject();
 
     public float raptyRange;
 
@@ -76,7 +83,7 @@ public class MyAnky : Agent
         //RaptyRange = new List<Transform>();
         // AnkyRange = new List<Transform>();
 
-        currentState = ankyState.FLEEING;
+        currentState = ankyState.GRAZING;
 
         //ankySeek.target = Water;
 
@@ -98,89 +105,105 @@ public class MyAnky : Agent
 
     protected override void Update()
     {
-
-
-        //if (thirst > 0)
-        //{
-        //    thirst -= (Time.deltaTime * 2) * 1;
-        //}
-        //if (hunger > 0)
-        //{
-        //    hunger -= (Time.deltaTime * 1) * 1;
-        //}
-
-        Debug.Log( thirst);
-
-
-        viewRapty.Clear();
-        foreach (Transform i in sight.visibleTargets)
+        if (isAlive)
         {
-            if (i.tag == "Rapty")
+
+            if (thirst > 0)
             {
-                viewRapty.Add(i);
+                thirst -= (Time.deltaTime * 2) * 1;
+            }
+            if (hunger > 0)
+            {
+                hunger -= (Time.deltaTime * 1) * 1;
+            }
+
+
+            if (thirst <= 0 && hunger <= 0)
+            {
+                health -= (Time.deltaTime * 1) * 1;
+            }
+
+            if (health <=0)
+            {
+                setState(ankyState.DEAD);
 
             }
-        }
-        foreach (Transform i in sight.stereoVisibleTargets)
-        {
-            if (i.tag == "Rapty")
-            {
-                viewRapty.Add(i);
-            }
-        }
 
-        viewAnky.Clear();
-        foreach (Transform u in sight.visibleTargets)
-        {
-            if (u.tag == "Anky")
-            {
-                if (u.transform.position != transform.position)
-                {
-                    viewAnky.Add(u);
-                }
-            }
-        }
-        foreach (Transform u in sight.stereoVisibleTargets)
-        {
-            if (u.tag == "Anky")
-            {
-                if (u.transform.position != transform.position)
-                {
-                    viewAnky.Add(u);
-                }
-            }
-        }
-            // Idle - should only be used at startup
-            //Scan();
-            // Eating - requires a box collision with a dead dino
+
+
+
+            //foreach (Transform i in sight.visibleTargets)
+            //{
+
+
+
+            //    if (i.tag == "Rapty")
+            //    {
+            //        Debug.Log("Adding Raptor");
+            //        viewRapty.Add(i);
+
+            //    }
+            //}
+
+
+            //foreach (Transform u in sight.visibleTargets)
+            //{
+            //    if (u.tag == "Anky")
+            //    {
+            //        if (u.transform.position != transform.position)
+            //        {
+            // 
+
+            Scan();
+
             if (currentState == ankyState.EATING)
-        {
-            Eat();
-        }
-        // Drinking - requires y value to be below 32 (?)
-        if (currentState == ankyState.DRINKING)
-        {
-            Drinking();
-        }
-        // Alerted - up to the student what you do here
-        if (currentState == ankyState.ALERTED)
-        {
+            {
+                Eating();
+                setAnim();
 
-            AnkyAlert();
-        }
-        // Hunting - up to the student what you do here
-        if (currentState == ankyState.GRAZING)
-        {
-            
-            Grazing();
-        }
-        // Fleeing - up to the student what you do here
-        if (currentState == ankyState.FLEEING)
-        {
-            AnkyFlee();
-        }
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
+            }
+            // Drinking - requires y value to be below 32 (?)
+            if (currentState == ankyState.DRINKING)
+            {
+                Drinking();
+                setAnim();
 
+            }
+            // Alerted - up to the student what you do here
+            if (currentState == ankyState.ALERTED)
+            {
+
+                AnkyAlert();
+                setAnim();
+
+            }
+            // Hunting - up to the student what you do here
+            if (currentState == ankyState.GRAZING)
+            {
+
+                Grazing();
+                setAnim();
+
+            }
+            // Fleeing - up to the student what you do here
+            if (currentState == ankyState.FLEEING)
+            {
+                // this.GetComponent<Flee>().target = this.gameObject;
+
+                AnkyFlee();
+                setAnim();
+            }
+            // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
+            if (currentState == ankyState.DEAD)
+            {
+                Dead();
+                setAnim();
+            }
+
+
+
+
+        }
         base.Update();
     }
 
@@ -190,8 +213,74 @@ public class MyAnky : Agent
     }
 
 
-    void setState()
+    void setState(ankyState newState)
     {
+        if (currentState != newState)
+        {
+            previousState = currentState;
+            currentState = newState;
+        }
+
+    }
+
+    void setAnim()
+    {
+
+
+
+        switch (previousState)
+        {
+
+            case ankyState.IDLE:
+                anim.SetBool("isIdle", false);
+                break;
+
+            case ankyState.EATING:
+                anim.SetBool("isEating", false);
+                break;
+
+
+            case ankyState.DRINKING:
+                ankySeek.enabled = false;
+
+                anim.SetBool("isDrinking", false);
+                break;
+
+
+            case ankyState.ALERTED:
+                anim.SetBool("isAlerted", false);
+                break;
+
+
+            case ankyState.GRAZING:
+                ankyWander.enabled = false;
+
+                anim.SetBool("isGrazing", false);
+                break;
+
+            case ankyState.ATTACKING:
+                anim.SetBool("isAttacking", false);
+                break;
+
+            case ankyState.FLEEING:
+                ankyFlee.enabled = false;
+
+                anim.SetBool("isFleeing", false);
+                break;
+
+            case ankyState.DEAD:
+                anim.SetBool("isDead", false);
+                break;
+
+
+
+
+
+        }
+
+
+
+
         switch (currentState)
         {
             case ankyState.EATING:
@@ -227,49 +316,7 @@ public class MyAnky : Agent
 
         }
 
-        switch (previousState)
-        {
-
-            case ankyState.IDLE:
-                anim.SetBool("isIdle", false);
-                break;
-
-            case ankyState.EATING:
-                anim.SetBool("isEating", false);
-                break;
-
-
-            case ankyState.DRINKING:
-                anim.SetBool("isDrinking", false);
-                break;
-
-
-            case ankyState.ALERTED:
-                anim.SetBool("isAlerted", false);
-                break;
-
-
-            case ankyState.GRAZING:
-                anim.SetBool("isGrazing", false);
-                break;
-
-            case ankyState.ATTACKING:
-                anim.SetBool("isAttacking", false);
-                break;
-
-            case ankyState.FLEEING:
-                anim.SetBool("isFleeing", false);
-                break;
-
-            case ankyState.DEAD:
-                anim.SetBool("isDead", false);
-                break;
-
-
-
-
-
-        }
+       
     }
 
 
@@ -281,7 +328,7 @@ public class MyAnky : Agent
     void Eating()
     {
         //hunger -= Time.deltaTime;
-        //ankyWander.enabled = false;
+        ankyWander.enabled = false;
 
         //if (hunger <= 0)
         //{
@@ -289,70 +336,148 @@ public class MyAnky : Agent
         //    hunger = 3.0f;
         //}
 
+        hunger += (Time.deltaTime * 4) * 1;
+
+        if (hunger >= 100)
+        {
+            setState(ankyState.GRAZING);
+
+        }
 
 
     }
 
     void Drinking()
     {
-
-        ankyWander.enabled = false;
-        ankySeek.target = water;
-
-        ankySeek.enabled = true;
-
-        if (transform.position.y < 36)
+        for (int i = 0; i < sight.visibleTargets.Count; i++)
         {
-            ankySeek.enabled = false;
-            thirst += (Time.deltaTime * 3) * 1;
-        }
+            // ankyWander.enabled = false;
+            ankySeek.target = water;
 
-        if ( thirst >= 100)
-        {
-            currentState = ankyState.GRAZING;
-        }
-           
+            ankySeek.enabled = true;
 
+            if (transform.position.y < 36)
+            {
+                ankySeek.enabled = false;
+                thirst += (Time.deltaTime * 3) * 1;
+            }
+
+            if (thirst >= 100)
+            {
+                setState(ankyState.GRAZING);
+                //currentState = ankyState.GRAZING;
+            }
+
+
+
+
+            if (sight.visibleTargets[i].tag == "Rapty")
+            {
+                RaptyInSight = sight.visibleTargets[i];
+                RaptyDist = Vector3.Distance(RaptyInSight.position, this.transform.position);
+            }
+
+            if (sight.visibleTargets[i].transform.name == "Rapty" && RaptyDist <= 50)
+            {
+                RaptyInSight = sight.visibleTargets[i];
+                setState(ankyState.ALERTED);
+                //currentState = ankyState.ALERTED;
+
+            }
+
+
+        }
 
     }
 
 
-    void Eat()
+    //void Eat()
+    //{
+    //    ankyWander.enabled = false;
+
+    //    hunger += (Time.deltaTime * 2) * 1;
+
+    //    if (hunger >= 100)
+    //    {
+    //        currentState = ankyState.GRAZING;
+    //    }
+
+    void Dead()
     {
-        ankyWander.enabled = false;
-
-        hunger += (Time.deltaTime * 2) * 1;
-
-        if (hunger >= 100)
-        {
-            currentState = ankyState.GRAZING;
-        }
-
-
-
-
+        isAlive = false;
+        DestroyObject(this.gameObject);
     }
+
+
+    //}
 
     void Grazing()
     {
-
-        if (thirst > 0)
+        for (int i = 0; i < sight.visibleTargets.Count; i++)
         {
-            thirst -= (Time.deltaTime * 2) * 1;
-        }
-        if (hunger > 0)
-        {
-            hunger -= (Time.deltaTime * 1) * 1;
-        }
-        //  GrazingTime -= Time.deltaTime;
-        ankyWander.enabled = true;
 
-        if (thirst < 50 )
-        {
-            currentState = ankyState.DRINKING;
+            //if (thirst > 0)
+            //{
+            //    thirst -= (Time.deltaTime * 2) * 1;
+            //}
+            //if (hunger > 0)
+            //{
+            //    hunger -= (Time.deltaTime * 1) * 1;
+            //}
+            //  GrazingTime -= Time.deltaTime;
+            ankyWander.enabled = true;
 
-           
+            if (thirst < 50)
+            {
+                setState(ankyState.DRINKING);
+                //currentState = ankyState.DRINKING;
+
+
+            }
+
+            if (hunger < 30)
+            {
+                setState(ankyState.EATING);
+            }
+
+
+            Debug.Log("rapty in sight ");
+
+            if (sight.visibleTargets[i].tag == "Rapty")
+            {
+                RaptyInSight = sight.visibleTargets[i];
+                RaptyDist = Vector3.Distance(RaptyInSight.position, this.transform.position);
+            }
+
+
+            if (sight.visibleTargets[i].transform.name == "Rapty" && RaptyDist <= 50 )
+            {
+                RaptyInSight = sight.visibleTargets[i];
+                setState(ankyState.ALERTED);
+                //currentState = ankyState.ALERTED;
+
+            }
         }
+
+
+        foreach (Transform t in sight.visibleTargets)
+        {
+            float ankyDistance = Vector3.Distance(t.position,transform.position);
+
+
+            if (ankyDistance > 50)
+            {
+                ankySeek.target = t.gameObject;
+                ankySeek.enabled = true;
+            }
+            else if (ankyDistance < 20)
+            {
+                ankySeek.enabled = false;
+                ankyWander.enabled = true;
+            }
+
+        }
+
 
     }
 
@@ -371,93 +496,216 @@ public class MyAnky : Agent
 
     //}
 
+
+
+
+
     void Scan()
     {
         for (int i = 0; i < sight.visibleTargets.Count; i++)
         {
-            RaptyInSight = sight.visibleTargets[i];
-            RaptyDist = Vector3.Distance(RaptyInSight.position, this.transform.position);
-            Debug.Log("rapty in sight ");
-            if (sight.visibleTargets[i].transform.name == "Rapty" && RaptyDist <= 150 && RaptyDist > 40)
-            {
-                RaptyInSight = sight.visibleTargets[i];
-                //setState(ankyState.ALERTED);
-                currentState = ankyState.ALERTED;
 
-            }
-            else if (sight.visibleTargets[i].tag == "Rapty" && RaptyDist <= 40)
+            Debug.Log("rapty in sight ");
+            if (sight.visibleTargets[i].tag == "Rapty")
             {
+
                 RaptyInSight = sight.visibleTargets[i];
-                // setState(ankyState.FLEEING);
-                currentState = ankyState.FLEEING;
+                RaptyDist = Vector3.Distance(RaptyInSight.position, this.transform.position);
             }
         }
+
+        for (int u = 0; u < sight.visibleTargets.Count; u++)
+        {
+            Debug.Log("anky in sight ");
+            if (sight.visibleTargets[u].tag == "Anky")
+            {
+
+                AnkyInSight = sight.visibleTargets[u];
+                ankyDist = Vector3.Distance(AnkyInSight.position, this.transform.position);
+            }
+        }
+
+            //if (sight.visibleTargets[i].transform.name == "Rapty" && RaptyDist <= 150 && RaptyDist > 40)
+            //{
+            //    RaptyInSight = sight.visibleTargets[i];
+            //    //setState(ankyState.ALERTED);
+            //    currentState = ankyState.ALERTED;
+
+            //}
+            //else if (sight.visibleTargets[i].tag == "Rapty" && RaptyDist <= 40)
+            //{
+            //    RaptyInSight = sight.visibleTargets[i];
+            //    // setState(ankyState.FLEEING);
+            //    currentState = ankyState.FLEEING;
+            //}
+        
     }
+
+
 
 
     void AnkyAlert()
     {
-        Face.RaptyInSight = RaptyInSight;
-        if (!ankyFace.enabled)
-            ankyFace.enabled = true;
+        Debug.Log("ALERT");
+        for (int i = 0; i < sight.visibleTargets.Count; i++)
+        {
+            
+            Debug.Log("rapty in sight ");
 
-        //foreach (Transform i in sight.stereoVisibleTargets)
-        //{
-        //    if (i.tag == "Rapty")
-        //    {
-        //        ankyFlee.target = i.gameObject;
-
-        //        if (!ankyFace.enabled)
-        //            ankyFace.enabled = true;
-        //    }
+            if (sight.visibleTargets[i].tag == "Rapty")
+            {
+                RaptyInSight = sight.visibleTargets[i];
+                RaptyDist = Vector3.Distance(RaptyInSight.position, this.transform.position);
+            }
 
 
-        //}
+                if (sight.visibleTargets[i].tag == "Rapty" && RaptyDist <= 50)
+            {
 
+                RaptyInSight = sight.visibleTargets[i];
+                setState(ankyState.FLEEING);
+                
+              //  currentState = ankyState.FLEEING;
+
+            }
+
+
+            if (sight.visibleTargets[i].tag == "Rapty" && RaptyDist > 60)
+            {
+
+                RaptyInSight = sight.visibleTargets[i];
+                setState(ankyState.GRAZING);
+
+                //currentState = ankyState.GRAZING;
+
+            }
+
+        }
     }
+
+    
+
 
     //void AnkyFlee()
     //{
 
-    //    Flee.RaptyInSight = RaptyInSight;
-    //    if (!ankyFlee.enabled)
-    //        ankyFlee.enabled = true;
 
+    //    for (int i = 0; i < sight.visibleTargets.Count; i++)
+    //    {
+    //        if (sight.visibleTargets[i].tag == "Rapty")
+    //        {
+    //            Flee.RaptyInSight = RaptyInSight;
+
+
+    //            ankyFlee.target = i.gameObject;
+    //            if (!ankyFlee.enabled)
+    //                ankyFlee.enabled = true;
+    //            RaptyDist = Vector3.Distance(RaptyInSight.position, this.transform.position);
+    //            if (RaptyDist > 50)
+    //            {
+    //                currentState = ankyState.ALERTED;
+
+    //            }
+
+
+    //        }
+
+
+    //    }
 
     //}
 
-    //GameObject closestRapty = new GameObject();
+
+
+
 
     void AnkyFlee()
     {
 
 
-
-        foreach (Transform x in viewRapty)
+        foreach (Transform i in sight.visibleTargets)
         {
-            Vector3 Difference = new Vector3();
-            Vector3 RaptorDiff = new Vector3();
-
-            Difference = (this.transform.position - x.position);
-            RaptorDiff = (this.transform.position - closestRapty.transform.position);
-
-            if (Difference.magnitude < RaptorDiff.magnitude)
+            if (i.tag == "Rapty")
             {
-                closestRapty = x.gameObject;
-            }
-            float Distance = Vector3.Distance(x.position, this.transform.position);
-            if (Distance > 50)
-            {
-                viewRapty.Clear();
-                currentState = ankyState.ALERTED;
-            }
-        }
+                // Flee.RaptyInSight = RaptyInSight;
 
-        if (closestRapty)
-        {
-            ankyFlee.target = closestRapty;
+
+                ankyFlee.target = i.gameObject;
+                // if (!ankyFlee.enabled)
+                ankyFlee.enabled = true;
+                RaptyDist = Vector3.Distance(RaptyInSight.position, this.transform.position);
+                if (RaptyDist > 60)
+                {
+                    setState(ankyState.GRAZING);
+                    //currentState = ankyState.GRAZING;
+
+                }
+
+
+            }
+
+
         }
 
     }
+
+
+    //void AnkyFlee()
+    //{
+
+
+    //    foreach (Transform i in sight.stereoVisibleTargets)
+    //    {
+    //        if (i.tag == "Rapty")
+    //        {
+    //            ankyFlee.target = i.gameObject;
+    //            Flee.RaptyInSight = RaptyInSight;
+    //            if (!ankyFlee.enabled)
+    //            ankyFlee.enabled = true;
+    //       }
+
+
+
+
+    //    }
+    //}
+
+    //GameObject closestRapty = new GameObject();
+    //public GameObject closestRapty;
+    //void AnkyFlee()
+    //{
+
+    //    closestRapty = new GameObject();
+
+
+
+    //    foreach (Transform x in viewRapty)
+    //    {
+
+    //        Vector3 Difference = new Vector3();
+    //        Vector3 RaptorDiff = new Vector3();
+
+
+    //        Difference = (this.transform.position - x.position);
+    //        RaptorDiff = (this.transform.position - closestRapty.transform.position);
+
+    //        if (Difference.magnitude < RaptorDiff.magnitude)
+    //        {
+    //            closestRapty = x.gameObject;
+    //        }
+    //        float Distance = Vector3.Distance(x.position, this.transform.position);
+    //        if (Distance > 50)
+    //        {
+    //            viewRapty.Clear();
+    //            currentState = ankyState.ALERTED;
+    //        }
+    //    }
+
+    //    if (closestRapty)
+    //    {
+    //        ankyFlee.target = closestRapty;
+    //    }
+
+    //}
 }
 
