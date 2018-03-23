@@ -42,7 +42,6 @@ public class FleeState : State<MyAnky>
         _owner.setCurrentState(MyAnky.ankyState.FLEEING);
         _owner.fleeBehaviourScript.target = _owner.myTarget.gameObject;
         _owner.fleeBehaviourScript.enabled = true;
-        _owner.wanderBehaviourScript.enabled = false;
         waitForSeconds = 2;
     }
 
@@ -56,7 +55,6 @@ public class FleeState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        _owner.wanderBehaviourScript.enabled = false;
         //Check distance between us and our closest hazard
         foreach (Transform pred in _owner.predatorsInRange)
         {
