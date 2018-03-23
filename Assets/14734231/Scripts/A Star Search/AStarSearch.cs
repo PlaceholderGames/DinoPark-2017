@@ -43,6 +43,9 @@ public class AStarSearch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (target == null)
+            return;
+
         // Exit early if agent and target hasn't moved, and the map hasn't changed
         if (start == mapGrid.getTileFromPosition(transform.position) && target.transform.position == targetPos)
             return;
