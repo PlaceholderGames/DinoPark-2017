@@ -34,18 +34,23 @@ public class MyAnky : Agent
     // Use this for initialization
     protected override void Start()
     {
+        // -- Josh --
+        // Will get a list of all the Anky's in the world currently. 
+        // and will also set up all the objects that it can use.
         ankyList = GameObject.FindGameObjectsWithTag("Anky");
 
-
-
+        // Sets the Anky water sphere if it hasnt been set
         if (GameObject.Find("WaterSphereAnky") != null)
         {
             waterDrinkLocation = GameObject.Find("WaterSphereAnky");
         }
+        // will get the Map grid set if it hasnt been
         if (MapGrid.FindObjectOfType<MapGrid>() != null)
         {
             this.GetComponent<AStarSearch>().mapGrid = MapGrid.FindObjectOfType<MapGrid>();
         }
+        // and if the flee target hasnt been set it will set it to itself, 
+        // this will get changed later when it flee's anyway. 
         if (this.GetComponent<Flee>().target == null)
         {
             this.GetComponent<Flee>().target = this.gameObject;
@@ -70,9 +75,14 @@ public class MyAnky : Agent
         // you to see how to change the flag parameters in the animation controller
         base.Start();
 
+        // -- Josh --
+        // go into the Idle state at first
         currentState = "Idle";
 
     }
+
+
+
 
     protected override void Update()
     {
@@ -80,6 +90,10 @@ public class MyAnky : Agent
         waterLevel -= 2 * Time.deltaTime;
         hungryLevel -= 2 * Time.deltaTime;
 
+
+        // -- Josh --
+        // The update state will drain the water and hungry levels and keep
+        // control of all the states. 
         switch (currentState)
         {
             case "Idle":
@@ -98,19 +112,19 @@ public class MyAnky : Agent
                 break;
         }
 
+        // If its not the leader ( set in the editor ) it will move to keep
+        // itself close to the leader.
         if (!leader)
         {
-
             distance = Vector3.Distance(this.transform.position, ankyLeader.transform.position);
             if (distance > 20)
             {
                 transform.position = Vector3.MoveTowards(transform.position, ankyLeader.transform.position, speed);
             }
-
         }
 
 
-
+        // and if it falls out of the world for whatever reason, it will teleport back
         if (transform.position.y < 32)
         {
             transform.position = new Vector3(transform.position.x, 150, transform.position.z);
@@ -137,6 +151,8 @@ public class MyAnky : Agent
         base.LateUpdate();
     }
 
+    // -- Josh --
+    // Will deal damage to the Anky when called by the Rapty
     public bool takeDamage(int damage)
     {
         health -= damage;
@@ -148,6 +164,9 @@ public class MyAnky : Agent
         return false;
     }
 
+
+    // Will be the default state for the Anky.
+    // When a certain condition is matched, it will switch to that state.
     void IdleState()
     {
         gameObject.GetComponent<Agent>().enabled = true;
@@ -175,6 +194,10 @@ public class MyAnky : Agent
         }
     }
 
+    // -- Josh --
+    // Will A* to the cloest water grid edge from the mapGrid we created
+    // when in range of the orb, it will restore its water level before 
+    // going back to Idle
     void DrinkingState()
     {
         gameObject.GetComponent<Wander>().enabled = false;
@@ -199,6 +222,10 @@ public class MyAnky : Agent
         }
     }
 
+
+    // -- Josh -- 
+    // It will use the MapGrid script again to get the closest place it can get food from
+    // when in range, its hunger level will go up until it switches state.
     void HungryState()
     {
         gameObject.GetComponent<Wander>().enabled = false;
@@ -224,6 +251,8 @@ public class MyAnky : Agent
         }
     }
 
+    // if it can still see any dino or the dino's it can see arent Rapty's it will 
+    // go back to idle, otherwise it will put that dino as its flee target and start to run away from it. 
     void FleeingState()
     {
         if (dinoView.visibleTargets.Count != 0)
@@ -248,6 +277,8 @@ public class MyAnky : Agent
         }
     }
 
+
+    // used for A*
    private void move(Vector3 directionVector, MyAnky _owner)
     {
         directionVector *= speed * Time.deltaTime;

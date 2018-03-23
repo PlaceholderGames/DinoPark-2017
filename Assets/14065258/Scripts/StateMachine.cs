@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// -- Josh --
+// This is the controller or template that is used for the state machine of the Raptors
+// It will be copied and replaced with each state.
 namespace StateStuff
 { 
     public class StateMachine<T>

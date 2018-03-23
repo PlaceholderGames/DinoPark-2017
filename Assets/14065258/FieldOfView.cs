@@ -62,14 +62,14 @@ public class FieldOfView : MonoBehaviour {
                     visibleTargets.Add(target);
 
                 }
-                visibleTargets = visibleTargets.Distinct().ToList();
-                stereoVisibleTargets = stereoVisibleTargets.Distinct().ToList();
+
                        
 
                 //float directionToTarget = Vector3.Angle(transform.forward, dirToTarget); // We need the direction of the object only for checking with raytracing
                  // For now, if it is in range and angle of eyesight we can see it
             }
-         
+            visibleTargets = visibleTargets.Distinct().ToList();
+            stereoVisibleTargets = stereoVisibleTargets.Distinct().ToList();
         }
     }
 	

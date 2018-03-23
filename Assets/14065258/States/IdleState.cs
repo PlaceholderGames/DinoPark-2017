@@ -6,8 +6,6 @@ using StateStuff;
 public class IdleState : State<MyRapty>
 {
     private static IdleState _instance; // static only declared once
-                                        //private FieldOfView dinoView;
-
 
     public bool breed = true;
 
@@ -37,24 +35,18 @@ public class IdleState : State<MyRapty>
     public override void EnterState(MyRapty _owner)
     {
         Debug.Log("Entering Idle State");
-        //_owner.dinoView.enabled = true;
-        //dinoView = _owner.raptor.GetComponent<FieldOfView>();
     }
 
     public override void ExitState(MyRapty _owner)
     {
         Debug.Log("exiting Idle State");
-        //_owner.dinoWander.enabled = false;
-        //_owner.dinoView.enabled = false;
     }
 
+    // -- Josh -- 
+    // The Dino will call the movement code from MyRapty and will just idle around the map until one of its
+    // levels gets below a certain before it will then switch states to that state.
     public override void UpdateState(MyRapty _owner)
     {
-
-
-
-
-
         if (_owner.energyLevel <= 0)
         {
             _owner.stateMachine.ChangeState(SleepingState.Instance);
@@ -67,6 +59,10 @@ public class IdleState : State<MyRapty>
         {
             _owner.stateMachine.ChangeState(HuntingState.Instance);
         }
+
+        // ----------
+        // -- Josh --
+        // Uncomment to test the breeding code.
         /*
         for (int i = 0; i < raptorArray.Length; i++)
         {
@@ -76,6 +72,7 @@ public class IdleState : State<MyRapty>
                 _owner.breeding = true;
             }
         } */
+        // ----------
 
 
         _owner.movement(_owner, _owner.moveSpeed);

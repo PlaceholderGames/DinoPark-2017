@@ -39,17 +39,19 @@ public class DrinkingState : State<MyRapty>
         aStarScript = _owner.GetComponent<AStarSearch>();
         pathFollowerScript = _owner.GetComponent<ASPathFollower>();
 
-        //_owner.dinoPursue.enabled = true;
         Debug.Log("Entering Drinking State");
     }
 
     public override void ExitState(MyRapty _owner)
     {
-
-        //_owner.dinoPursue.target = new GameObject();
-
         Debug.Log("exiting Drinking State");
     }
+
+    // -- Josh --
+    // This will call the GetEdgeWAter from the MapGrid script and will move our watersphere to that location
+    // it will then A* its way over to that location
+    // Once in range, the water level will increase before
+    // when it's water is back to full, it will go back into idle
 
     public override void UpdateState(MyRapty _owner)
     {
@@ -63,7 +65,6 @@ public class DrinkingState : State<MyRapty>
             pathFollowerScript.path = aStarScript.path;
         }
         move(pathFollowerScript.getDirectionVector(), _owner);
-        //_owner.transform.transform.localRotation = new Quaternion(0, 0, 0, 1);
 
         if (Vector3.Distance(_owner.waterDrink.transform.position, _owner.transform.position) < 25 && _owner.waterLevel < 100)
         {
@@ -74,9 +75,7 @@ public class DrinkingState : State<MyRapty>
             _owner.stateMachine.ChangeState(IdleState.Instance);
 
         }
-
     }
-
 
     void move(Vector3 directionVector, MyRapty _owner)
     {

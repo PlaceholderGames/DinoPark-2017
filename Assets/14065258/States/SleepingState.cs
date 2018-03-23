@@ -44,17 +44,18 @@ public class SleepingState : State<MyRapty>
         aStarScript = _owner.GetComponent<AStarSearch>();
         pathFollowerScript = _owner.GetComponent<ASPathFollower>();
         aStarScript.target = new GameObject();
-        //_owner.dinoView.enabled = true;
-        //dinoView = _owner.raptor.GetComponent<FieldOfView>();
     }
 
     public override void ExitState(MyRapty _owner)
     {
         Debug.Log("exiting Sleeping State");
-        //_owner.dinoWander.enabled = false;
-        //_owner.dinoView.enabled = false;
     }
 
+
+    // -- Josh --
+    // The Dino will A* its way to the water sphere as it is its "home" near the water now.
+    // once there, it will restore its energy level before switching back to the Idle state 
+    // now that its rested.
     public override void UpdateState(MyRapty _owner)
     {
         aStarScript.target = _owner.waterDrink.gameObject;

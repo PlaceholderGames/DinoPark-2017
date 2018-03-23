@@ -48,14 +48,18 @@ public class BreedingState : State<MyRapty>
 
     public override void ExitState(MyRapty _owner)
     {
+        // -- Josh --
+        // turns off breeding so it doesnt happen again
         _owner.breeding = false;
         Debug.Log("exiting Breeding State");
-        //_owner.dinoWander.enabled = false;
-        //_owner.dinoView.enabled = false;
     }
 
     public override void UpdateState(MyRapty _owner)
     {
+        // -- Josh -- 
+        // If the rapty is in view of itself, it will send a message to the MyRapty script to tell it to breed. 
+        // Once done, the breed is changed to false and the state is sent back to being idle. 
+        // Otherwise, it will move towards the cloest visible Rapty it can see.
         for (int i = 0; i < _owner.dinoView.visibleTargets.Count; i++)
         {
             if (_owner.dinoView.visibleTargets[i] != null)
@@ -65,11 +69,9 @@ public class BreedingState : State<MyRapty>
                     if (Vector3.Distance(_owner.dinoView.visibleTargets[i].transform.position, _owner.transform.position) < 20 && breed)
                     {
                         Debug.Log("Breeding");
-                        //((Box.transform.position - Capsule.transform.position) * 0.5f) + Capsule.transform.position;
                         _owner.breed(((_owner.dinoView.visibleTargets[i].transform.position - _owner.transform.position) * 0.5f) + _owner.transform.position);
                         breed = false;
                         _owner.stateMachine.ChangeState(IdleState.Instance);
-                        //MyRapty.Instantiate<GameObject>(_owner.gameObject);
                     }
                     else
                     {

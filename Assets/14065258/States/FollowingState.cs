@@ -42,7 +42,6 @@ public class FollowingState : State<MyRapty>
         aStarScript = _owner.GetComponent<AStarSearch>();
         pathFollowerScript = _owner.GetComponent<ASPathFollower>();
        
-        //_owner.dinoPursue.enabled = true;
         Debug.Log("Entering Following State");
     }
 
@@ -51,18 +50,24 @@ public class FollowingState : State<MyRapty>
         Debug.Log("exiting Following State");
     }
 
+    // -- Josh --
+    // Alot happens here so i'll comment it line by line.
     public override void UpdateState(MyRapty _owner)
     {
-
-        //Debug.Log(Vector3.Distance(_owner.dinoView.visibleTargets[_owner.targetDinoLocation].position, _owner.transform.position));
+        // If no dino is in visible range, dont do anything.
         if (_owner.dinoView.visibleTargets.Count != 0)
         {
+            // Get the dino we identfied as the one we want to kill
             targetDinoLocation = _owner.dinoView.visibleTargets[_owner.targetDinoLocation].position;
-
+            
+            // if we are in range to do damage..
             if (Vector3.Distance(targetDinoLocation, _owner.transform.position) < 20)
             {
+                // start dealing damamge to that dino.
                 isdead = _owner.dinoView.visibleTargets[_owner.targetDinoLocation].gameObject.GetComponent<MyAnky>().takeDamage(10);
 
+                // When we finially get the message back that it is dead
+                // we increase our hunger and go back to the idle state.
                 if (isdead)
                 {
                     _owner.hungerLevel += 70;
@@ -70,6 +75,7 @@ public class FollowingState : State<MyRapty>
                     _owner.stateMachine.ChangeState(IdleState.Instance);
                 }
             }
+            // however, if we are not in view of the dino, we A* towards it.
             else
             {
                 aStarScript.target = _owner.dinoView.visibleTargets[_owner.targetDinoLocation].gameObject;
@@ -82,6 +88,7 @@ public class FollowingState : State<MyRapty>
                 _owner.transform.transform.localRotation = new Quaternion(0, 0, 0, 1);
             }
         }
+        // If we dont see a dino in our side view, we check our front view and A* towards the first thing we see
         else if (_owner.dinoView.stereoVisibleTargets.Count != 0)
         {
             aStarScript.target = _owner.dinoView.stereoVisibleTargets[0].gameObject;
@@ -93,10 +100,13 @@ public class FollowingState : State<MyRapty>
             move(pathFollowerScript.getDirectionVector(), _owner);
             _owner.transform.transform.localRotation = new Quaternion(0, 0, 0, 1);
         }
+        // if our energy runs out from all the hard work, we go to the sleeping state
         if (_owner.energyLevel <= 0)
         {
             _owner.stateMachine.ChangeState(SleepingState.Instance);
         }
+        // or if our water runs out, we go get a drink because you cant fight
+        // with a dry mouth. 
         if (_owner.waterLevel < 20)
         {
             _owner.stateMachine.ChangeState(DrinkingState.Instance);

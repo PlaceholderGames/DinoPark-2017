@@ -11,15 +11,7 @@ public class MyRapty : MonoBehaviour
     //Josh
     [HideInInspector]
     public FieldOfView dinoView;
-    //[HideInInspector]
-    //public Wander dinoWander;
-    //[HideInInspector]
-    //public Face dinoFace;
-    //[HideInInspector]
-    //public Pursue dinoPursue;
-    //[HideInInspector]
-    //public AgentBehaviour dinoAgent;
-    //[HideInInspector]
+
     public GameObject waterDrink;
 
     public GameObject controller;
@@ -75,6 +67,8 @@ public class MyRapty : MonoBehaviour
     // Use this for initialization
     protected void Start()
     {
+        // -- Josh --
+        // Will try to step up all the varibles it can before hand. 
         foreach (GameObject item in raptorArray)
         {
             allRaptors.Add(item);
@@ -120,6 +114,7 @@ public class MyRapty : MonoBehaviour
 
     private void Update()
     {
+        // If the rapty sees another rapty, it will try to keep close togheter
         if (dinoView.visibleTargets.Count != 0)
         {
             for (int i = 0; i < dinoView.visibleTargets.Count; i++)
@@ -141,10 +136,14 @@ public class MyRapty : MonoBehaviour
             }
 
         }
+        // -- Josh --
+        // Deplets the levels for the code
 
-        energyLevel += 5 * Time.deltaTime;
-        //waterLevel -= 1 * Time.deltaTime;
-        //hungerLevel -= 0.5f * Time.deltaTime;
+        energyLevel -= 0.5f * Time.deltaTime;
+        waterLevel -= 1 * Time.deltaTime;
+        hungerLevel -= 0.5f * Time.deltaTime;
+        
+        
         // Idle - should only be used at startup
 
         // Eating - requires a box collision with a dead dino
@@ -159,11 +158,15 @@ public class MyRapty : MonoBehaviour
 
         // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
+        // -- Josh --
+        // runs the update in whichever state we are currently in
         if (stateMachine != null)
         {
                     stateMachine.Update();
         }
 
+        // -- Josh --
+        // If gone out of bounds. will bring him back.
         if (transform.position.y < 32)
         {
             transform.position = new Vector3(transform.position.x,150,transform.position.z);
@@ -174,6 +177,8 @@ public class MyRapty : MonoBehaviour
         //Update();
     }
 
+    // -- Josh -- 
+    // Movement command to move him around idle
     public void movement(MyRapty _owner, float movespeed)
     {
         _owner.energyLevel -= (moveSpeed / 2) * Time.deltaTime;
@@ -197,6 +202,8 @@ public class MyRapty : MonoBehaviour
         }
     }
 
+    // -- Josh --
+    // Used to make the dino wander around the map for a few seconds when needed.
     IEnumerator Wander()
     {
         int rotTime = Random.Range(1, 1); // times to rotate
@@ -229,11 +236,15 @@ public class MyRapty : MonoBehaviour
 
     }
 
+    // -- Josh -- 
+    // Used to instantiate a new dino. can only be done here.
     public void breed(Vector3 pos)
     {
         Instantiate(dinoPrefab, pos, Quaternion.identity);
     }
 
+    // -- Josh --
+    // Used for A* movement. will change state when it cant see anything.
     void move(Vector3 directionVector, MyRapty _owner)
     {
         directionVector *= moveSpeed * Time.deltaTime;
@@ -246,6 +257,8 @@ public class MyRapty : MonoBehaviour
 
     }
 
+    // -- Josh -- 
+    // Used to deal damage to the Rapty via the Anky
     public bool takeDamage(int damage)
     {
         health -= damage;
@@ -256,10 +269,4 @@ public class MyRapty : MonoBehaviour
         }
         return false;
     }
-
-    /*
-    protected void LateUpdate()
-    {
-       // LateUpdate();
-    } */
 }

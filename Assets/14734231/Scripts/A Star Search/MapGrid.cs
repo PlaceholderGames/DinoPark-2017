@@ -12,8 +12,13 @@ public class MapGrid : MonoBehaviour {
 
     [HideInInspector]
     public MapTile[,] tiles;
+
+    //-- Josh --
+    // These are used to get the tiles needed for unwalkable water tiles
+    // and tiles that are between certain heights.
     [HideInInspector]
     public List<MapTile> waterEdge = new List<MapTile>();
+    [HideInInspector]
     public List<MapTile> foodEdge = new List<MapTile>();
 
     private Terrain terrain;
@@ -168,6 +173,11 @@ public class MapGrid : MonoBehaviour {
         return new Vector2(xTile, yTile);
     }
 
+    // -- Josh --
+    // This function returns the tile that is closet to the water
+    // to the Dinosaur. It does it by going through all the tiles
+    // in the waterEdge list and getting the shorest distance
+    // one.
     public MapTile getEdgeWater(GameObject dino)
     {
         int chosenTile = 0;
@@ -187,6 +197,12 @@ public class MapGrid : MonoBehaviour {
         }
         return waterEdge[chosenTile];
     }
+
+    // -- Josh --
+    // This function returns the tile that is closet to the grass
+    // to the Dinosaur. It does it by going through all the tiles
+    // in the foodEdge list and getting the shorest distance
+    // one.
 
     public MapTile getFood(GameObject dino)
     {

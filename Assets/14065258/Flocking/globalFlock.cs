@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// -- Josh --
+// This script creates several dino's in a range and adds them to the allDino list
+// then, each update, the goal is randomly moved around the map for them to follow. 
 public class globalFlock : MonoBehaviour
 {
 
