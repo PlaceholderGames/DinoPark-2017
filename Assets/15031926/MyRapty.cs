@@ -39,6 +39,7 @@ public class MyRapty : Agent
     public Transform ball;
     public Transform deadAnky;
     GameObject theBall;
+    GameObject[] WaterPoints;
 
     protected override void Start()
     {
@@ -52,7 +53,7 @@ public class MyRapty : Agent
         anim.SetBool("isAttacking", false);
         anim.SetBool("isFleeing", false);
         anim.SetBool("isDead", false);
-
+        WaterPoints = GameObject.FindGameObjectsWithTag("Water");
 
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
@@ -90,10 +91,9 @@ public class MyRapty : Agent
             anim.SetBool("isIdle", false);
             anim.SetBool("isAlerted", true);
             fsm = raptyState.ALERTED;
-
-
         }
-        // Eating - requires a box collision with a dead dino
+
+        // Eating - Triggered from the attacking state after an enemy dino dies
         else if (fsm == raptyState.EATING)
         {
             if(!busy)
@@ -114,7 +114,6 @@ public class MyRapty : Agent
                     {
                         //theBall = GameObject.FindGameObjectWithTag("ball");
                         //theBall.transform.SetPositionAndRotation(this.transform.position, Quaternion.identity);
-                        GameObject[] WaterPoints = GameObject.FindGameObjectsWithTag("Water");
 
                         for(int i = 0; i < WaterPoints.Length; i++)
                         {
@@ -230,11 +229,14 @@ public class MyRapty : Agent
             {
                 stateOnce = true;
                 pursue.enabled = false;
-                Vector3 AnkyPos = TheAnky.transform.position;
+                //Vector3 AnkyPos = TheAnky.transform.position;
                 Agent ankyAgent = TheAnky.gameObject.GetComponent<Agent>();
                 if(ankyAgent != null) { Debug.Log("Found it!"); ankyAgent.TimeToDie(); }
                 TheAnky.transform.Rotate(0.0f, 0.0f, 180.0f);
                 //Instantiate(deadAnky, AnkyPos, new Quaternion(0.0f, 0.0f, 180.0f, 0.0f));
+
+                anim.SetBool("isEating", true);
+                anim.SetBool("isAttacking", false);
                 stateOnce = false;
                 fsm = raptyState.EATING;
 
@@ -301,8 +303,8 @@ public class MyRapty : Agent
         if(fsm == raptyState.HUNTING || fsm == raptyState.FLEEING)
         {
             stateOnce = false;
-            anim.SetBool("isHunting", true);
-            anim.SetBool("isFleeing", true);
+            anim.SetBool("isHunting", false);
+            //anim.SetBool("isFleeing", true);
             anim.SetBool("isAlerted", true);
             fsm = raptyState.ALERTED;
         }
@@ -332,10 +334,13 @@ public class MyRapty : Agent
             //When the rapty's thirst or energy gets to 0, his health starts to tick down. The effect is compounded if he is hungry and thirsty
             if(thirst <= 0 && !actuallyDrinking) { health -= 0.5f; }
             if(energy <= 0 && fsm != raptyState.EATING) { health -= 0.5f; }
-            if(thirst > 80 && energy > 80) { health += 0.2f; }
+            if(thirst > 70 && energy > 70 && health < 100) { health += 0.2f; }
         }
     }
-
+    ////////////////////////////////////////////////////////////////////
+    //UNUSED CODE BELOW                                               //
+    ////////////////////////////////////////////////////////////////////
+    /// </summary>
     void getNearest()
     {
         for (int i = 0; i < ankysInSight.Count; i++)
