@@ -37,30 +37,30 @@ public class Agent : MonoBehaviour
 	}
     protected virtual void LateUpdate () // Changed so we can inherit
     {
-        //if (blendPriority)
-        //{
-        //    steering = GetPrioritySteering();
-        //    groups.Clear();
-        //}
-        //velocity += steering.linear;// * Time.deltaTime;
-        //rotation += steering.angular;// * Time.deltaTime;
-        //if (velocity.magnitude > maxSpeed)
-        //{
-        //    velocity.Normalize();
-        //    velocity = velocity * maxSpeed;
-        //}
-        //if (rotation > maxRotation)
-        //{
-        //    rotation = maxRotation;
-        //}
-        //if (steering.angular == 0.0f)
-        //{
-        //    rotation = 0.0f;
-        //}
-        //if (steering.linear.sqrMagnitude == 0.0f)
-        //{
-        //    velocity = Vector3.zero;
-        //}
+        if (blendPriority)
+        {
+            steering = GetPrioritySteering();
+            groups.Clear();
+        }
+        velocity += steering.linear * Time.deltaTime;
+        rotation += steering.angular * Time.deltaTime;
+        if (velocity.magnitude > maxSpeed)
+        {
+            velocity.Normalize();
+            velocity = velocity * maxSpeed;
+        }
+        if (rotation > maxRotation)
+        {
+            rotation = maxRotation;
+        }
+        if (steering.angular == 0.0f)
+        {
+            rotation = 0.0f;
+        }
+        if (steering.linear.sqrMagnitude == 0.0f)
+        {
+            velocity = Vector3.zero;
+        }
         steering = new Steering();
     }
     public void SetSteering (Steering steering)

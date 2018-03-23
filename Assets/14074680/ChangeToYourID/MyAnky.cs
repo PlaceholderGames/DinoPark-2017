@@ -9,35 +9,31 @@ public class MyAnky : Agent
     public bool switchState = false;
     public float gameTimer;
     public int seconds = 0;
+    public double hydration = 100;
+    public double food = 100;
+    public double health = 100;
+    public GameObject Water;
+    public GameObject Food;
+    public Seek AnkySeek;
+    public Seek AnkyFood;
+    public Wander AnkyWander;
+    public Flee AnkyFlee;
+    public List<Transform> AnkyVillains = new List<Transform>();
+    public List<Transform> AnkyHeroes = new List<Transform>();
+    public FieldOfView FOV;
 
     public StateMachine<MyAnky> StateMachine { get; set; }
 
-    private void Start()
+    public int Distance { get; internal set; }
+
+    void Awake()
     {
-        StateMachine = new StateMachine<MyAnky>(this);
-        StateMachine.ChangeState(DrinkingState.Instance);
-        gameTimer = Time.time;
+        AnkyWander = GetComponent<Wander>();
+        AnkySeek = GetComponent<Seek>();
+        AnkyFood = GetComponent<Seek>();
+        AnkyFlee = GetComponent<Flee>();
+        FOV = GetComponent<FieldOfView>();
     }
-
-    private void Update()
-    {
-        if (Time.time > gameTimer + 1)
-        {
-            gameTimer = Time.time;
-            seconds++;
-            Debug.Log(seconds);
-        }
-
-        if (seconds == 5)
-        {
-            seconds = 0;
-            switchState = !switchState;
-        }
-
-        StateMachine.Update();
-    }
-
-
     public enum ankyState
     {
         IDLE,       // The default state on creation.
@@ -53,42 +49,95 @@ public class MyAnky : Agent
     public Animator anim;
 
     // Use this for initialization
-    //protected override void Start()
-    //{
-    //    anim = GetComponent<Animator>();
-    //    // Assert default animation booleans and floats
-    //    anim.SetBool("isIdle", true);
-    //    anim.SetBool("isEating", false);
-    //    anim.SetBool("isDrinking", false);
-    //    anim.SetBool("isAlerted", false);
-    //    anim.SetBool("isGrazing", false);
-    //    anim.SetBool("isAttacking", false);
-    //    anim.SetBool("isFleeing", false);
-    //    anim.SetBool("isDead", false);
-    //    anim.SetFloat("speedMod", 1.0f);
-    //    // This with GetBool and GetFloat allows 
-    //    // you to see how to change the flag parameters in the animation controller
-    //    base.Start();
+    protected override void Start()
+    {
+        anim = GetComponent<Animator>();
+        StateMachine = new StateMachine<MyAnky>(this);
+        StateMachine.ChangeState(IdleState.Instance);
+        // Assert default animation booleans and floats
+        anim.SetBool("isIdle", true);
+        anim.SetBool("isEating", false);
+        anim.SetBool("isDrinking", false);
+        anim.SetBool("isAlerted", false);
+        anim.SetBool("isGrazing", false);
+        anim.SetBool("isAttacking", false);
+        anim.SetBool("isFleeing", false);
+        anim.SetBool("isDead", false);
+        anim.SetFloat("speedMod", 1.0f);
+        // This with GetBool and GetFloat allows 
+        // you to see how to change the flag parameters in the animation controller
+        AnkySeek.target = Water;
+        AnkyFood.target = Food;
+        base.Start();
 
-    //}
+    }
 
 
 
-    //protected override void Update()
-    //{
-    //    // Idle - should only be used at startup
+    protected override void Update()
+    {
+        if (Time.time > gameTimer + 1)
+        {
+            gameTimer = Time.time;
+            seconds++;
+        }
 
-    //    // Eating - requires a box collision with a dead dino
+        if (seconds == 5)
+        {
+            if (food >= 1)
+            {
+                food--;
+            }
+            if (hydration >= 1)
+            {
+                hydration--;
+            }
+            seconds = 0;
+            //switchState = !switchState;
 
-    //    // Drinking - requires y value to be below 32 (?)
+            if (hydration <= 0)
+            {
+                if (health >= 1)
+                {
+                    health--;
+                }
+            }
 
-    //    // Alerted - up to the student what you do here
+            if (food <= 0)
+            {
+                if (health >= 1)
+                {
+                    health--;
+                }
+            }
 
-    //    // Hunting - up to the student what you do here
+            if (health <= 1)
+            {
+                StateMachine.ChangeState(DeadState.Instance);
+            }
 
-    //    // Fleeing - up to the student what you do here
-    //    // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-    //}
+        }
+      AnkyVillains.Clear();
+
+            foreach (Transform j in FOV.visibleTargets)
+            {
+                if (j.tag == "Rapty" )
+                {
+                    AnkyVillains.Add(j);
+                }
+            }
+
+            foreach (Transform j in FOV.stereoVisibleTargets)
+            {
+                if (j.tag == "Rapty")
+                {
+                    AnkyVillains.Add(j);
+                }
+            }
+        StateMachine.Update();
+        base.Update();
+
+    }
 
     protected override void LateUpdate()
     {

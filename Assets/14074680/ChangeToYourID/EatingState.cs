@@ -31,9 +31,10 @@ public class EatingState : State<MyAnky>
         }
     }
 
-    public override void EnterState(MyAnky _o)
+    public override void EnterState(MyAnky _owner)
     {
         Debug.Log("Entering Eating State");
+        _owner.AnkyFood.enabled = true;
     }
 
     public override void ExitState(MyAnky _owner)
@@ -43,9 +44,16 @@ public class EatingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        if (!_owner.switchState)
+        if (_owner.transform.position.y >= 57)
         {
-            _owner.StateMachine.ChangeState(DrinkingState.Instance);
+            _owner.AnkyFood.enabled = false;
+            _owner.food++;
+
+        }
+        if (_owner.food >= 100)
+        {
+            _owner.AnkyWander.enabled = true;
+            _owner.StateMachine.ChangeState(Grasingstate.Instance);
         }
     }
 }
