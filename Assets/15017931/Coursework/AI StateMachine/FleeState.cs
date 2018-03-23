@@ -4,8 +4,6 @@ using UnityEngine;
 using StateMachine;
 using System;
 
-
-
 public class FleeState : State<MyAnky>
 {
     private static FleeState _instance;
@@ -102,4 +100,3 @@ public class FleeState : State<MyAnky>
         }
     }
 }
-
