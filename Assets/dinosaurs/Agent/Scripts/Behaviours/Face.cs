@@ -15,14 +15,19 @@ public class Face : Align {
 
     public override Steering GetSteering()
     {
-        Vector3 direction = targetAux.transform.position - transform.position;
-        if (direction.magnitude > 0.0f)
+        if (targetAux != null && this != null)
         {
-            float targetOrientation = Mathf.Atan2(direction.x, direction.z);
-            targetOrientation *= Mathf.Rad2Deg;
-            target.GetComponent<Agent>().orientation = targetOrientation;
+            Vector3 direction = targetAux.transform.position - transform.position;
+            if (direction.magnitude > 0.0f)
+            {
+                float targetOrientation = Mathf.Atan2(direction.x, direction.z);
+                targetOrientation *= Mathf.Rad2Deg;
+                target.GetComponent<Agent>().orientation = targetOrientation;
+            }
+            return base.GetSteering();
         }
         return base.GetSteering();
+
     }
 
     void OnDestroy ()
