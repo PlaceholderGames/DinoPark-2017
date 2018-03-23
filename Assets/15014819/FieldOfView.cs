@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-
+using System.Linq;
 public class FieldOfView : MonoBehaviour {
 
 	public float viewRadius; // Range of vision. Anky = 100, Rapty = 200
@@ -36,7 +35,7 @@ public class FieldOfView : MonoBehaviour {
     void FindVisibleTargets()
     {
         visibleTargets.Clear ();
-	stereoVisibleTargets.Clear ();
+        stereoVisibleTargets.Clear();
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
         for (int i = 0; i < targetsInViewRadius.Length; i++)
@@ -46,7 +45,7 @@ public class FieldOfView : MonoBehaviour {
 
             if (Vector3.Angle(transform.forward, dirToTarget) < stereoAngle / 2) //Can be seen in stereo
             {
-                //float distanceToTarget = Vector3.Distance(transform.position, target.position); // Only if we see it do we know how far away it is, due to stereo vision
+                float distanceToTarget = Vector3.Distance(transform.position, target.position); // Only if we see it do we know how far away it is, due to stereo vision
                 //Debug.Log("Relative distance: " + distanceToTarget); // This will be used to determine states, such as attack, alert, etc
 
                 //float orientationOfTarget = target.eulerAngles.y; // This gives the relative angle of the target. 0 is directly facing, 180 is facing away
