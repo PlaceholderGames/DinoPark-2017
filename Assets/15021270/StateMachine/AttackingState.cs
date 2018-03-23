@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using StateStuff;
 
-public class AttackingState : State<AI>
+public class AttackingState : State<RaptyAI>
 {
     private static AttackingState _instance;
 
@@ -28,14 +28,14 @@ public class AttackingState : State<AI>
         }
     }
 
-    public override void EnterState(AI _owner)
+    public override void EnterState(RaptyAI _owner)
     {
         _owner.agent.maxSpeed = 20;
         _owner.removeHunger = 4;
         Debug.Log("Entering Attacking State");
     }
 
-    public override void ExitState(AI _owner)
+    public override void ExitState(RaptyAI _owner)
     {
         _owner.pursue.target = _owner.prey;
         _owner.pursue.targetAux = _owner.prey;
@@ -43,7 +43,7 @@ public class AttackingState : State<AI>
         Debug.Log("Exiting Attacking State");
     }
 
-    public override void UpdateState(AI _owner)
+    public override void UpdateState(RaptyAI _owner)
     {
         //If there is no hunger or no health then the raptor is dead
         if (_owner.hunger <= 0 || _owner.health <= 0)
@@ -51,14 +51,9 @@ public class AttackingState : State<AI>
             _owner.stateMachine.ChangeState(DeadState.Instance);
         }
 
-        //If the raptor has moved too far away from the anky it will switch to hunting state, allowing for it to flee
-        foreach (Transform i in _owner.view.visibleTargets)
+        if(_owner.prey.GetComponent<AnkyAI>().dead == true)
         {
-            if (i.tag == "Anky" && Vector3.Distance(_owner.transform.position, i.transform.position) > 35)
-            {
-                _owner.prey = i.gameObject;
-                _owner.stateMachine.ChangeState(HuntingState.Instance);
-            }
+            _owner.stateMachine.ChangeState(HuntingState.Instance);
         }
     }
 }

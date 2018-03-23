@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using StateStuff;
 
-public class DrinkingState : State<AI>
+public class DrinkingState : State<RaptyAI>
 {
     private float addThirstTimer;
 
@@ -30,19 +30,19 @@ public class DrinkingState : State<AI>
         }
     }
 
-    public override void EnterState(AI _owner)
+    public override void EnterState(RaptyAI _owner)
     {
 
         Debug.Log("Entering Drinking State");
     }
 
-    public override void ExitState(AI _owner)
+    public override void ExitState(RaptyAI _owner)
     {
 
         Debug.Log("Exiting Drinking State");
     }
 
-    public override void UpdateState(AI _owner)
+    public override void UpdateState(RaptyAI _owner)
     {
         //Drink until the raptor has 100 thrist and then switch to idle
         addThirstTimer += Time.deltaTime;

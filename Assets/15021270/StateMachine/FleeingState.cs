@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using StateStuff;
 
-public class FleeingState : State<AI>
+public class FleeingState : State<RaptyAI>
 {
     private static FleeingState _instance;
 
@@ -28,7 +28,7 @@ public class FleeingState : State<AI>
         }
     }
 
-    public override void EnterState(AI _owner)
+    public override void EnterState(RaptyAI _owner)
     {
         _owner.pursue.target = _owner.prey;
         _owner.pursue.targetAux = _owner.prey;
@@ -41,7 +41,7 @@ public class FleeingState : State<AI>
         Debug.Log("Entering Fleeing State");
     }
 
-    public override void ExitState(AI _owner)
+    public override void ExitState(RaptyAI _owner)
     {
         _owner.flee.enabled = false;
         _owner.enemy = false;
@@ -50,7 +50,7 @@ public class FleeingState : State<AI>
         Debug.Log("Exiting Fleeing State");
     }
 
-    public override void UpdateState(AI _owner)
+    public override void UpdateState(RaptyAI _owner)
     {
         //Forces the raptor to flee and disables pursuing
         _owner.pursue.enabled = false;

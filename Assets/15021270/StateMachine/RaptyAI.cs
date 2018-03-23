@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using StateStuff;
 
-public class AI : MonoBehaviour
+public class RaptyAI : MonoBehaviour
 {
 
     public Animator anim;
@@ -41,7 +41,7 @@ public class AI : MonoBehaviour
     public bool alpha = false;
     public bool returnToAlpha = false;
 
-    public StateMachine<AI> stateMachine { get; set; }
+    public StateMachine<RaptyAI> stateMachine { get; set; }
 
     void Awake()
     {
@@ -58,12 +58,19 @@ public class AI : MonoBehaviour
 
     private void Start()
     {
-        stateMachine = new StateMachine<AI>(this);
+        stateMachine = new StateMachine<RaptyAI>(this);
         stateMachine.ChangeState(IdleState.Instance);
     }
 
     private void Update()
     {
+
+        //Not great fix but stops the raptor going under water
+        //More advanced logic would be needed
+        if (transform.position.y <= 32)
+        {
+            transform.Translate(0, 1, 0);
+        }
 
         //un-specific changes to the raptor such as hunger and thirst draining
         hungerTimer += Time.deltaTime;

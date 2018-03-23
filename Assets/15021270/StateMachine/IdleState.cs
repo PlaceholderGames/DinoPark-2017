@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using StateStuff;
 
-public class IdleState : State<AI>
+public class IdleState : State<RaptyAI>
 {
 
     private float healthTimer;
@@ -31,7 +31,7 @@ public class IdleState : State<AI>
         }
     }
 
-    public override void EnterState(AI _owner)
+    public override void EnterState(RaptyAI _owner)
     {
         _owner.agent.maxSpeed = 3;
         _owner.removeHunger = 10;
@@ -42,7 +42,7 @@ public class IdleState : State<AI>
         Debug.Log("Entering idle State");
     }
 
-    public override void ExitState(AI _owner)
+    public override void ExitState(RaptyAI _owner)
     {
         _owner.pursue.target = _owner.prey;
         _owner.pursue.targetAux = _owner.prey;
@@ -52,21 +52,22 @@ public class IdleState : State<AI>
         Debug.Log("Exiting idle State");
     }
 
-    public override void UpdateState(AI _owner)
+    public override void UpdateState(RaptyAI _owner)
     {
         //Stops the raptor chasing after any ankys in idle
         _owner.pursue.enabled = false;
 
-        //If the raptor is thirsty it will take drinking priority over hunting
-        //While in idle it means the raptor is full and that it does not need to hunt
-        if (_owner.thirst < 50)
+        
+            //If the raptor is thirsty it will take drinking priority over hunting
+            //While in idle it means the raptor is full and that it does not need to hunt
+            if (_owner.thirst < 50)
         {
             _owner.wander.enabled = true;
             _owner.Astar.target = _owner.waterLocation;
             _owner.move(_owner.follower.getDirectionVector());
 
             //While looking for water if the raptor enters a deep patch of water, stop to drink
-            if (_owner.transform.position.y <= 36)
+            if (_owner.transform.position.y <= 35)
             {
                 _owner.stateMachine.ChangeState(DrinkingState.Instance);
             }
@@ -81,10 +82,15 @@ public class IdleState : State<AI>
                 {
                     _owner.prey = i.gameObject;
                     //Debug.Log(_owner.prey);
-                    _owner.stateMachine.ChangeState(HuntingState.Instance);
+
+                    if (_owner.prey.GetComponent<AnkyAI>().dead == false)
+                    {
+                        _owner.stateMachine.ChangeState(HuntingState.Instance);
+                    }
+                    
                 }
             }
-            _owner.wander.enabled = false;
+            //_owner.wander.enabled = false;
         }
 
         //While in idle health regenerates over time
@@ -103,7 +109,8 @@ public class IdleState : State<AI>
         }
 
         //If the raptor is outside of the range of the alpha it will run towards it
-        if(Vector3.Distance(_owner.transform.position, _owner.friendly.transform.position) > 80)
+        if(Vector3.Distance(_owner.transform.position, _owner.friendly.transform.position) > 80 &&
+            _owner.thirst >= 50)
         {
             _owner.returnToAlpha = true;
         }

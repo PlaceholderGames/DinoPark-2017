@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using StateStuff;
 
-public class DeadState : State<AI>
+public class DeadState : State<RaptyAI>
 {
     private static DeadState _instance;
 
@@ -28,18 +28,18 @@ public class DeadState : State<AI>
         }
     }
 
-    public override void EnterState(AI _owner)
+    public override void EnterState(RaptyAI _owner)
     {
         _owner.agent.maxSpeed = 0;
         Debug.Log("Entering Dead State");
     }
 
-    public override void ExitState(AI _owner)
+    public override void ExitState(RaptyAI _owner)
     {
         Debug.Log("Exiting Dead State");
     }
 
-    public override void UpdateState(AI _owner)
+    public override void UpdateState(RaptyAI _owner)
     {
         //Dead!  There is no leaving this state!
     }
