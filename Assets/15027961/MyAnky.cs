@@ -232,19 +232,24 @@ public class MyAnky : Agent
         Debug.Log("Eating");
         List<GameObject> raptor = new List<GameObject>();
         raptor.Clear();
-        foreach (Transform r in fov.visibleTargets)
+        if (fov.visibleTargets != null)
         {
-            raptor.Add(r.gameObject);
-        }
-
-        foreach (GameObject l in raptor)
-        {
-            if (l.tag == "Rapty" && food > 30)
+            foreach (Transform r in fov.visibleTargets)
             {
-                currentState = ankyState.ALERTED;
+                raptor.Add(r.gameObject);
             }
         }
-
+        if (fov.visibleTargets != null)
+        {
+            foreach (GameObject l in raptor)
+            {
+                if (l.tag == "Rapty" && food > 30)
+                {
+                    currentState = ankyState.ALERTED;
+                }
+            }
+        }
+    
         if (this.transform.position.y >= 70 && food < 100)
         {
             Debug.Log("eating");
@@ -315,40 +320,44 @@ public class MyAnky : Agent
     void fleeingMethod()
     {
         Debug.Log("Fleeing");
-        foreach (var r in raptyList)
+        if (raptyList.Count <= 0)
         {
-            if (raptyList.Count == 0)
+            foreach (var r in raptyList)
             {
-                currentState = ankyState.GRAZING;
-            }
-            else if (r.tag == "Rapty")
-            {
-                float distAR;
-                distAR = Vector3.Distance(this.transform.position, r.transform.position);
-                //Debug.Log(dist);
-                if (distAR < 30)
+                if (raptyList.Count == 0)
                 {
-                    currentState = ankyState.FLEEING;
-                    anim.SetBool("isIdle", false);
-                    anim.SetBool("isEating", false);
-                    anim.SetBool("isDrinking", false);
-                    anim.SetBool("isAlerted", false);
-                    anim.SetBool("isGrazing", false);
-                    anim.SetBool("isAttacking", false);
-                    anim.SetBool("isFleeing", true);
-                    anim.SetBool("isDead", false);
-                    wanderScript.enabled = false;
-                    fleeScript.target = r.gameObject;
-                    fleeScript.enabled = true;
+                    currentState = ankyState.GRAZING;
                 }
-                else if (distAR > 40)
+                else if (r.tag == "Rapty")
                 {
+                    float distAR;
+                    distAR = Vector3.Distance(this.transform.position, r.transform.position);
+                    //Debug.Log(dist);
+                    if (distAR < 30)
+                    {
+                        currentState = ankyState.FLEEING;
+                        anim.SetBool("isIdle", false);
+                        anim.SetBool("isEating", false);
+                        anim.SetBool("isDrinking", false);
+                        anim.SetBool("isAlerted", false);
+                        anim.SetBool("isGrazing", false);
+                        anim.SetBool("isAttacking", false);
+                        anim.SetBool("isFleeing", true);
+                        anim.SetBool("isDead", false);
+                        wanderScript.enabled = false;
+                        fleeScript.target = r.gameObject;
+                        fleeScript.enabled = true;
+                    }
+                    else if (distAR > 40)
+                    {
 
-                    currentState = ankyState.ALERTED;
-                    fleeScript.enabled = false;
+                        currentState = ankyState.ALERTED;
+                        fleeScript.enabled = false;
+                    }
                 }
             }
         }
+        currentState = ankyState.GRAZING;
         prevState = ankyState.FLEEING;
     }
 

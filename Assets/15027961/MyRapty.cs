@@ -150,19 +150,22 @@ public class MyRapty : Agent
     }
     void eatingMethod()
     {
-       // deadankyList.Clear();
-        foreach (Transform i in fov.visibleTargets)     //see
+        // deadankyList.Clear();
+        if (fov.visibleTargets != null)
         {
-            if (i.tag == "Anky")                    // anky
+            foreach (Transform i in fov.visibleTargets)     //see
             {
-               // deadankyList.Add(i.gameObject)
-                if (i.GetComponent<MyAnky>().currentState == MyAnky.ankyState.DEAD)     //anky dead
+                if (i.tag == "Anky")                    // anky
                 {
-                    i.GetComponent<MyAnky>().isDead = true;
-                    Vector3.MoveTowards(this.gameObject.transform.position, i.gameObject.transform.position, 10);
-                    if (Vector3.Distance(this.gameObject.transform.position, i.gameObject.transform.position) <= 5)
+                    // deadankyList.Add(i.gameObject)
+                    if (i.GetComponent<MyAnky>().currentState == MyAnky.ankyState.DEAD)     //anky dead
                     {
-                        food += 10 * Time.deltaTime;
+                        i.GetComponent<MyAnky>().isDead = true;
+                        Vector3.MoveTowards(this.gameObject.transform.position, i.gameObject.transform.position, 10);
+                        if (Vector3.Distance(this.gameObject.transform.position, i.gameObject.transform.position) <= 5)
+                        {
+                            food += 10 * Time.deltaTime;
+                        }
                     }
                 }
             }
@@ -265,11 +268,14 @@ public class MyRapty : Agent
     void huntingMethod()
     {
         ankyList.Clear();
-        foreach (Transform i in fov.visibleTargets)
+        if (fov.visibleTargets != null)
         {
-            if (i.tag == "Anky")
+            foreach (Transform i in fov.visibleTargets)
             {
-                ankyList.Add(i.gameObject);
+                if (i.tag == "Anky")
+                {
+                    ankyList.Add(i.gameObject);
+                }
             }
         }
         if (water <= 20)
@@ -333,30 +339,32 @@ public class MyRapty : Agent
     {
         bool hit = false;
         ankyList.Clear();
-        foreach (Transform i in fov.visibleTargets)
-        {
-            if (i.tag == "Anky")
+        if (fov.visibleTargets != null)
+            foreach (Transform i in fov.visibleTargets)
             {
-                ankyList.Add(i.gameObject);
-                aStarScript.target = ankyList[0].gameObject;
-                float distRA = Vector3.Distance(this.gameObject.transform.position, ankyList[0].transform.position);
-                if (pathFollowerScript.path.nodes.Count < 1 || pathFollowerScript.path == null)
+                if (i.tag == "Anky")
                 {
-                    pathFollowerScript.path = aStarScript.path;
-                }
-                move(pathFollowerScript.getDirectionVector());
-                if (distRA < 5)
-                {
-                    hit = raptyList[0].GetComponent<MyRapty>().takeDamage(5);
-                    if (hit)
+                    ankyList.Add(i.gameObject);
+                    aStarScript.target = ankyList[0].gameObject;
+                    float distRA = Vector3.Distance(this.gameObject.transform.position, ankyList[0].transform.position);
+                    if (pathFollowerScript.path.nodes.Count < 1 || pathFollowerScript.path == null)
                     {
-                        currentState = raptyState.ALERTED;
+                        pathFollowerScript.path = aStarScript.path;
                     }
-                }
+                    move(pathFollowerScript.getDirectionVector());
+                    if (distRA < 5)
+                    {
+                        hit = raptyList[0].GetComponent<MyRapty>().takeDamage(5);
+                        if (hit)
+                        {
+                            currentState = raptyState.ALERTED;
+                        }
+                    }
 
+                }
             }
-        }
     }
+    
     void death()
     {
         Debug.Log("Death");
