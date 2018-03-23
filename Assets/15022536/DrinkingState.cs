@@ -36,23 +36,10 @@ public class DrinkingState : State<MyAnky>
     }
     public override void UpdateState(MyAnky _owner)
     {
-        
+ 
+        _owner.wander.enabled = false;
         _owner.drinking.enabled = true;
         _owner.drinking.Drink();
-        //Alerted
-        foreach (Transform animal in _owner.alerted.visibleTargets)
-        {
-            if (animal.tag == "Rapty")
-            {
-                _owner.mySM.ChangeState(MyAlertedState.Instance);
-                return;
-            }
-        }
-        //Idle
-        if (_owner.health >= 100)
-        {
-            _owner.mySM.ChangeState(MyIdleState.Instance);
-            return;
-        }
+
     }
 }

@@ -25,30 +25,36 @@ public class MyAnky : Agent
     // stamina level to be replenish while drinking water
     public int stamina = 40;
     // target element for fleeing
+
     public GameObject target;
+    public GameObject goal;
+
+    List<Transform> ankylosaurus;
+    List<Transform> targetToFollow;
 
 
     //state machine
-    public StateMachine<MyAnky> stateMachine { get;set; }
+    public StateMachine<MyAnky> SM;
 
-    public DrinkingState drinking;
+    public Drinking drinking;
     public Wander wander;
-   // public FleeState flee;
+    public Flee flee;
     public FieldOfView AnkyView;
-
+    public FieldOfAlert AnkyAlerted;
     void Awake()
     {
+        SM = new StateMachine<MyAnky>(this);
         wander = GetComponent<Wander>();
         AnkyView = GetComponent<FieldOfView>();
-        drinking = GetComponent<DrinkingState>();
+        AnkyAlerted = GetComponent<FieldOfAlert>();
+        AnkyAlerted.viewRadius = 100; // keep as def value
+        drinking = GetComponent<Drinking>();
+        flee = GetComponent<Flee>();
+
        // flee = GetComponent<Flee>();
     }
 
-    private void ChangeState()
-    {
-        ChangeToDrinking();
-        ChangeToFlee();
-    }
+ 
 
     private void ChangeToDrinking()
     {
@@ -98,8 +104,8 @@ public class MyAnky : Agent
         state = ankyState.IDLE;
         ankylosaurus = new List<Transform>();
         anim = GetComponent<Animator>();
+        
 
-        mySM.ChangeState(MyIdleState.Instance);
 
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -118,7 +124,7 @@ public class MyAnky : Agent
     }
     protected override void Update()
     {
-        mySM.Update();
+        SM.Update();
     }
 
 
