@@ -57,7 +57,10 @@ public class FieldOfView : MonoBehaviour {
             else if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle/2)
             {
                 //float directionToTarget = Vector3.Angle(transform.forward, dirToTarget); // We need the direction of the object only for checking with raytracing
-                visibleTargets.Add(target); // For now, if it is in range and angle of eyesight we can see it
+                if (target.gameObject != this.gameObject)
+                {
+                    visibleTargets.Add(target); // For now, if it is in range and angle of eyesight we can see it
+                }
             }
          
         }
