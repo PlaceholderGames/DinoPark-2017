@@ -6,7 +6,6 @@ using UnityEditor;
 [CustomEditor(typeof(MapGrid))]
 public class MapGrid_GUI : Editor
 {
-
     private void OnSceneGUI()
     {
         MapGrid grid = (MapGrid)target;

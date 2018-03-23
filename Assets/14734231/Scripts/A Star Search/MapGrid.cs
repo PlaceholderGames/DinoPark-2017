@@ -18,6 +18,8 @@ public class MapGrid : MonoBehaviour {
     private float oldTileSize;
     private float oldHeightThreshold;
     private float oldSeaLevel;
+
+    public Transform Anky;
     
 
     // Use this for initialization
@@ -90,11 +92,13 @@ public class MapGrid : MonoBehaviour {
             {
                 Vector3 tileLocation = tiles[x, y].position; // Get the position
                 
+                
                 Vector3[] points = new Vector3[4]; // Array of positions at four corners of tile
                 points[0] = new Vector3(tileLocation.x - (tileSize / 2), tileLocation.y, tileLocation.z + (tileSize / 2)); // Top left
                 points[1] = new Vector3(tileLocation.x + (tileSize / 2), tileLocation.y, tileLocation.z + (tileSize / 2)); // Top right
                 points[2] = new Vector3(tileLocation.x + (tileSize / 2), tileLocation.y, tileLocation.z - (tileSize / 2)); // Bottom right
                 points[3] = new Vector3(tileLocation.x - (tileSize / 2), tileLocation.y, tileLocation.z - (tileSize / 2)); // Bottom left
+                
 
                 float[] heightPoints = new float[4]; // Height of all corners
 

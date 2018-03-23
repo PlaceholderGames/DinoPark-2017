@@ -7,6 +7,7 @@ public class Flee : AgentBehaviour {
         steering.linear = transform.position - target.transform.position;
         steering.linear.Normalize();
         steering.linear = steering.linear * agent.maxAccel;
+
         return steering;
     }
 }

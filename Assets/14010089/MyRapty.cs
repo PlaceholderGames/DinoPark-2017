@@ -38,13 +38,19 @@ public class MyRapty : Agent
     protected override void Update()
     {
         // Idle - should only be used at startup
-
+        if (anim.GetBool("isIdle"))
+        {
+            Debug.Log("Rapty is Idle");
+        }
         // Eating - requires a box collision with a dead dino
 
         // Drinking - requires y value to be below 32 (?)
 
         // Alerted - up to the student what you do here
-
+        if (anim.GetBool("isAlerted"))
+        {
+            Debug.Log("Rapty is Alerted");
+        }
         // Hunting - up to the student what you do here
 
         // Fleeing - up to the student what you do here
