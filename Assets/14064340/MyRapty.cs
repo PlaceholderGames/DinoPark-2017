@@ -23,6 +23,7 @@ public class MyRapty : Agent
     };
     public Animator anim;
     public Seek RaptySeek;
+    public Face RaptyFace;
     public bool switchState = false;
     public double saturation = 100;
     public double hydration = 100;
@@ -113,28 +114,6 @@ public class MyRapty : Agent
             }
         }
 
-        friends.Clear();
-        foreach (Transform u in fov.visibleTargets)
-        {
-            if (u.tag == "Rapty")
-            {
-                if (u.transform.position != transform.position)
-                {
-                    friends.Add(u);
-                }
-            }
-        }
-        foreach (Transform u in fov.stereoVisibleTargets)
-        {
-            if (u.tag == "Rapty")
-            {
-                if (u.transform.position != transform.position)
-                {
-                    friends.Add(u);
-                }
-            }
-        }
-
 
         foreach (Transform x in Enemies)
         {
@@ -146,19 +125,9 @@ public class MyRapty : Agent
 
             if (Difference.magnitude < RaptorDiff.magnitude)
             {
-                t = x.transform;
+               t= x.transform;
             }
-            float Distance = Vector3.Distance(x.position, transform.position);
-            if (Distance >= 95)
-            {
-                Enemies.Clear();
 
-            }
-            if (Distance < 95)
-            {
-                Enemies.Clear();
-                stateMachine.ChangeState(HuntState.Instance);
-            }
         }
 
         if (t)
@@ -177,8 +146,8 @@ public class MyRapty : Agent
             Debug.DrawLine(path.corners[i], path.corners[indd], Color.red, 0.2f);
         }
         go.position = path.corners[1];
-        RaptySeek.target = go.gameObject;
-
+        RaptySeek.target = t.gameObject;
+        RaptyFace.enabled = false;
         RaptySeek.enabled = true;
 
         stateMachine.Update();
