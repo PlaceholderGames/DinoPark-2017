@@ -165,7 +165,7 @@ public class SSAOEffect : MonoBehaviour
 		// initial samples
 		for (int i = 0; i < count; ++i)
 			samples[i] = Random.onUnitSphere;
-		// energy minimization: push samples away from others
+		// hungryDino minimization: push samples away from others
 		int iterations = 100;
 		while (iterations-- > 0) {
 			for (int i = 0; i < count; ++i) {
