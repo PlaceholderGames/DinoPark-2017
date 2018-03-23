@@ -53,32 +53,28 @@ public class FleeingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _Owner)
     {
-
-
-        if (_Owner.raptorDistance > 25) // if enemy near in range and over certain distance face them
+        
+        if (_Owner.raptorDistance > 25) // if enemy distance is over 25 switch back to alert state
         {
             _Owner.ankyFleeing.enabled = false;
-            _Owner.stateMachine.ChangeState(Alert.Instance);    // stop fleeing at 25
+            _Owner.stateMachine.ChangeState(Alert.Instance);    
         }
-        else if (_Owner.raptorDistance < 25 && _Owner.raptorDistance > 5)
+        else if (_Owner.raptorDistance < 25 && _Owner.raptorDistance > 5)   // if raptor distance is less than 25 but over 5 flee from the raptor
         {
-            
-            _Owner.maxSpeed = 20.0f;
-            _Owner.ankyFleeing.target = _Owner.Enemy;   // set flee target to raptor
-            _Owner.ankyFleeing.enabled = true;          // start fleeing from raptor
-
-            // can go to attack, alert or dead.
-
+            _Owner.ankyFleeing.target = _Owner.RaptyEnemy;   // set flee target to raptor
+            _Owner.ankyFleeing.enabled = true;              // start fleeing from raptor
         }
-        else if (_Owner.raptorDistance < 5)
+        else if (_Owner.raptorDistance < 5) // if raptor distance is less than 5 switch to attack state
         {
-            //go to attack
             _Owner.stateMachine.ChangeState(AttackState.Instance);
         }
-        else if (_Owner.hunger <= 0 && _Owner.thirst <= 0)
+        else if (_Owner.hunger <= 0 && _Owner.thirst <= 0)  // if hunger and thirst are below 0 then switch to dead state
         {
             _Owner.stateMachine.ChangeState(DeadState.Instance);
         }
 
     }
 }
+
+
+//_Owner.maxSpeed = 20.0f;    // doesnt increase speed

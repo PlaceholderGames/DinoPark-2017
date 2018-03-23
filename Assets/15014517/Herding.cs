@@ -9,7 +9,5 @@ public class Herding : AgentBehaviour
         steering.linear.Normalize();
         steering.linear = steering.linear * agent.maxAccel;
         return steering;
-
-
     }
 }

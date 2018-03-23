@@ -44,42 +44,31 @@ public class Alert : State<MyAnky>
 
     public override void UpdateState(MyAnky _Owner)
     {
-
         
-
-        if (_Owner.raptorDistance < 25 && _Owner.raptorDistance > 5)    //enemy between 25 and 5 switch to flee
+        if (_Owner.raptorDistance < 25 )    //if enemy is less than 25 switch to flee
         {
             _Owner.stateMachine.ChangeState(FleeingState.Instance);
         }
-
         else if(_Owner.raptorDistance > 25 && _Owner.raptorDistance < 50) // if enemy near in range and over certain distance face them
+        { 
+            Debug.Log("flee slowly");
+            _Owner.ankyFleeing.target = _Owner.RaptyEnemy;    
+            _Owner.ankyFleeing.enabled = true; 
+        }
+        else if (_Owner.raptorDistance > 50)    // if the raptor distance is over 50 switch state back to grazing
         {
+            _Owner.stateMachine.ChangeState(Grazing.Instance);
+        }
+        else if (_Owner.hunger <= 0 && _Owner.thirst <= 0)  // if thirst and hunger are less than 0 switch to dead state 
+        {
+            _Owner.stateMachine.ChangeState(DeadState.Instance);
+        } 
+    }
+}
+
+
+
             //face not working 
             //Debug.Log("face");                
             //_Owner.ankyFacing.target = _Owner.Enemy;            
             //_Owner.ankyFacing.enabled = true;
-            
-            Debug.Log("flee slowly");
-            _Owner.ankyFleeing.target = _Owner.Enemy;    
-            _Owner.ankyFleeing.enabled = true;            
-           
-        }
-
-        else if (_Owner.raptorDistance > 50)
-        {
-
-            _Owner.stateMachine.ChangeState(Grazing.Instance);
-        }
-        else if (_Owner.hunger <= 0 && _Owner.thirst <= 0)
-        {
-            _Owner.stateMachine.ChangeState(DeadState.Instance);
-        }
-
-
-        //start facing threat then move away if too close
-
-        // can go to attack, flee, eat drink or grazing.
-
-
-    }
-}

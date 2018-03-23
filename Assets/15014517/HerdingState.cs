@@ -46,36 +46,27 @@ public class HerdingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _Owner)
     {
+        _Owner.ankyHerding.target = _Owner.AnkyFriend;  // set target      
 
-        _Owner.ankyHerding.target = _Owner.Friend;
-        
-
-        if (_Owner.ankyDistance > 50)
+        if (_Owner.ankyDistance > 50)   // if the anky is over 50 away start herding 
         {
             _Owner.ankyHerding.enabled = true;
         }
-        else if (_Owner.ankyDistance < 20)
+        else if (_Owner.ankyDistance < 20)  // if the anky distance is under 20 switch back to grazing
         {
-            Debug.Log(_Owner.ankyDistance);
-            
+            //Debug.Log(_Owner.ankyDistance);
             _Owner.stateMachine.ChangeState(Grazing.Instance);
             
         }
-        else if (_Owner.Enemy != null && _Owner.raptorDistance < 50) // if herding and a raptor appears become alerted
+        else if (_Owner.RaptyEnemy != null && _Owner.raptorDistance < 50) // if herding and a raptor appears become alerted
         {
             Debug.Log("whilst herding a raptor appeared");
-            _Owner.ankyHerding.enabled = false;
             _Owner.stateMachine.ChangeState(Alert.Instance);
         }
-        else if (_Owner.hunger <= 0 && _Owner.thirst <= 0)
+        else if (_Owner.hunger <= 0 && _Owner.thirst <= 0)  // if thirst and hunger below 0 switch to dead
         {
-            _Owner.stateMachine.ChangeState(DeadState.Instance);
-        }
-
-        ////start herding 
-        //Debug.Log("herding");
-        //_Owner.ankyHerding.target = _Owner.Friend;
-        //_Owner.ankyHerding.enabled = true;
+            _Owner.stateMachine.ChangeState(DeadState.Instance);    
+        }      
 
     }
 }

@@ -28,7 +28,6 @@ public class MyAnky : Agent
     public float hunger = 100, thirst = 100;
 
     public List<Transform> Raptors;
-
     public List<Transform> AnkysHerd;
 
     private bool canBeEating = false;
@@ -37,12 +36,11 @@ public class MyAnky : Agent
     public List<Transform> WaterObjects;
     public List<Transform> FoodObjects;
 
-
     public AStarSearch ankyAStar;
     public ASAgentInstance ankyASIntance;
     public ASPathFollower ankyAsPath;
 
-    //state scripts
+    
     public Flee ankyFleeing;
     public Face ankyFacing;
     public Wander ankyWandering;
@@ -51,13 +49,14 @@ public class MyAnky : Agent
     public Agent agent;
 
     public GameObject water;
-    public GameObject Enemy = null;
-    public GameObject Friend = null;
+    public GameObject RaptyEnemy = null;
+    public GameObject AnkyFriend = null;
     public FieldOfView ankyView;
     public Transform myTransform;
     public float weight = 1.0f;
 
-
+    public float raptorDistance;
+    public float ankyDistance;
 
 
     public virtual void Awake()
@@ -77,18 +76,12 @@ public class MyAnky : Agent
     {
 
         myAnky = gameObject.GetComponent<MyAnky>();
+        agent = GetComponent<Agent>();
+
         stateMachine = new StateMachine<MyAnky>(this);
-        // set state imediately to idle
-        stateMachine.ChangeState(Idle.Instance);
-        //set state to grazing
-        stateMachine.ChangeState(Grazing.Instance);
-
-
-
         
-
-
-
+        stateMachine.ChangeState(Idle.Instance);
+        
         myAnky.maxSpeed = 5.0f;
 
         Raptors = new List<Transform>();
@@ -132,183 +125,91 @@ public class MyAnky : Agent
 
     protected override void Update()
     {
-
         ScanRaptors();
         ScanAnkys();
         stateMachine.Update();
-
-
-        StartCoroutine(LowerFoodAndThirt());
-
-
-        //wait();
-
-        // Idle - should only be used at startup
-
-        //Debug.Log(myTransform.position);
-
-
-        // Eating - requires a box collision with a dead dino
-
-        // Drinking - requires y value to be below 32 (?)
-
-        // Alerted - up to the student what you do here
-
-        // Hunting - up to the student what you do here
-
-        // Fleeing - up to the student what you do here
-
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
+        StartCoroutine(LowerFoodAndThirt());        
         base.Update();
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public float raptorDistance;
-    public float ankyDistance;
-
+    } 
     public void ScanAnkys()
-    {
-        
+    {        
         AnkysHerd = new List<Transform>();
-        float closeAnky = 1;
-        //Vector3 farAnky = new Vector3(4000, 4000, 4000);
+        float farthestAnky = 1;        
         int ankyIndex = 0;
         GameObject anky = null;
 
-        for (int i = 0; i < ankyView.visibleTargets.Count; i++)
+        for (int i = 0; i < ankyView.visibleTargets.Count; i++) // for loop that checks all visible targets
         {
-            if (ankyView.visibleTargets[i].gameObject.tag == "Anky")
+            if (ankyView.visibleTargets[i].gameObject.tag == "Anky")    // if target is called anky store it to a list
             {
                 AnkysHerd.Add(ankyView.visibleTargets[i]);
             }
         }
-
-
         for (int i = 0; i < AnkysHerd.Count; i++)
         {
-
-            ankyDistance = Vector3.Distance(myTransform.position, AnkysHerd[i].position);
-
-            if (ankyDistance > closeAnky)
+            ankyDistance = Vector3.Distance(myTransform.position, AnkysHerd[i].position);   
+            if (ankyDistance > farthestAnky)   // if the anky distance is greater than the current furthest anky 
             {
-                closeAnky = ankyDistance;
+                farthestAnky = ankyDistance;   
                 ankyIndex = i;
-                anky = AnkysHerd[ankyIndex].gameObject;
-
+                anky = AnkysHerd[ankyIndex].gameObject; // store that anky as the new furthest
             }
         }
-
-
-
         if (anky != null)
         {
-            if (anky.gameObject.tag == "Anky")
+            if (anky.gameObject.tag == "Anky")  // is anky isnt empty and has a tag of anky store as the anky firend
             {
-                Friend = anky;
+                AnkyFriend = anky;
             }
             else
             {
-                Friend = null;
-
+                AnkyFriend = null;
             }
-
         }
-
     }
-
-
-
 
     public void ScanRaptors()
     {
         float distance = -1;
         Raptors = new List<Transform>();
-        float closeDinosaur = 200;
+        float closestRaptor = 200;
         int dinoIndex = 0;
         GameObject dino = null;
-        for (int i = 0; i < ankyView.visibleTargets.Count; i++)
+        for (int i = 0; i < ankyView.visibleTargets.Count; i++)     // check all target in viewable range of anky
         {
-            if (ankyView.visibleTargets[i].gameObject.tag == "Rapty")
+            if (ankyView.visibleTargets[i].gameObject.tag == "Rapty")   // if rapty store in raptors list
             {
                 Raptors.Add(ankyView.visibleTargets[i]);
             }
         }
-
-        for (int i = 0; i < ankyView.stereoVisibleTargets.Count; i++)
-        {
-            if (ankyView.stereoVisibleTargets[i].gameObject.tag == "Rapty")
-            {
-                Raptors.Add(ankyView.stereoVisibleTargets[i]);
-            }
-        }
-
         if (Raptors.Count > 0)
         {
-
             for (int i = 0; i < Raptors.Count; i++)
             {
-
                 distance = Vector3.Distance(myTransform.position, Raptors[i].position);
 
-                if (raptorDistance < closeDinosaur)
+                if (raptorDistance < closestRaptor) // if raptor distance is less than the closest raptor
                 {
-                    closeDinosaur = raptorDistance;
+                    closestRaptor = raptorDistance; 
                     dinoIndex = i;
-                    dino = Raptors[dinoIndex].gameObject;
-
+                    dino = Raptors[dinoIndex].gameObject;   // store that raptor as the new closest raptor
                 }
             }
-            Enemy = dino;
+            RaptyEnemy = dino;      // set enemy raptor to game object dino
             raptorDistance = distance;
         }
-
-
         else
         {
-            Enemy = null;
+            RaptyEnemy = null;
             raptorDistance = -1.0f;
         }
-
-    }
-
-   
-    public IEnumerator Wait()
-    {
-        yield return new WaitForSeconds(0.25f);
-    }
+    }        
     public IEnumerator LowerFoodAndThirt()
     {
         yield return new WaitForSeconds(2);
         thirst = thirst - 0.1f;
         hunger = hunger - 0.1f;
-    }
-    public IEnumerator Wait3()
-    {
-        yield return new WaitForSeconds(0.5f);
-    }
-
+    }  
     protected override void LateUpdate()
     {
         base.LateUpdate();
