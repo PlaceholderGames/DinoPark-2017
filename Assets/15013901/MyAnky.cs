@@ -30,6 +30,7 @@ public class MyAnky : Agent
     private Face faceScript;
     private Attack attackScript;
     public GameObject water;
+    public GameObject food;
 
     // Use this for initialization
     protected override void Start()
@@ -160,32 +161,31 @@ public class MyAnky : Agent
             }
         }
     }
-    void eatting()
+    void eating()
     {
         if (Health <= 0)
         {
             Health = 0;
             currentstate = ankyState.DEAD;
         }
-        if (transform.position.y <= 62)
+        wanderScript.enabled = false;
+        SeekScript.enabled = true;
+  
+
+        if (transform.position.y >= 62)
         {
-            Food -= Time.deltaTime;
-            // Debug.Log(Food);
-        }
+            SeekScript.enabled = false;
+            Food += (Time.deltaTime *3) *1.0;
         if (Food <= 0)
-        {
+            {
             Food = 0;
-        }
-        if (Health <= 0)
-        {
-            Health = 0;
+            } //Debug.Log(Food);
         }
         if (Food >= 100)
         { 
          currentstate = ankyState.GRAZING;
         }
      }
-
     void drinking()
     {
         if (Health <= 0)
@@ -229,8 +229,8 @@ public class MyAnky : Agent
             {
                 float dist;
                 dist = Vector3.Distance(this.transform.position, i.transform.position);
-                //Debug.Log(dist);
-                //Debug.Log("anky");
+                Debug.Log(dist);
+                Debug.Log("anky");
 
 
                 if (dist <= 30)
@@ -372,7 +372,7 @@ public class MyAnky : Agent
                 break;
 
             case ankyState.EATING:
-                eatting();
+                eating();
                 break;
 
             case ankyState.FLEEING:

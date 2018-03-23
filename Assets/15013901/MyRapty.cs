@@ -63,6 +63,23 @@ public class MyRapty : Agent
 
     protected override void Update()
     {
+        if (Food <= 0)
+        {
+            Food = 0;
+        }
+
+        if (Food <= 0)
+        {
+            Health -= 1 * Time.deltaTime;
+        }
+        else if (Water == 0)
+        {
+            Health -= 1 * Time.deltaTime;
+        }
+        else if (Food == 0 && Water == 0)
+        {
+            Health -= 3 * Time.deltaTime;
+        }
 
         Water -= (Time.deltaTime * 0.2) * 1.0;
         Food -= (Time.deltaTime * 0.1) * 1.0;
@@ -83,7 +100,7 @@ public class MyRapty : Agent
                 break;
 
             case raptyState.ATTACKING:
-                attack();
+            //    attack();
                 break;
 
             case raptyState.EATING:
@@ -123,54 +140,70 @@ public class MyRapty : Agent
     }
     void Hunting()
     {
-        anim.SetBool("isIdle", false);
-        anim.SetBool("isEating", false);
-        anim.SetBool("isDrinking", false);
-        anim.SetBool("isAlerted", false);
-        anim.SetBool("isHunting", true);
-        anim.SetBool("isAttacking", false);
-        anim.SetBool("isFleeing", false);
-        anim.SetBool("isDead", false);
-        wanderScript.enabled = true;
-
-    
-        foreach (Transform a in fov.visibleTargets)
         {
-            float dist2;
-            dist2 = Vector3.Distance(this.transform.position, a.transform.position);
-            if (a.tag == ("Anky") && dist2 <= 50)
+            if (Health <= 0)
             {
-                currentstate = raptyState.ALERTED;
+                Health = 0;
+                currentstate = raptyState.DEAD;
             }
-        
-        else
-        {
+            anim.SetBool("isIdle", false);
+            anim.SetBool("isEating", false);
+            anim.SetBool("isDrinking", false);
+            anim.SetBool("isAlerted", false);
+            anim.SetBool("isHunting", true);
+            anim.SetBool("isAttacking", false);
+            anim.SetBool("isFleeing", false);
+            anim.SetBool("isDead", false);
+            wanderScript.enabled = true;
+            if (Food <= 80)
+            {
+                currentstate = raptyState.EATING;
+
+            }
+            else if (Water <= 70)
+            {
+                currentstate = raptyState.DRINKING;
+                wanderScript.enabled = true;
+            }
+            else
+            {
                 currentstate = raptyState.HUNTING;
+            }
+
+            foreach (Transform a in fov.visibleTargets)
+            {
+                float dist2;
+                dist2 = Vector3.Distance(this.transform.position, a.transform.position);
+                if (a.tag == ("Anky") && dist2 <= 40)
+                {
+                    currentstate = raptyState.ALERTED;
+                }
+
+                else
+                {
+                    currentstate = raptyState.HUNTING;
+                }
+            }
         }
-       } 
     }
     void alert()
     {
-        anim.SetBool("isIdle", false);
-        anim.SetBool("isEating", false);
-        anim.SetBool("isDrinking", false);
-        anim.SetBool("isAlerted", true);
-        anim.SetBool("isHunting", false);
-        anim.SetBool("isAttacking", false);
-        anim.SetBool("isFleeing", false);
-        anim.SetBool("isDead", false);
+        if (Health <= 0)
+        {
+            Health = 0;
+            currentstate = raptyState.DEAD;
+        }
         foreach (Transform a in fov.visibleTargets)
         {
-           
+            float dist2;
             if(a.tag ==("Anky"))
             {
-            float dist2;
-            dist2 = Vector3.Distance(transform.position, a.transform.position);
+                dist2 = Vector3.Distance(transform.position, a.transform.position);
                 if (dist2 <= 30) 
                 {
                     Debug.Log("Rapty:its over anky i have the high ground");
                     currentstate = raptyState.ATTACKING;
-                    wanderScript.enabled = true;
+                    wanderScript.enabled = false;
                 }
                 else
                 {
@@ -185,37 +218,47 @@ public class MyRapty : Agent
     }
     void eatting()
     {
-        if (transform.position.y <= 62)
         {
-            Food -= Time.deltaTime;
-            // Debug.Log(Food);
-        }
-        else if (Food < 100)
-        {
-            Food += 5;
-            if (Food == 100)
+            if (Health <= 0)
             {
-                // Debug.Log("Food is full");
-                currentstate = raptyState.HUNTING; // grazing to eatting 
-
-
+                Health = 0;
+                currentstate = raptyState.DEAD;
             }
-            if (Food == 0)
-            {
+           
+            SeekScript.enabled = true;
 
-                Health -= 1;
+
+         
+                if (Food <= 0)
+                {
+                    Food = 0;
+                } // Debug.Log(Food);
+            }
+            if (Food >= 100)
+            {
+                currentstate = raptyState.HUNTING;
             }
         }
-    }
+    
     void drinking()
     {
-    
+        if (Health <= 0)
+        {
+            Health = 0;
+            currentstate = raptyState.DEAD;
+        }
+        wanderScript.enabled = false;
         SeekScript.enabled = true;
 
         if (transform.position.y <= 36)
         {
             SeekScript.enabled = false;
             Water += (Time.deltaTime * 3) * 1.0;
+            if (Water <= 0)
+            {
+                Water = 0;
+            }
+
 
         }
         if (Water >= 100)
@@ -229,59 +272,62 @@ public class MyRapty : Agent
 
     }
     void Fleeing()
-    { }
+    {
+    }
+
 
     void dead()
     {
         if (Health <= 0)
         {
             transform.Rotate(0, 0, 180);
+            DestroyObject(gameObject);
         }
     }
-    void attack()
-    {
+    //void attack()
+    //{
+    //    foreach (Transform a in fov.visibleTargets)
+    //    {
+    //        if (a.tag == ("Anky"))
+    //        {
+    //            float dist3;
+    //            dist3 = Vector3.Distance(this.transform.position, a.transform.position);
+    //            // Debug.Log(dist3);
+    //            if (dist3 <= 30) Debug.Log("dont try it");
+    //            {
+    //                anim.SetBool("isIdle", false); //alerted to attacking
+    //                anim.SetBool("isEating", false);
+    //                anim.SetBool("isDrinking", false);
+    //                anim.SetBool("isAlerted", false);
+    //                anim.SetBool("isGrazing", false);
+    //                anim.SetBool("isAttacking", true);
+    //                anim.SetBool("isFleeing", false);
+    //                anim.SetBool("isDead", false);
+    //                wanderScript.enabled = false;
+    //                SeekScript.enabled = true;
+    //                FaceScript.enabled = true;
+    //                SeekScript.target = a.gameObject;
+    //            }
+    //            if(dist3 >=35)
+    //            {
+    //                currentstate = raptyState.ALERTED;
+    //                wanderScript.enabled = true;
+    //                PursueScript.enabled = false;
+    //                SeekScript.enabled = false;
+    //                FaceScript.enabled = false;
+    //                anim.SetBool("isIdle", false); //alerted to attacking
+    //                anim.SetBool("isEating", false);
+    //                anim.SetBool("isDrinking", false);
+    //                anim.SetBool("isAlerted", false);
+    //                anim.SetBool("isGrazing", false);
+    //                anim.SetBool("isAttacking", true);
+    //                anim.SetBool("isFleeing", false);
+    //                anim.SetBool("isDead", false);
+    //            }
+    //        }
+    //    }
 
-
-        foreach (Transform a in fov.visibleTargets)
-        {
-            if (a.tag == ("Anky"))
-            {
-                float dist3;
-                dist3 = Vector3.Distance(this.transform.position, a.transform.position);
-                // Debug.Log(dist3);
-                if (dist3 <= 30) Debug.Log("dont try it");
-                {
-                    anim.SetBool("isIdle", false); //alerted to attacking
-                    anim.SetBool("isEating", false);
-                    anim.SetBool("isDrinking", false);
-                    anim.SetBool("isAlerted", false);
-                    anim.SetBool("isGrazing", false);
-                    anim.SetBool("isAttacking", true);
-                    anim.SetBool("isFleeing", false);
-                    anim.SetBool("isDead", false);
-                    wanderScript.enabled = false;
-                    SeekScript.enabled = true;
-                    FaceScript.enabled = true;
-                    SeekScript.target = a.gameObject;
-                }
-                if(dist3 >=35)
-                {
-                    currentstate = raptyState.ALERTED;
-                    wanderScript.enabled = true;
-                    PursueScript.enabled = true;
-                    anim.SetBool("isIdle", false); //alerted to attacking
-                    anim.SetBool("isEating", false);
-                    anim.SetBool("isDrinking", false);
-                    anim.SetBool("isAlerted", false);
-                    anim.SetBool("isGrazing", false);
-                    anim.SetBool("isAttacking", true);
-                    anim.SetBool("isFleeing", false);
-                    anim.SetBool("isDead", false);
-                }
-            }
-        }
-
-    }
+    //}
 
 
 }
