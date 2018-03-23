@@ -134,10 +134,9 @@ public class MyAnky : Agent
         //myTarget = Instantiate(myTarget, this.transform);
         aStarTarget = new GameObject("AstarTarget");
         aStarScript.enabled = true;
+        
 
-     
         aStarScript.target = aStarTarget;
-        aStarScript.target = this.gameObject;
 
         //set dino stats
         myStats.speed = 2;
@@ -297,11 +296,8 @@ public class MyAnky : Agent
             {
                 if (o.gameObject.CompareTag(pTag))
                 {
-                    if (o.GetComponent<MyRapty>().currentState != MyRapty.raptorState.DEAD)
-                    {
-                        predatorsInRange.Add(o);
-                        averageTargetPos += (o.position);
-                    }
+                    predatorsInRange.Add(o);
+                    averageTargetPos += (o.position);
                 }
             }
 
@@ -402,11 +398,6 @@ public class MyAnky : Agent
             Gizmos.DrawWireSphere(myTarget.transform.position, herdingRange);
        
 
-    }
-
-    public void hitTarget(float damage)
-    {
-        myStats.health -= damage;
     }
 
 
