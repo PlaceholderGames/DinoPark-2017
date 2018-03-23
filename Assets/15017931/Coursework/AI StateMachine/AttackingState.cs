@@ -42,6 +42,7 @@ public class AttackingState : State<MyAnky>
         _owner.setCurrentState(MyAnky.ankyState.ATTACKING);
         _owner.wanderBehaviourScript.enabled = false;
         targetInRange = new List<Transform>();
+        _owner.seekBehaviourScript.enabled = false;
     }
 
     public override void ExitState(MyAnky _owner)
@@ -85,40 +86,40 @@ public class AttackingState : State<MyAnky>
                 _owner.anim.SetBool("isFleeing", true);
                 _owner.stateMachine.ChangeState(FleeState.Instance);
             }
-            //check if the state of our target is dead or no targets within range
-            else if (_owner.predatorsInRange.Count <=0)
+        }
+        //check if the state of our target is dead or no targets within range
+        else if (_owner.predatorsInRange.Count <= 0)
+        {
+            _owner.stateMachine.ChangeState(AlertState.Instance);
+        }
+        else
+        {
+            //What to do if we are still attacking
+            //Turn to face our main target
+            //=============================
+            //
+            //   Needs fixing, face script appears not to work
+            //  
+            //=============================
+            foreach (Transform target in targetInRange)
             {
-                _owner.stateMachine.ChangeState(AlertState.Instance);
+                _owner.averageTargetPos += target.position;
             }
-            else
+
+            _owner.averageTargetPos = new Vector3(_owner.averageTargetPos.x / targetInRange.Count, _owner.averageTargetPos.y / targetInRange.Count, _owner.averageTargetPos.z / targetInRange.Count);
+            _owner.myTarget.transform.position = _owner.averageTargetPos;
+
+            // _owner.faceBehaviourScript.target = _owner.myTarget;
+            // _owner.faceBehaviourScript.enabled = true;
+
+            //every 2 seconds, swing our tail/ attack
+            if (counter <= 0)
             {
-                //What to do if we are still attacking
-                //Turn to face our main target
-                //=============================
-                //
-                //   Needs fixing, face script appears not to work
-                //  
-                //=============================
-                foreach (Transform target in targetInRange)
-                {
-                    _owner.averageTargetPos += target.position;
-                }
-
-                _owner.averageTargetPos = new Vector3(_owner.averageTargetPos.x / targetInRange.Count, _owner.averageTargetPos.y / targetInRange.Count, _owner.averageTargetPos.z / targetInRange.Count);
-                _owner.myTarget.transform.position = _owner.averageTargetPos;
-
-               // _owner.faceBehaviourScript.target = _owner.myTarget;
-               // _owner.faceBehaviourScript.enabled = true;
-
-                //every 2 seconds, swing our tail/ attack
-                if (counter <= 0)
-                {
-                    Debug.Log("Swing");
-                    //reset our cooldown
-                    counter = attackCooldown;
-                }
-                counter -= Time.deltaTime;
+                Debug.Log("Swing");
+                //reset our cooldown
+                counter = attackCooldown;
             }
+            counter -= Time.deltaTime;
         }
     }
 }

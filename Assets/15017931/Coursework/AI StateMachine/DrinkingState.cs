@@ -39,6 +39,8 @@ public class DrinkingState : State<MyAnky>
         _owner.anim.SetBool("isDrinking", true);
         _owner.setCurrentState(MyAnky.ankyState.DRINKING);
         timeToDrink = 0;
+        _owner.wanderBehaviourScript.enabled = false;
+        _owner.seekBehaviourScript.enabled = false;
     }
 
     public override void ExitState(MyAnky _owner)
@@ -51,7 +53,11 @@ public class DrinkingState : State<MyAnky>
     public override void UpdateState(MyAnky _owner)
     {
         //We can only gain our thirst back after n... seconds
-        if (timeToDrink <= 0)
+        if (_owner.myStats.health <= 0)
+        {
+            _owner.stateMachine.ChangeState(AlertState.Instance);
+        }
+        else if (timeToDrink <= 0)
         {
             //Drink
             _owner.myStats.thirst += _owner.drink;

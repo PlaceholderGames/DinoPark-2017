@@ -39,6 +39,9 @@ public class DeadState : State<MyAnky>
         _owner.anim.SetBool("isDead", true);
         _owner.setCurrentState(MyAnky.ankyState.DEAD);
         decayTimer = decayRate;
+        _owner.wanderBehaviourScript.enabled = false;
+        _owner.seekBehaviourScript.enabled = false;
+        _owner.gameObject.layer = 10;
     }
 
     public override void ExitState(MyAnky _owner)

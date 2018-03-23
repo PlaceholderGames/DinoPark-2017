@@ -8,6 +8,7 @@ public struct dinoStats
 {
     public int speed;
     public float health;
+    public float turnSpeed;
     public float hunger;
     public float thirst;
     public float energy;
@@ -32,10 +33,11 @@ public class MyAnky : Agent
 
     [Header("15017931")]
     public ankyState currentState = ankyState.IDLE;
+    public Agent myAgent;
     public dinoStats myStats;
     public Animator anim;
     public GameObject myTarget;
-    public GameObject waterTarget;
+    public GameObject aStarTarget;
     [Space(10)]
 
     // list of objects we want to stay away from
@@ -53,6 +55,7 @@ public class MyAnky : Agent
     public float distance = 0;
     public float closestHazardDist = 100;
     public Transform closestHazard = null;
+    public float herdingRange = 20;
     [Range(0, 100)]
     public float fleeDistance = 45;
     private FieldOfView eyes;
@@ -64,6 +67,7 @@ public class MyAnky : Agent
     public Flee fleeBehaviourScript;
 	public Wander wanderBehaviourScript;
     public Face faceBehaviourScript;
+    public Seek seekBehaviourScript;
     public AStarSearch aStarScript;
     public ASPathFollower pathFollowerScript;
     [Space(10)]
@@ -83,7 +87,7 @@ public class MyAnky : Agent
 
 
     [Header("Combat")]
-    public int attackRange = 10;
+    public int attackRange = 8;
 
     [Header("if We are Hit")]
     public int headDamage = 10;
@@ -113,8 +117,11 @@ public class MyAnky : Agent
         faceBehaviourScript = GetComponent<Face>();
         aStarScript = GetComponent<AStarSearch>();
         pathFollowerScript = GetComponent<ASPathFollower>();
+        seekBehaviourScript = GetComponent<Seek>();
+        aStarScript = GetComponent<AStarSearch>();
+        myAgent = GetComponent<Agent>();
 
-		currentState = ankyState.IDLE;
+        currentState = ankyState.IDLE;
 
 		//Get our field of view script
 		eyes = GetComponent<FieldOfView> ();
@@ -125,10 +132,15 @@ public class MyAnky : Agent
         myTarget = new GameObject("MyTarget");
         myTarget.transform.SetParent(this.transform);
         //myTarget = Instantiate(myTarget, this.transform);
+        aStarTarget = new GameObject("AstarTarget");
+        aStarScript.enabled = true;
+        
 
+        aStarScript.target = aStarTarget;
 
         //set dino stats
-        myStats.speed = 10;
+        myStats.speed = 2;
+        myStats.turnSpeed = 5;
         myStats.health = 100;
         myStats.hunger = 100;
         myStats.thirst = 100;
@@ -162,10 +174,8 @@ public class MyAnky : Agent
     }
 
     protected override void Update()
-    {
-
+    { 
         stateMachine.Update();
-        Debug.DrawLine(this.transform.position, averageTargetPos);
 
         updateStats();
 
@@ -188,52 +198,64 @@ public class MyAnky : Agent
     /// </summary>
     void updateStats()
     {
-        //convert thrist to energy
-        if(myStats.thirst > 0 && myStats.energy <= 80)
-        {
-            myStats.thirst -= thirstLossPerSecond * Time.deltaTime;
-            myStats.energy += thirstLossPerSecond * Time.deltaTime;
-        }
 
         //convert hunger to energy 
-        if (myStats.hunger > 0 && myStats.energy <= 80)
+        if (currentState != ankyState.DEAD)
         {
-            myStats.hunger -= healthLossPerSecond * Time.deltaTime;
-            myStats.energy += hungerLossPerSecond * Time.deltaTime;
-        }
+            if (myStats.hunger > 0 && myStats.energy <= 100)
+            {
+                myStats.hunger -= hungerLossPerSecond * Time.deltaTime;
+                myStats.energy += hungerLossPerSecond * Time.deltaTime;
+            }
 
-        //if we have energy, convert this to health
-        if(myStats.energy > 30 && myStats.health < 100)
-        {
-            myStats.energy -= energyLossPerSecond * Time.deltaTime;
-            myStats.health += energyLossPerSecond * Time.deltaTime;
-        }
+            //convert thrist to energy
+            if (myStats.thirst > 0 && myStats.energy <= 100)
+            {
+                myStats.thirst -= thirstLossPerSecond * Time.deltaTime;
+                myStats.energy += thirstLossPerSecond * Time.deltaTime;
+            }
 
-        //if we have no energy, depleat life
-        if (myStats.energy <= 0)
-        {
-            myStats.energy = 0;
 
-            //Lose health over time
-            myStats.health -= healthLossPerSecond * Time.deltaTime;
+            //if we have energy, convert this to health
+            if (myStats.energy > 30 && myStats.health < 100)
+            {
+                myStats.energy -= energyLossPerSecond * Time.deltaTime;
+                myStats.health += energyLossPerSecond * Time.deltaTime;
+            }
+
+            //if we have no energy, depleat life
+            if (myStats.energy <= 0)
+            {
+                myStats.energy = 0;
+
+                //Lose health over time
+                myStats.health -= healthLossPerSecond * Time.deltaTime;
+            }
+            //lose energy over time
+            else
+            {
+                myStats.energy -= energyLossPerSecond * Time.deltaTime;
+            }
+
+            //ensure we cant go over 100 
+            if (myStats.energy >= 100)
+                myStats.energy = 100;
+            if (myStats.health >= 100)
+                myStats.health = 100;
+            if (myStats.thirst >= 100)
+                myStats.thirst = 100;
+            if (myStats.hunger >= 100)
+                myStats.hunger = 100;
         }
-        //lose energy over time
         else
         {
-            myStats.energy -= energyLossPerSecond * Time.deltaTime;
+            myStats.energy = 0;
+            myStats.health = 0;
+            myStats.thirst = 0;
+            myStats.hunger = 0;
         }
-    
-        //ensure we cant go over 100 
-        if(myStats.energy >=100)    
-            myStats.energy = 100;
-        if(myStats.health >= 100)
-            myStats.health = 100;
-        if (myStats.thirst >= 100)
-            myStats.thirst = 100;
-        if (myStats.hunger >= 100)
-            myStats.hunger = 100;
-        
     }
+
 	/// <summary>
 	/// Causes the dino to 'blink' at the end of every frame,
 	/// this allows us to refresh our predators in range list
@@ -272,13 +294,14 @@ public class MyAnky : Agent
 			//add to our predator list
 			foreach (string pTag in predators) 
 			{
-				if (o.gameObject.CompareTag (pTag)) 
-				{
-					predatorsInRange.Add (o);
-                    averageTargetPos += (o.position);
-				}
-
-
+                if (o.gameObject.CompareTag(pTag))
+                {
+                    if (o.gameObject.layer == SortingLayer.GetLayerValueFromName("Dinos"))
+                    {
+                        predatorsInRange.Add(o);
+                        averageTargetPos += (o.position);
+                    }
+                }
 			}
 
 			//Add to our friends list
@@ -318,9 +341,68 @@ public class MyAnky : Agent
         directionVector *= myStats.speed * Time.deltaTime;
 
         transform.Translate(directionVector, Space.World);
-        transform.LookAt(transform.position + directionVector);
+        transform.LookAt(this.transform.position + directionVector);
 
     }
+
+
+    /// <summary>
+    /// Method that finds friends and encorages us to move towards their average position
+    /// </summary>
+    public void herd()
+    {
+        Vector3 averagePos = Vector3.zero;
+        int average;
+        //if we have friends in range
+        if(friendsInRange.Count > 0 )
+        {
+            average = friendsInRange.Count + 1;
+
+            foreach(Transform friend in friendsInRange)
+            {
+                averagePos += friend.position;
+            }
+            averagePos += this.transform.position;
+            //set our average position for friends 
+            averagePos = new Vector3(averagePos.x/ average, averagePos.y /average , averagePos.z / average);           
+            
+            //Update our target position to the averge position
+            myTarget.transform.position = averagePos;
+
+            Debug.DrawLine(this.transform.position, myTarget.transform.position);
+
+            //Check if we are outside our herding range
+            if (Vector3.Distance(this.transform.position, averagePos) > herdingRange)
+            {
+                wanderBehaviourScript.enabled = false;
+
+                //move closer to the average position
+                Vector3 targetDir = averagePos - myAgent.transform.position;
+      
+                seekBehaviourScript.target = myTarget;
+                seekBehaviourScript.enabled = true;
+            }
+            else
+            {
+                wanderBehaviourScript.enabled = true;
+            }
+        }
+        else
+        {
+            seekBehaviourScript.enabled = false;
+        }
+
+    }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        if (myTarget != null)
+            Gizmos.DrawWireSphere(myTarget.transform.position, herdingRange);
+       
+
+    }
+
 
 
     /// <summary>

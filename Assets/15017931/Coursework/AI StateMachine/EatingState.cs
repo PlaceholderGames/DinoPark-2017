@@ -38,6 +38,7 @@ public class EatingState : State<MyAnky>
         Debug.Log("Entering Eating State");
         _owner.anim.SetBool("isEating", true);
         _owner.setCurrentState(MyAnky.ankyState.EATING);
+        _owner.wanderBehaviourScript.enabled = false;
         timeToEat = 0;
     }
 
@@ -50,7 +51,12 @@ public class EatingState : State<MyAnky>
 
     public override void UpdateState(MyAnky _owner)
     {
-        if (timeToEat <= 0)
+        _owner.seekBehaviourScript.enabled = false; 
+        if (_owner.myStats.health <= 0)
+        {
+            _owner.stateMachine.ChangeState(AlertState.Instance);
+        }
+        else if (timeToEat <= 0)
         {
             //Eat   
             _owner.myStats.hunger += _owner.eat;

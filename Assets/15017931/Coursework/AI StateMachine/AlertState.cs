@@ -97,5 +97,7 @@ public class AlertState : State<MyAnky>
         {
             _owner.stateMachine.ChangeState(DrinkingState.Instance);
         }
+
+        _owner.herd();
     }
 }
