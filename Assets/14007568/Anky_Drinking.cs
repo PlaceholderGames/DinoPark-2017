@@ -64,7 +64,7 @@ public class Drinking_State : State<MyAnky>
         Debug.Log("Exit Drinking State");
         _owner.anim.SetBool("isDrinking", false);
         _owner.SeekScript.enabled = false;
-        _owner.WanderScript.enabled = false;
+       // _owner.WanderScript.enabled = false;
     }
 
     public override void updateState(MyAnky _owner)
@@ -73,6 +73,7 @@ public class Drinking_State : State<MyAnky>
 
         if (_owner.Anky_Water >= 100)
         {
+            Debug.Log("Drinking State");
             _owner.stateMachine.ChangeDinoState(GrazingState.Instance);
 
         }
@@ -87,8 +88,6 @@ public class Drinking_State : State<MyAnky>
 
             
         }
-
-
 
 
         /*

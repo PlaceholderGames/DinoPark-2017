@@ -75,12 +75,49 @@ public class FleeingState : State<MyAnky>
     {
         _owner.fleeScript.enabled = true;
 
-        if (_owner.Distance.magnitude > 30)
+        /* if (_owner.Distance.magnitude > 30)
+         {
+             _owner.stateMachine.ChangeDinoState(GrazingState.Instance);
+             _owner.fleeScript.enabled = false;
+
+         }
+
+     */
+
+
+        if (_owner.RaptorsInView.Count > 0)
         {
-            _owner.stateMachine.ChangeDinoState(GrazingState.Instance);
-            _owner.fleeScript.enabled = false;
+
+            foreach (Transform i in _owner.RaptorsInView)
+            {
+
+
+                float AnkyDistance = Vector3.Distance(i.position, _owner.transform.position);
+                if (AnkyDistance < 50)
+                {
+
+                    _owner.fleeScript.target = i.gameObject;
+
+                }
+
+                if (AnkyDistance >= 60)
+                {
+
+                    _owner.stateMachine.ChangeDinoState(GrazingState.Instance);
+                  
+
+                }
+
+
+
+
+
+            }
+
 
         }
+
+
 
 
     }

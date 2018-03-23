@@ -81,7 +81,8 @@ public class AlertState : State<MyAnky>
 
         {
             _owner.stateMachine.ChangeDinoState(GrazingState.Instance);
-            _owner.fleeScript.enabled = true;
+            _owner.fleeScript.enabled = false;
+            _owner.WanderScript.enabled = true;
 
         }
 
@@ -91,7 +92,7 @@ public class AlertState : State<MyAnky>
 
             _owner.stateMachine.ChangeDinoState(FleeingState.Instance);
             _owner.WanderScript.enabled = false;
-
+            _owner.fleeScript.enabled = true;
         }
 
 

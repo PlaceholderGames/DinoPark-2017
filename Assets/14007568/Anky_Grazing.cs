@@ -86,7 +86,7 @@ public class GrazingState : State<MyAnky>
 
 
 
-        if (_owner.Anky_Water < 97) {
+        if (_owner.Anky_Water < 60) {
 
             _owner.stateMachine.ChangeDinoState(Drinking_State.Instance);
 
@@ -95,7 +95,31 @@ public class GrazingState : State<MyAnky>
 
         }
 
-   
+
+
+        if (_owner.RaptorsInView.Count > 0)
+        {
+         
+           foreach (Transform i in _owner.FieldOV.visibleTargets)
+           {
+
+
+                float AnkyDistance = Vector3.Distance(i.position, _owner.transform.position);
+                if (AnkyDistance < 50)
+                {
+
+
+
+                    _owner.stateMachine.ChangeDinoState(FleeingState.Instance);
+
+
+                }
+
+           }
+
+
+        }
+
     }
 
 

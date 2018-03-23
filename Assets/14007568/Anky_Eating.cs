@@ -69,7 +69,7 @@ public class Anky_Eating : State<MyAnky>
         Debug.Log("Exit Eating State");
         _owner.anim.SetBool("isEating", false);
         _owner.SeekScript.enabled = false;
-        _owner.WanderScript.enabled = false;
+        //_owner.WanderScript.enabled = false;
     }
 
     public override void updateState(MyAnky _owner)
@@ -84,26 +84,19 @@ public class Anky_Eating : State<MyAnky>
 
 
 
-        if (_owner.transform.position.y < 52)
+        if (_owner.transform.position.y > 52)
         {
 
             _owner.SeekScript.enabled = false;
             _owner.Anky_Food_Level += (Time.deltaTime * 5) * 1;
 
-
-
         }
 
 
+        
 
 
     }
-
-
-
-
-
-
 
 
 }

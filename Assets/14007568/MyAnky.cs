@@ -34,10 +34,12 @@ public class MyAnky : Agent
     public GameObject rapty = null;
     
     public Seek SeekScript;
+   
     public Wander WanderScript;
     public Flee fleeScript;
     public List<Transform> RaptorsInView = new List<Transform>();
-    public Transform AnkyPos;
+    public List<Transform> AnkyInView = new List<Transform>();
+   // public Transform AnkyPos;
 
     public Anky_Behaviour<MyAnky> stateMachine { get; set; }
     public Animator anim;
@@ -51,6 +53,7 @@ public class MyAnky : Agent
         WanderScript = GetComponent<Wander>();
         SeekScript = GetComponent<Seek>();
         FieldOV = GetComponent<FieldOfView>();
+      
     }
 
     public void FieldOFView()
@@ -93,7 +96,7 @@ public class MyAnky : Agent
 
         for (int i = 0; i < RaptorsInView.Count; i++) {
 
-            Distance = (AnkyPos.position - RaptorsInView[i].position);
+            Distance = (transform.position - RaptorsInView[i].position);
 
             if (Distance.magnitude < VisDistance.magnitude) {
 
@@ -167,27 +170,6 @@ public class MyAnky : Agent
         // if (Anky_Water > 0)
 
 
-        // Anky_Water = Anky_Water - 1;
-
-        /*  if (Anky_Water == 100)
-          {
-              Anky_Water -= (Time.deltaTime * 0.3) * 1;
-
-
-          }*/
-
-        // for each time a second passes lower health water food levels by one.
-
-
-
-
-        /*  if (Anky_Water == 100)
-       {
-           Anky_Water -= (Time.deltaTime * 0.3) * 1;
-
-
-       }
-       */
 
         if (Anky_Water >= 0)
         {
@@ -208,6 +190,17 @@ public class MyAnky : Agent
         if (Anky_Water <= 0 || Anky_Food_Level <= 0) {
 
             Health_Anky -= (Time.deltaTime*0.3)*1;
+
+
+        }
+
+
+        if (Health_Anky <= 0) {
+
+
+            Destroy(gameObject);
+          
+            return;
 
 
         }
