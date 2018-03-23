@@ -27,24 +27,21 @@ public class MyAnky : Agent
     // target element for fleeing
     public GameObject target;
 
+
     //state machine
-    public bool switchState = false;
     public StateMachine<MyAnky> stateMachine { get;set; }
 
-   
+    public DrinkingState drinking;
+    public Wander wander;
+   // public FleeState flee;
+    public FieldOfView AnkyView;
 
-    Wander wander;
-    FieldOfView AnkyView;
-    DrinkSC drink;
-    Flee flee;
-
-    
     void Awake()
     {
         wander = GetComponent<Wander>();
         AnkyView = GetComponent<FieldOfView>();
-        drink = GetComponent<DrinkSC>();
-        flee = GetComponent<Flee>();
+        drinking = GetComponent<DrinkingState>();
+       // flee = GetComponent<Flee>();
     }
 
     private void ChangeState()
@@ -95,86 +92,35 @@ public class MyAnky : Agent
         }
     }
     // Use this for initialization
+
     protected override void Start()
     {
-        stateMachine = new StateMachine<MyAnky>(this);
-        stateMachine.ChangeState(FirstState.Instance);
-        
-    }
-    
+        state = ankyState.IDLE;
+        ankylosaurus = new List<Transform>();
+        anim = GetComponent<Animator>();
 
-  
+        mySM.ChangeState(MyIdleState.Instance);
+
+        // Assert default animation booleans and floats
+        anim.SetBool("isIdle", true);
+        anim.SetBool("isEating", false);
+        anim.SetBool("isDrinking", false);
+        anim.SetBool("isAlerted", false);
+        anim.SetBool("isGrazing", false);
+        anim.SetBool("isAttacking", false);
+        anim.SetBool("isFleeing", false);
+        anim.SetBool("isDead", false);
+        anim.SetFloat("speedMod", 1.0f);
+        // This with GetBool and GetFloat allows 
+        // you to see how to change the flag parameters in the animation controller
+        base.Start();
+
+    }
     protected override void Update()
     {
-
-        // Idle - should only be used at startup
-
-        // Eating - requires a box collision with a dead dino
-
-        // Drinking - requires y value to be below 32
-
-        // Alerted - up to the student what you do here
-
-        // Hunting - up to the student what you do here
-
-        // Fleeing - up to the student what you do here
-
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
-        stateMachine.Update();
-       //  base.Update();
+        mySM.Update();
     }
 
-    // previouse version
-    /*
-    protected override void Update()
-    {
-        ChangeState();
-
-        // Idle - should only be used at startup
-
-        if (state.ToString() == "IDLE")
-        {
-            Debug.Log("idle");
-        }
-        // Eating - requires a box collision with a dead dino
-
-        // Drinking - requires y value to be below 32
-        else if (state.ToString() == "DRINKING")
-        {
-            Debug.Log("drink");
-            flee.enabled = false;
-
-            drink.enabled = true;
-            drink.Drink();
-
-        }
-
-
-
-        // Alerted - up to the student what you do here
-
-        // Hunting - up to the student what you do here
-
-        // Fleeing - up to the student what you do here
-        else if (state.ToString() == "FLEEING")
-        {
-            Debug.Log("flee");
-            wander.enabled = false;
-            drink.enabled = false;
-            flee.enabled = true;
-            flee.target = target;
-        }
-        if (state.ToString() == "ALERTED")
-        {
-            Debug.Log("alerted");
-        }
-
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
-        base.Update();
-    }
-    */
 
     protected override void LateUpdate()
     {
