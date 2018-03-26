@@ -55,6 +55,7 @@ public class Enemy : MonoBehaviour
 
     public virtual IEnumerator Attack()
     {
+
         yield break;
     }
 
