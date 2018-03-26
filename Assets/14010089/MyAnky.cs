@@ -27,8 +27,13 @@ public class MyAnky : Agent
     public FaceAway FaceAway;
     public Face Face;
     public Seek Seek;
+    public health health;
 
     public GameObject WaterSource;
+    public static GameObject[] waypoints;
+    public GameObject[] myStool;
+
+    public Transform stoolPos;
 
     public double AnkyWaterLevel = 100;
     public double AnkyFoodLevel = 100;
@@ -36,12 +41,23 @@ public class MyAnky : Agent
     private const float FoodCoef = 0.2f;
     private const float RecoverWaterCoefMultiplier = 10f;
     private const float RecoverFoodCoefMultiplier = 5f;
+    public int currentWP = 0;
+
 
     public Animator anim;
     public FieldOfView fov;
 
-    public List<Transform> FovRaptorList = new List<Transform>();
-    public List<Transform> FovAnkyList = new List<Transform>();
+   // public List<Transform> FovRaptorList = new List<Transform>();
+   // public List<Transform> FovAnkyList = new List<Transform>();
+
+
+    public List<Transform> FovMonoRaptorList = new List<Transform>();
+    public List<Transform> FovMonoAnkyList = new List<Transform>();
+
+    public List<Transform> FovStereoRaptorList = new List<Transform>();
+    public List<Transform> FovStereoAnkyList = new List<Transform>();
+
+
 
     #endregion
 
@@ -57,8 +73,12 @@ public class MyAnky : Agent
         Seek = GetComponent<Seek>();
         anim = GetComponent<Animator>();
         fov = GetComponent<FieldOfView>();
-        
 
+        health = GetComponent<health>();
+
+
+        waypoints = GameObject.FindGameObjectsWithTag("waypoints");
+        //waypoints = GameObject.FindGameObjectsWithTag("waypoint1");
 
         #endregion
 
@@ -93,12 +113,12 @@ public class MyAnky : Agent
             
             if (i.gameObject.tag == "Anky")
             {
-                FovAnkyList.Add(i);
+                FovMonoAnkyList.Add(i);
             }
 
             if (i.gameObject.tag == "Rapty")
             {
-                FovRaptorList.Add(i);
+                FovMonoRaptorList.Add(i);
             }
             
         }
@@ -107,27 +127,28 @@ public class MyAnky : Agent
         #region FieldofView_StereoVisibleTargets
         foreach (Transform i in fov.stereoVisibleTargets)
         {
-            /*
+            
             if (i.gameObject.tag == "Anky")
             {
-                FovAnkyList.Add(i);
+                FovStereoAnkyList.Add(i);
             }
 
             if (i.gameObject.tag == "Rapty")
             {
-                FovRaptorList.Add(i);
+                FovStereoRaptorList.Add(i);
             }
-            */
+            
         }
 
-        Debug.Log("Number of Raptors insight: " + FovRaptorList.Count);
+        Debug.Log("Number of Raptors in Mono vision of anky: " + FovMonoRaptorList.Count);
+        Debug.Log("Number of Raptors insight in stereo vision of anky: " + FovStereoRaptorList.Count);
         #endregion
 
         #region IDLE
         if (anim.GetBool("isIdle"))
         {
-            anim.SetBool("isIdle", false);
-            anim.SetBool("isGrazing", true);
+                anim.SetBool("isIdle", false);
+                anim.SetBool("isGrazing", true);
         }
         #endregion
 
@@ -137,12 +158,18 @@ public class MyAnky : Agent
             Wander.enabled = true;
             Debug.Log("Anky is Grazing");
 
-            if (FovRaptorList.Count > 0)
+            if (FovMonoRaptorList.Count > 0)
             {
                 Wander.enabled = false;
                 anim.SetBool("isGrazing", false);
                 anim.SetBool("isAlerted", true);
+            }
 
+            if (FovStereoRaptorList.Count > 0)
+            {
+                Wander.enabled = false;
+                anim.SetBool("isGrazing", false);
+                anim.SetBool("isFleeing", true);
             }
 
             if (AnkyWaterLevel <= 30)
@@ -151,6 +178,14 @@ public class MyAnky : Agent
                 anim.SetBool("isGrazing", false);
                 anim.SetBool("isDrinking", true);
             }
+
+            if (AnkyFoodLevel <= 40)
+            {
+                Wander.enabled = false;
+                anim.SetBool("isGrazing", false);
+                anim.SetBool("isEating", true);
+            }
+
         }
         #endregion
 
@@ -170,7 +205,7 @@ public class MyAnky : Agent
                 {
                     Debug.Log("Anky no longer thirsty");
 
-                    if (FovRaptorList.Count <= 0)
+                    if (FovMonoRaptorList.Count <= 0)
                     {
                         anim.SetBool("isDrinking", false);
                         anim.SetBool("isGrazing", true);
@@ -188,193 +223,95 @@ public class MyAnky : Agent
         #region Alerted
         if (anim.GetBool("isAlerted"))
         {
-            Flee.enabled = true;
             Debug.Log("Anky is Alerted");
+            Wander.enabled = true;
+            Wander.rate = 100;
 
-            if (FovRaptorList.Count <= 0)
+            if ((FovMonoRaptorList.Count <= 0) && (FovStereoRaptorList.Count <=0))
             {
-                Flee.enabled = false;
                 anim.SetBool("isAlerted", false);
                 anim.SetBool("isGrazing", true);
             }
 
+            if (FovStereoRaptorList.Count > 0)
+            {
+                anim.SetBool("isAlerted", false);
+                anim.SetBool("isFleeing", true);
+            }
+
         }
         #endregion
 
+        #region Eating
+        if (anim.GetBool("isEating"))
+        {
+            Debug.Log("Anky is Going to seek food");
 
+            transform.position = Vector3.MoveTowards(transform.position, 
+                                                        waypoints[currentWP].transform.position, 
+                                                            2 * Time.deltaTime);
 
+            if (Vector3.Distance(waypoints[currentWP].transform.position, transform.position) < 1.0f)
+            {
+                Destroy(waypoints[currentWP]);
+                Debug.Log(waypoints[currentWP]);
+                currentWP++;
+                AnkyFoodLevel += +40;
+            }
+
+            if (AnkyFoodLevel >= 100)
+            {
+                AnkyFoodLevel = 100;
+                Debug.Log("Anky no longer hungry");
+
+                if (FovMonoRaptorList.Count <= 0)
+                {
+                    anim.SetBool("isEating", false);
+                    anim.SetBool("isGrazing", true);
+                }
+                else
+                {
+                    anim.SetBool("isEating", false);
+                    anim.SetBool("isAlerted", true);
+                }
+            }
+        }
+        #endregion
+
+        #region FLEEING
+        // Fleeing - up to the student what you do here
+        if (anim.GetBool("isFleeing"))
+        {
+            Flee.enabled = true;
+            Debug.Log("Anky is Fleeing");
+
+            if (FovStereoRaptorList.Count <= 0)
+            {
+                Flee.enabled = false;
+                Debug.Log("Anky lost sight of Rapty");
+                anim.SetBool("isFleeing", false);
+                anim.SetBool("isAlerted", true);
+            }
+        }
+        #endregion
+
+        #region HUNTING
+        // Hunting - up to the student what you do here
+        #endregion
+
+        #region DEAD
+        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
+        #endregion
 
         AnkyFoodLevel -= FoodCoef * Time.deltaTime;
         AnkyWaterLevel -= WaterCoef * Time.deltaTime;
 
-        FovRaptorList.Clear();
+        FovMonoRaptorList.Clear();
+        FovMonoAnkyList.Clear();
+        FovStereoRaptorList.Clear();
+        FovStereoAnkyList.Clear();
         base.Update();
     }
-
-    #region Old
-    /*
-protected override void Update()
-{
-
-    #region FieldofView_VisibleTargets
-
-    foreach (Transform i in fov.visibleTargets)
-    {
-        if (i.gameObject.tag == "Anky")
-        {
-            FovAnkyList.Add(i);
-        }
-
-        if (i.gameObject.tag == "Rapty")
-        {
-            FovRaptorList.Add(i);
-        }
-
-    }
-    #endregion
-
-    #region FieldofView_StereoVisibleTargets
-    foreach (Transform i in fov.stereoVisibleTargets)
-    {
-        if (i.gameObject.tag == "Anky")
-        {
-            FovAnkyList.Add(i);
-        }
-
-        if (i.gameObject.tag == "Rapty")
-        {
-            FovRaptorList.Add(i);
-        }
-    }
-
-    Debug.Log("Number of Raptors insight: " + FovRaptorList.Count);
-    #endregion
-
-    AnkyFoodLevel -= FoodCoef * Time.deltaTime;
-    AnkyWaterLevel -= WaterCoef * Time.deltaTime;
-
-    #region States
-
-    #region IDLE
-    #region IDLEtoGRAZING
-    // Idle - should only be used at startup
-    if (anim.GetBool("isIdle"))
-    {
-        anim.SetBool("isIdle", false);
-        anim.SetBool("isGrazing", true);
-    }
-    #endregion
-    #endregion
-
-    #region GRAZING
-    if (anim.GetBool("isGrazing"))
-    {
-        Wander.enabled = true;
-
-        #region GRAZINGtoALERTED
-        if (FovRaptorList.Count > 0)
-        {
-            Wander.enabled = false;
-            anim.SetBool("isGrazing", false);
-            anim.SetBool("isAlerted", true);
-
-        }
-        #endregion
-
-        #region GRAZINGtoDRINKING
-        if (AnkyWaterLevel <= 90)
-        {
-            Wander.enabled = false;
-            anim.SetBool("isGrazing", false);
-            anim.SetBool("isDrinking", true);
-
-        }
-        #endregion
-    }
-
-    #endregion
-
-
-    #region DRINKING
-
-    if (anim.GetBool("isDrinking"))
-    {
-        Debug.Log("Anky is Going to seek water");
-        Seek.enabled = true;
-
-        #region Seek&Drink
-        if (transform.position.y <= 36)
-        {
-            Seek.enabled = false;
-            AnkyWaterLevel += RecoverWaterCoefMultiplier * Time.deltaTime;
-            Debug.Log("Anky is drinking");
-        }
-        #endregion
-
-        if (AnkyWaterLevel >= 100)
-        {
-            #region DRINKINGtoGRAZING
-            if (FovRaptorList.Count <= 0)
-            {
-                Debug.Log("Anky not thirsty, reverting to grazing");
-                anim.SetBool("isDrinking", false);
-                anim.SetBool("isGrazing", true);
-            }
-            #endregion
-            else
-            #region DRINKINGtoALERTED
-            {
-                Debug.Log("Anky not thirsty, reverting to Alerted");
-                anim.SetBool("isDrinking", false);
-                anim.SetBool("isAlerted", true);
-            }
-            #endregion
-        }
-    }
-
-    #endregion
-
-    #region ALERTED
-    // Alerted - up to the student what you do here
-
-    if (anim.GetBool("isAlerted"))
-    {
-        Flee.enabled = true;
-        Debug.Log("Anky is Alerted");
-    }
-    else
-    {
-        anim.SetBool("isAlerted", false);
-        anim.SetBool("isDrinking", true);
-    }
-
-
-    #endregion
-
-    #region EATING
-    // Eating - requires a box collision with a dead dino
-    #endregion
-
-    #region HUNTING
-    // Hunting - up to the student what you do here
-    #endregion
-
-    #region FLEEING
-    // Fleeing - up to the student what you do here
-    #endregion
-
-    #region DEAD
-    // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-    #endregion
-
-    #endregion
-
-    FovRaptorList.Clear();
-    base.Update();
-}
-*/
-
-    #endregion
 
     protected override void LateUpdate()
     {
