@@ -66,19 +66,6 @@ public class MyAnky : Agent
 
     protected override void Update()
     {
-        // Idle - should only be used at startup
-
-        // Eating - requires a box collision with a dead dino
-
-        // Drinking - requires y value to be below 35 (?)
-
-        // Alerted - up to the student what you do here
-
-        // Hunting - up to the student what you do here
-
-        // Fleeing - up to the student what you do here
-
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
 
         ankyEnemies.Clear();
 
