@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Statestuff;
 
 public class MyRapty : Agent
 {
@@ -16,10 +17,43 @@ public class MyRapty : Agent
         DEAD
     };
     private Animator anim;
+    public FieldOfView fov;
+    //public Pursue pursueScript;
+    public Wander wanderScript;
+    public Face facingScript;
+    public raptyState currentRaptyState;
+    public List<Transform> RaptorsInView = new List<Transform>();
+    public List<Transform> AnkyInView = new List<Transform>();
+    public GameObject anky;
+    public float speed = 2.0f;
+    public AStarSearch aStarScript;
+    public ASPathFollower pathFollowerScript;
+
+    public GameObject ankyTarget;
+
+    public double hydration = 100;
+    public double sustenance = 100;
+    public double health = 100;
+
+    public StateMachine<MyRapty> stateMachine { get; set; }
+
+    void Awake()
+    {
+        fov= GetComponent<FieldOfView>();
+        //pursueScript = GetComponent<Pursue>();
+        wanderScript = GetComponent<Wander>();
+        aStarScript = GetComponent<AStarSearch>();
+        pathFollowerScript = GetComponent<ASPathFollower>();
+        facingScript = GetComponent<Face>();
+        
+    }
 
     // Use this for initialization
     protected override void Start()
     {
+
+        stateMachine = new StateMachine<MyRapty>(this);
+        stateMachine.ChangeState(RaptorHuntingState.Instance);
         anim = GetComponent<Animator>();
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -30,6 +64,11 @@ public class MyRapty : Agent
         anim.SetBool("isAttacking", false);
         anim.SetBool("isFleeing", false);
         anim.SetBool("isDead", false);
+        //pursueScript.enabled = false;
+        aStarScript.enabled = false;
+        pathFollowerScript.enabled = false;
+        wanderScript.enabled = false;
+        
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
         base.Start();
@@ -37,20 +76,43 @@ public class MyRapty : Agent
 
     protected override void Update()
     {
-        // Idle - should only be used at startup
+        if(health <=0 && currentRaptyState != raptyState.DEAD)
+        {
+            stateMachine.ChangeState(RaptorDeadState.Instance);
+            currentRaptyState = raptyState.DEAD;
+        }
+        if (currentRaptyState != raptyState.DEAD)
+        {
+            desireToLive();
+            Search();
+            foreach (Transform i in AnkyInView)
+            {
 
-        // Eating - requires a box collision with a dead dino
 
-        // Drinking - requires y value to be below 32 (?)
+                //facingScript.target = i.gameObject;
+                anky = new GameObject();
+                Vector3 Difference = new Vector3();
+                Vector3 ankyDifference = new Vector3();
+                Difference = (transform.position - i.position);
+                ankyDifference = (transform.position - anky.transform.position);
+                if (Difference.magnitude < ankyDifference.magnitude)
+                {
+                    anky = i.gameObject;
+                }
+                if (AnkyInView.Count > 0)
+                {
+                    ankyTarget = anky.gameObject;
+                    aStarScript.target = ankyTarget;
+                    aStarScript.enabled = true;
+                    pathFollowerScript.enabled = true;
+                    if (pathFollowerScript.path.nodes.Count < 1 || pathFollowerScript == null)
+                        pathFollowerScript.path = aStarScript.path;
+                    move(pathFollowerScript.getDirectionVector());
+                }
 
-        // Alerted - up to the student what you do here
-
-        // Hunting - up to the student what you do here
-
-        // Fleeing - up to the student what you do here
-
-        // Dead - If the animal is being eaten, reduce its 'health' until it is consumed
-
+            }
+        }
+        stateMachine.Update();
         base.Update();
     }
 
@@ -58,4 +120,70 @@ public class MyRapty : Agent
     {
         base.LateUpdate();
     }
+
+    public void move(Vector3 directionVector)
+    {
+        directionVector *= speed * Time.deltaTime;
+
+        transform.Translate(directionVector, Space.World);
+        transform.LookAt(transform.position + directionVector);
+    }
+
+    protected void Search()
+    {
+        RaptorsInView.Clear();
+        foreach (Transform i in fov.visibleTargets)
+        {
+            if (i.tag == "Rapty" && !RaptorsInView.Contains(i))
+            {
+                RaptorsInView.Add(i);
+            }
+        }
+
+        foreach (Transform i in fov.stereoVisibleTargets)
+        {
+            if (i.tag == "Rapty" && !RaptorsInView.Contains(i))
+            {
+                RaptorsInView.Add(i);
+            }
+        }
+
+        AnkyInView.Clear();
+        foreach (Transform i in fov.visibleTargets)
+        {
+            if (i.tag == "Anky" && !AnkyInView.Contains(i))
+            {           
+                    AnkyInView.Add(i);
+            }
+        }
+
+        foreach (Transform i in fov.stereoVisibleTargets)
+        {
+            if (i.tag == "Anky" && !AnkyInView.Contains(i))
+            {
+                    AnkyInView.Add(i);
+            }
+        }
+    }
+    
+    protected void desireToLive()
+    {
+        if (hydration > 0)
+            hydration -= (Time.deltaTime * 0.2);
+
+        if (sustenance > 0)
+            sustenance -= (Time.deltaTime * 0.25);
+
+        if (hydration <= 0 || sustenance <= 0)
+        {
+            health -= 0.1;
+        }
+
+        if (hydration > 85 && sustenance > 85 && health < 100)
+        {
+            health += 0.2;
+        }
+
+    }
+   
 }

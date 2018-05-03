@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class FieldOfView : MonoBehaviour {
 
@@ -61,9 +62,11 @@ public class FieldOfView : MonoBehaviour {
             }
          
         }
-    }
-	
-	public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
+        visibleTargets = visibleTargets.Distinct().ToList();
+        stereoVisibleTargets = stereoVisibleTargets.Distinct().ToList();
+    }  
+
+    public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
 	{
 		if (!angleIsGlobal) {
 			angleInDegrees += transform.eulerAngles.y;

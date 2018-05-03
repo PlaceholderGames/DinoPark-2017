@@ -4,7 +4,7 @@ using Statestuff;
 public class GrazingState : State<MyAnky>
 {
     private static GrazingState _instance;
-
+    int[,] details;
     private GrazingState()
     {
         if (_instance != null)
@@ -32,7 +32,6 @@ public class GrazingState : State<MyAnky>
         Debug.Log("Entering Grazing State");
         _owner.anim.SetBool("isGrazing",true);
         _owner.wanderScript.enabled = true;
-        _owner.RaptorsInView.Clear();
     }
 
     public override void ExitState(MyAnky _owner)
@@ -40,55 +39,65 @@ public class GrazingState : State<MyAnky>
         Debug.Log("Exiting Grazing State");
         _owner.anim.SetBool("isGrazing", false);
         _owner.wanderScript.enabled = false;
+        _owner.seekingScript.enabled = false;
+        
     }
 
     public override void UpdateState(MyAnky _owner)
     {
-        foreach (Transform i in _owner.fov.visibleTargets)
+
+        if(_owner.hasChild==false&&_owner.numberOfChildren <4)
         {
-            if (i.tag == "Rapty" && !_owner.RaptorsInView.Contains(i))
+            _owner.breeding();
+            _owner.anim.SetFloat("speedMod", 0.8f);
+          
+        }
+        else
+        {
+            _owner.anim.SetFloat("speedMod", 1.0f);
+        }
+
+        foreach(Transform i in _owner.AnkyInView)
+        {
+            float distance = Vector3.Distance(i.transform.position, _owner.transform.position);
+            if(distance >50)
             {
-                _owner.RaptorsInView.Add(i);
-                _owner.currentAnkyState = MyAnky.ankyState.ALERTED;
+                _owner.seekingScript.target = i.gameObject;
+                _owner.wanderScript.enabled = false;
+                _owner.seekingScript.enabled = true;
+            }
+            if(distance <10) 
+            {
+                _owner.seekingScript.enabled = false;
+                _owner.wanderScript.enabled = true;
             }
         }
 
-        foreach (Transform i in _owner.fov.stereoVisibleTargets)
+        details = _owner.TerrainScript.Terrain.terrainData.GetDetailLayer(0, 0, _owner.TerrainScript.Terrain.terrainData.detailWidth,_owner.TerrainScript.Terrain.terrainData.detailHeight,0);
+        if(details[(int)_owner.transform.position.z,(int)_owner.transform.position.x] != 0)
         {
-            if (i.tag == "Rapty" && !_owner.RaptorsInView.Contains(i))
+           if(_owner.sustenance < 75)
             {
-                _owner.RaptorsInView.Add(i);
-                _owner.currentAnkyState = MyAnky.ankyState.ALERTED;
-            }
+                _owner.stateMachine.ChangeState(EatingState.Instance);
+                _owner.currentAnkyState = MyAnky.ankyState.EATING;
+            } 
         }
 
-        if(_owner.transform.position.y <35)
-        {
-            _owner.stateMachine.ChangeState(DrinkingState.Instance);
-        }
-
-        ////////////////////////////
-        //Alert State//
-        ////////////////////////////
-        if (_owner.currentAnkyState == MyAnky.ankyState.ALERTED)
+        ////////
+        //State Changes
+        ////////
+        if (_owner.RaptorsInView.Count > 0)
         {
             _owner.stateMachine.ChangeState(AlertState.Instance);
+            _owner.currentAnkyState = MyAnky.ankyState.ALERTED;
         }
-        /*
-        ////////////////////////////
-        //Drinking State//
-        ////////////////////////////
-        if (_owner.currentAnkyState == MyAnky.ankyState.DRINKING)
+
+        if(_owner.hydration < 65)
         {
             _owner.stateMachine.ChangeState(DrinkingState.Instance);
+            _owner.currentAnkyState = MyAnky.ankyState.DRINKING;
         }
-        ////////////////////////////
-        //Eating State//
-        ////////////////////////////
+
         
-        else if (_owner.currentAnkyState == MyAnky.ankyState.EATING)
-        {
-            _owner.stateMachine.ChangeState(EatingState.Instance);
-        }*/
     }
 }

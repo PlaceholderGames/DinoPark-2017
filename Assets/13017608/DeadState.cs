@@ -30,21 +30,22 @@ public class DeadState : State<MyAnky>
     public override void EnterState(MyAnky _owner)
     {
         Debug.Log("Entering Dead State");
+        _owner.anim.SetBool("isDead", true);
+        //Upon Death disable all scripts
+        _owner.wanderScript.enabled = false;
+        _owner.seekingScript.enabled = false;
+        _owner.fleeScript.enabled = false;
+        _owner.tag = "Untagged";
     }
 
     public override void ExitState(MyAnky _owner)
     {
         Debug.Log("Exiting Dead State");
+        _owner.anim.SetBool("isDead", false);
     }
 
     public override void UpdateState(MyAnky _owner)
     {
-        ////////////////////////////
-        //Dead State//
-        ////////////////////////////
-        if (_owner.currentAnkyState == MyAnky.ankyState.DEAD)
-        {
-            _owner.stateMachine.ChangeState(DeadState.Instance);
-        }
+        //No need for an update as nothing can be brought back to life
     }
 }

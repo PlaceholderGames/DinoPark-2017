@@ -4,7 +4,9 @@ using Statestuff;
 public class AlertState : State<MyAnky>
 {
     private static AlertState _instance;
-    
+
+    int[,] details;
+
     private AlertState()
     {
         if (_instance != null)
@@ -30,110 +32,77 @@ public class AlertState : State<MyAnky>
     public override void EnterState(MyAnky _owner)
     {
         Debug.Log("Entering Alert State");
+        _owner.anim.SetBool("isAlerted", true);
         _owner.wanderScript.enabled = true;
     }
 
     public override void ExitState(MyAnky _owner)
     {
         Debug.Log("Exiting Alert State");
+        _owner.anim.SetBool("isAlerted", false);
         _owner.wanderScript.enabled = false;
+        _owner.seekingScript.enabled = false;
     }
-
-    public Vector3 closestRaptor = new Vector3(10000, 10000, 10000);
-    public int closestRaptorIndex = 0;
-    public GameObject Raptor = new GameObject();
 
     public override void UpdateState(MyAnky _owner)
     {
-        foreach (Transform i in _owner.fov.visibleTargets)
-        {
-            if (i.tag == "Rapty" && !_owner.RaptorsInView.Contains(i))
-            {
-                _owner.RaptorsInView.Add(i);
-                _owner.currentAnkyState = MyAnky.ankyState.ALERTED;
-            }
-        }
 
-        foreach (Transform i in _owner.fov.stereoVisibleTargets)
-        {
-            if (i.tag == "Rapty" && !_owner.RaptorsInView.Contains(i))
-            {
-                _owner.RaptorsInView.Add(i);
-                _owner.currentAnkyState = MyAnky.ankyState.ALERTED;
-            }
-        }
-
-        /*
-        for (int i = 0; i < _owner.RaptorsInView.Count;i++ )
-        {
-            Debug.Log(_owner.RaptorsInView.Count);
-        }
-        */
-        /*for(int i =0; i < _owner.RaptorsInView.Count; i++)
-        {
-            Vector3 Difference = new Vector3();
-            Difference = (_owner.transform.position - _owner.RaptorsInView[i].position);
-            if(Difference.magnitude < closestRaptor.magnitude)
-            {
-                closestRaptor = Difference;
-                closestRaptorIndex = 1;
-                Raptor = _owner.RaptorsInView[i].gameObject;
-            }
-        }
-        if(Raptor)
-        {
-            _owner.stateMachine.ChangeState(FleeingState.Instance);
-            _owner.fleeScript.target = Raptor;
-        }*/
-        
         foreach (Transform Raptors in _owner.RaptorsInView)
         {
             float distance = Vector3.Distance(Raptors.position, _owner.transform.position);
-            if (distance < 30 && distance > 5)
+            if (distance < 30 && distance > 10)
             {
                 _owner.fleeScript.target = Raptors.gameObject;
                 _owner.stateMachine.ChangeState(FleeingState.Instance);
+                _owner.currentAnkyState = MyAnky.ankyState.FLEEING;
             }
-            else if (distance < 5)
+            if (distance < 10)
             {
                 _owner.stateMachine.ChangeState(AttackState.Instance);
+                _owner.currentAnkyState = MyAnky.ankyState.ATTACKING;
             }
         }
-       
-        ////////////////////////////
-        //Grazing State//
-        ////////////////////////////
-        if (_owner.currentAnkyState == MyAnky.ankyState.GRAZING)
+
+        foreach (Transform i in _owner.AnkyInView)
+        {
+            float distance = Vector3.Distance(i.transform.position, _owner.transform.position);
+            if (distance > 40)
+            {
+                _owner.seekingScript.target = i.gameObject;
+                _owner.wanderScript.enabled = false;
+                _owner.seekingScript.enabled = true;
+            }
+            if (distance < 15)
+            {                
+                _owner.seekingScript.enabled = false;
+                _owner.seekingScript.target = null;
+                _owner.wanderScript.enabled = true;
+            }
+        }
+
+        if (_owner.RaptorsInView.Count < 1)
         {
             _owner.stateMachine.ChangeState(GrazingState.Instance);
+            _owner.currentAnkyState = MyAnky.ankyState.GRAZING;
         }
-        ////////////////////////////
-        //Drinking State//
-        ////////////////////////////
-        else if (_owner.currentAnkyState == MyAnky.ankyState.DRINKING)
+
+        if (_owner.hydration < 40)
         {
             _owner.stateMachine.ChangeState(DrinkingState.Instance);
+            _owner.currentAnkyState = MyAnky.ankyState.DRINKING;
         }
-        ////////////////////////////
-        //Eating State//
-        ////////////////////////////
-        else if (_owner.currentAnkyState == MyAnky.ankyState.EATING)
+
+        
+
+        details = _owner.TerrainScript.Terrain.terrainData.GetDetailLayer(0, 0, _owner.TerrainScript.Terrain.terrainData.detailWidth, _owner.TerrainScript.Terrain.terrainData.detailHeight, 0);
+        if (details[(int)_owner.transform.position.z, (int)_owner.transform.position.x] != 0)
         {
-            _owner.stateMachine.ChangeState(EatingState.Instance);
+            if (_owner.sustenance < 45)
+            {
+                _owner.stateMachine.ChangeState(EatingState.Instance);
+                _owner.currentAnkyState = MyAnky.ankyState.EATING;
+            }
         }
-        ////////////////////////////
-        //Fleeing State//
-        ////////////////////////////
-        else if (_owner.currentAnkyState == MyAnky.ankyState.FLEEING)
-        {
-            _owner.stateMachine.ChangeState(FleeingState.Instance);
-        }
-        ////////////////////////////
-        //Attacking State//
-        ////////////////////////////
-        else if (_owner.currentAnkyState == MyAnky.ankyState.ATTACKING)
-        {
-            _owner.stateMachine.ChangeState(AttackState.Instance);
-        }
+
     }
 }

@@ -30,35 +30,40 @@ public class AttackState : State<MyAnky>
     public override void EnterState(MyAnky _owner)
     {
         Debug.Log("Entering Attack State");
+        _owner.anim.SetBool("isAttacking", true);
+        _owner.wanderScript.enabled = false;
     }
 
     public override void ExitState(MyAnky _owner)
     {
         Debug.Log("Exiting Attack State");
+        _owner.anim.SetBool("isAttacking", false);
+        _owner.wanderScript.enabled = true;
     }
 
     public override void UpdateState(MyAnky _owner)
-    {
-        ////////////////////////////
-        //Fleeing State//
-        ////////////////////////////
-        if (_owner.currentAnkyState == MyAnky.ankyState.FLEEING)
-        {
-            _owner.stateMachine.ChangeState(FleeingState.Instance);
-        }
-        ////////////////////////////
-        //Alert State//
-        ////////////////////////////
-        else if (_owner.currentAnkyState == MyAnky.ankyState.ALERTED)
+    {       
+        if (_owner.RaptorsInView.Count < 1)
         {
             _owner.stateMachine.ChangeState(AlertState.Instance);
+            _owner.currentAnkyState = MyAnky.ankyState.ALERTED;
         }
-        ////////////////////////////
-        //Dead State//
-        ////////////////////////////
-        else if (_owner.currentAnkyState == MyAnky.ankyState.DEAD)
+        foreach (Transform Raptors in _owner.RaptorsInView)
         {
-            _owner.stateMachine.ChangeState(DeadState.Instance);
+            float distance = Vector3.Distance(Raptors.position, _owner.transform.position);
+            
+            if(distance < 10)
+            {
+                //_owner.Attack();
+                _owner.takeDamage(_owner.damage);
+            }
+
+            if (distance > 10 )
+            {
+                _owner.stateMachine.ChangeState(FleeingState.Instance);
+                _owner.currentAnkyState = MyAnky.ankyState.FLEEING;
+            }
+            
         }
     }
 }

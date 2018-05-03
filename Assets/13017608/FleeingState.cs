@@ -30,56 +30,48 @@ public class FleeingState : State<MyAnky>
     public override void EnterState(MyAnky _owner)
     {
         Debug.Log("Entering Fleeing State");
+        _owner.anim.SetBool("isFleeing", true);
         _owner.fleeScript.enabled = true;
     }
 
     public override void ExitState(MyAnky _owner)
     {
         Debug.Log("Exiting Fleeing State");
+        _owner.anim.SetBool("isFleeing", false);
         _owner.fleeScript.enabled = false;
     }
 
-    public Vector3 closestRaptor = new Vector3(10000, 10000, 10000);
-    public int closestRaptorIndex = 0;
     public GameObject Raptor = new GameObject();
 
     public override void UpdateState(MyAnky _owner)
     {
-        for (int i = 0; i < _owner.RaptorsInView.Count; i++)
+        foreach(Transform i in _owner.RaptorsInView)
         {
             Vector3 Difference = new Vector3();
-            Difference = (_owner.transform.position - _owner.RaptorsInView[i].position);
-            if (Difference.magnitude < closestRaptor.magnitude)
+            Vector3 RaptorDifference = new Vector3();
+            Difference = (_owner.transform.position - i.position);
+            RaptorDifference = (_owner.transform.position - Raptor.transform.position);
+
+            if (Difference.magnitude < RaptorDifference.magnitude)
             {
-                closestRaptor = Difference;
-                closestRaptorIndex = 1;
-                Raptor = _owner.RaptorsInView[i].gameObject;
+                Raptor = i.gameObject;
+            }
+            float distance = Vector3.Distance(Raptor.transform.position, _owner.transform.position);
+            if (distance > 50)
+            {
+                _owner.stateMachine.ChangeState(AlertState.Instance);
+                _owner.currentAnkyState = MyAnky.ankyState.ALERTED;
+            }
+            if (distance < 10)
+            {
+                _owner.stateMachine.ChangeState(AttackState.Instance);
+                _owner.currentAnkyState = MyAnky.ankyState.ATTACKING;
             }
         }
         if (Raptor)
         {
             _owner.fleeScript.target = Raptor;
         }
-        ////////////////////////////
-        //Attack State//
-        ////////////////////////////
-        /*if (_owner.currentAnkyState == MyAnky.ankyState.ATTACKING)
-        {
-            _owner.stateMachine.ChangeState(AttackState.Instance);
-        }
-        ////////////////////////////
-        //Alert State//
-        ////////////////////////////
-        else if (_owner.currentAnkyState == MyAnky.ankyState.GRAZING)
-        {
-            _owner.stateMachine.ChangeState(AlertState.Instance);
-        }
-        ////////////////////////////
-        //Dead State//
-        ////////////////////////////
-        else if (_owner.currentAnkyState == MyAnky.ankyState.DEAD)
-        {
-            _owner.stateMachine.ChangeState(DeadState.Instance);
-        }*/
+
     }
 }
