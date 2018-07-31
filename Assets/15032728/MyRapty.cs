@@ -20,6 +20,7 @@ public class MyRapty : Agent
     // Use this for initialization
     protected override void Start()
     {
+        /* Animations disabled due to incorrect implementation.
         anim = GetComponent<Animator>();
         // Assert default animation booleans and floats
         anim.SetBool("isIdle", true);
@@ -32,6 +33,7 @@ public class MyRapty : Agent
         anim.SetBool("isDead", false);
         // This with GetBool and GetFloat allows 
         // you to see how to change the flag parameters in the animation controller
+         * */
         base.Start();
     }
 

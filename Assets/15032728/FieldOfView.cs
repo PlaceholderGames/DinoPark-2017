@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class FieldOfView : MonoBehaviour {
@@ -15,7 +14,7 @@ public class FieldOfView : MonoBehaviour {
     public LayerMask targetMask;
     //public LayerMask obstacleMask; // Not using raytracing to determine visibility right now
 
-    [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
+    //[HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
     public List<Transform> visibleTargets = new List<Transform>(); // this is the list of visible dinosaurs
 
     [HideInInspector] // If you want to see the list of visible Dinos in the Inspector view, comment this out
@@ -60,10 +59,7 @@ public class FieldOfView : MonoBehaviour {
                 //float directionToTarget = Vector3.Angle(transform.forward, dirToTarget); // We need the direction of the object only for checking with raytracing
                 visibleTargets.Add(target); // For now, if it is in range and angle of eyesight we can see it
             }
-         
         }
-        visibleTargets = visibleTargets.Distinct().ToList();
-        stereoVisibleTargets = stereoVisibleTargets.Distinct().ToList();
     }
 	
 	public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
